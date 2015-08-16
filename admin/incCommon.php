@@ -14,6 +14,7 @@
 
 	$adminConfig = config('adminConfig');
 	include("$currDir/incFunctions.php");
+	include("$currDir/language.php");
 
 	/* trim $_POST, $_GET, $_REQUEST */
 	if(count($_POST)) $_POST = array_trim($_POST);

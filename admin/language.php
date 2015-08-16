@@ -1,0 +1,3 @@
+<?php
+
+	$Translation['Attention!'] = 'Attention!';
