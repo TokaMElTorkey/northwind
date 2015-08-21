@@ -92,27 +92,21 @@
 				if(mm && sm!='-1'){
 				
 					confirmMessage = "<?php echo $Translation['sure move member']; ?>";
-					confirmMessage = confirmMessage.replace("<MEMBER>", sm);
-					confirmMessage = confirmMessage.replace("<OLDGROUP>", sg);
-					confirmMessage = confirmMessage.replace("<NEWGROUP>", dg);
+					confirmMessage = confirmMessage.replace(/<MEMBER>/, sm).replace(/<OLDGROUP>/, sg).replace(/<NEWGROUP>/, dg);
 					return window.confirm(confirmMessage);
 					
 				}
 				if((dmm || dm) && sm!='-1'){
 				
 					confirmMessage = "<?php echo $Translation['sure move data of member']; ?>";
-					confirmMessage = confirmMessage.replace("<OLDMEMBER>", sm);
-					confirmMessage = confirmMessage.replace("<OLDGROUP>", sg);
-					confirmMessage = confirmMessage.replace("<NEWMEMBER>", dm);
-					confirmMessage = confirmMessage.replace("<NEWGROUP>", dg);					
+					confirmMessage = confirmMessage.replace(/<OLDMEMBER>/, sm).replace(/<OLDGROUP>/, sg).replace(/<NEWMEMBER>/, dm).replace(/<NEWGROUP>/, dg);					
 					return window.confirm(confirmMessage);
 				}
 
 				if(mm){
 				
 					confirmMessage = "<?php echo $Translation['sure move all members']; ?>";
-					confirmMessage = confirmMessage.replace("<OLDGROUP>", sg);
-					confirmMessage = confirmMessage.replace("<NEWGROUP>", dg);			
+					confirmMessage = confirmMessage.replace(/<OLDGROUP>/, sg).replace(/<NEWGROUP>/, dg);
 					return window.confirm(confirmMessage);
 				}
 
@@ -120,9 +114,7 @@
 				
 				
 					confirmMessage = "<?php echo $Translation['sure move data of all members']; ?>";
-					confirmMessage = confirmMessage.replace("<OLDGROUP>", sg);
-					confirmMessage = confirmMessage.replace("<MEMBER>", dm);
-					confirmMessage = confirmMessage.replace("<NEWGROUP>", dg);
+					confirmMessage = confirmMessage.replace(/<OLDGROUP>/, sg).replace(/<MEMBER>/, dm).replace(/<NEWGROUP>/, dg);
 					return window.confirm(confirmMessage);
 				}
 			}
