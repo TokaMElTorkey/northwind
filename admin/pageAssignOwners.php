@@ -29,10 +29,7 @@
 				$insertBegin = "insert ignore into membership_userrecords (tableName, pkValue, groupID, memberID, dateAdded, dateUpdated) values ";
 				$ts = time();
 				$assigned = 0;
-				$tempStatus = '';
-				$originalValues = '';
-				$replaceValues = '';
-				
+				$tempStatus = '';		
 
 				$res = sql("select `$tn`.`$pkf` from `$tn`", $eo);
 				while($row = db_fetch_row($res)){

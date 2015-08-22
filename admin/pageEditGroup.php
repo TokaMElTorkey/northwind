@@ -181,7 +181,7 @@
 				<div class="formFieldCaption"><?php echo $Translation["group name"]; ?></div>
 				</td>
 			<td align="left" class="tdFormInput">
-				<input type="text" name="name" <?php echo ($anonGroupID==$groupID ? $Translation["readonly"] : ""); ?> value="<?php echo $name; ?>" size="20" class="formTextBox">
+				<input type="text" name="name" <?php echo ($anonGroupID==$groupID ? "readonly" : ""); ?> value="<?php echo $name; ?>" size="20" class="formTextBox">
 				<br>
 				<?php if($anonGroupID==$groupID){ 
 							echo $Translation["readonly group name"]; 

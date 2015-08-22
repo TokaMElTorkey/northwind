@@ -71,7 +71,6 @@
 	$Translation["anonymous group attention"] = "Attention! This is the anonymous group.";
 	$Translation["show tool tips"] = "Show tool tips as mouse moves over options";
 	$Translation["group name"] = "Group name";
-	$Translation["readonly"] = "readonly";
 	$Translation["readonly group name"] = "The name of the anonymous group is read-only here.";
 	$Translation["anonymous group name"] = "If you name the group '<ANONYMOUSGROUP>', it will be considered the anonymous group<br>that defines the permissions of guest visitors that do not log into the system.";
 	
@@ -98,4 +97,30 @@
 	$Translation["shippers"] = "Shippers";
 	$Translation["save changes"] = "Save changes";
 	
+	
+	
+	//pageEditMember.php
+	$Translation["username error"] = "Error: Username already exists or is invalid. Make sure you provide a username containing 4 to 20 valid characters.";
+	$Translation["member not found"] = "Error: Member not found!";
+	$Translation["user has special permissions"] = "This user has special permissions that override his group permissions.";
+	$Translation["user has group permissions"] = 'This user inherits the <a href="pageEditGroup.php?groupID=<GROUPID>">permissions of his group</a>.';
+	$Translation["set user special permissions"] = 'Set special permissions for this user';
+	$Translation["sure continue"] = "If you made any changes to this member and did not save them yet, they will be lost if you continue. Are you sure you want to continue?";
+	$Translation["edit member"] = "Edit Member <MEMBERID>" ;
+	$Translation["add new member"] = "Add New Member";
+	$Translation["anonymous guest member"] = "Attention! This is the anonymous (guest) member.";
+	$Translation["admin member"] = 'Attention! This is the admin member. You can\'t change the username, password or email of this member here, but you can do so in the <a href="pageSettings.php">admin settings</a> page.';
+	
+	$Translation["member username"] = "Member username";
+	$Translation["read only username"] = "The username of the guest member is read-only.";
+	$Translation["password"] = "Password";
+	$Translation["change password"] = "Type a password only if you want to change this member\'s<br>password. Otherwise, leave this field empty.";
+	$Translation["confirm password"] = "Confirm password";
+	$Translation["email"] = "Email";
+	$Translation["approved"] = "Approved?";
+	$Translation["banned"] = "Banned?";
+	$Translation["comments"] = "Comments";
+	
 ?>
+
+
