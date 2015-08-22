@@ -30,6 +30,9 @@
 				$ts = time();
 				$assigned = 0;
 				$tempStatus = '';
+				$originalValues = '';
+				$replaceValues = '';
+				
 
 				$res = sql("select `$tn`.`$pkf` from `$tn`", $eo);
 				while($row = db_fetch_row($res)){
@@ -49,12 +52,16 @@
 
 				if ($memberID){
 					$tempStatus = $Translation["assigned table records to group and member"];
-					$tempStatus = preg_replace(  '/<MEMBERID>/' , $memberID , $tempStatus );
+					$tempStatus = str_replace ( "<MEMBERID>" , $memberID , $tempStatus );
 				}else{
 					$tempStatus = $Translation["assigned table records to group"];	
 				}
 				
-				$tempStatus = preg_replace( array ('/<NUMBER>/','/<TABLE>/' , '/<GROUP>/' ) , array ( number_format($assigned) , $tn , sqlValue("select name from membership_groups where groupID='$groupID'") ) , $tempStatus);
+				$originalValues =  array ('<NUMBER>','<TABLE>' , '<GROUP>' );
+				$number = number_format($assigned);
+				$group = sqlValue("select name from membership_groups where groupID='$groupID'");
+				$replaceValues = array ( $number , $tn , $group );
+				$tempStatus = str_replace ( $originalValues , $replaceValues , $tempStatus );
 
 				$status.= $tempStatus. ".<br>";
 			} 

@@ -81,7 +81,6 @@
 	$Translation["admin approve users"] = "Yes, and the admin must approve them.";
 	$Translation["automatically approve users"] = "Yes, and automatically approve them.";
 	$Translation["group table permissions"] = "Table permissions for this group";
-	$Translation["no"] = "No";
 	$Translation["owner"] = "Owner";
 	$Translation["group"] = "Group";
 	$Translation["all"] = "All";
@@ -99,5 +98,4 @@
 	$Translation["shippers"] = "Shippers";
 	$Translation["save changes"] = "Save changes";
 	
-
 ?>

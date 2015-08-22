@@ -168,7 +168,7 @@
 		}
 	}
 ?>
-<div class="page-header"><h1><?php echo ($groupID ? preg_replace( '/<GROUPNAME>/' , $name, $Translation["edit group"] ) : $Translation["add new group"]); ?></h1></div>
+<div class="page-header"><h1><?php echo ($groupID ? str_replace ('<GROUPNAME>' , $name, $Translation["edit group"] ) : $Translation["add new group"]); ?></h1></div>
 <?php if($anonGroupID==$groupID){ ?>
 	<div class="alert alert-warning"><?php echo $Translation["anonymous group attention"]; ?></div>
 <?php } ?>
@@ -186,7 +186,7 @@
 				<?php if($anonGroupID==$groupID){ 
 							echo $Translation["readonly group name"]; 
 					  }else{ 
-							echo preg_replace( '/<ANONYMOUSGROUP>/' ,  $adminConfig['anonymousGroup'] , $Translation["anonymous group name"] );
+							echo str_replace ( '<ANONYMOUSGROUP>' ,  $adminConfig['anonymousGroup'] , $Translation["anonymous group name"] );
 					  } ?>
 				</td>
 			</tr>
