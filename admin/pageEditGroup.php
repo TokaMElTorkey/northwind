@@ -69,7 +69,7 @@
 		if($_POST['groupID']==''){ // new group
 			// make sure group name is unique
 			if(sqlValue("select count(1) from membership_groups where name='$name'")){
-				echo "<div class=\"alert alert-danger\">Error: Group name already exists. You must choose a unique group name.</div>";
+				echo "<div class=\"alert alert-danger\">{$Translation["group exists error"]}</div>";
 				include("$currDir/incFooter.php");
 			}
 
@@ -91,7 +91,7 @@
 
 			// make sure group name is unique
 			if(sqlValue("select count(1) from membership_groups where name='$name' and groupID!='$groupID'")){
-				echo "<div class=\"alert alert-danger\">Error: Group name already exists. You must choose a unique group name.</div>";
+				echo "<div class=\"alert alert-danger\">{$Translation["group exists error"]}</div>";
 				include("$currDir/incFooter.php");
 			}
 
@@ -163,37 +163,36 @@
 			}
 		}else{
 			// no such group exists
-			echo "<div class=\"alert alert-danger\">Error: Group not found!</div>";
+			echo "<div class=\"alert alert-danger\">{$Translation["group not found error"]}</div>";
 			$groupID=0;
 		}
 	}
 ?>
-<div class="page-header"><h1><?php echo ($groupID ? "Edit Group '$name'" : "Add New Group"); ?></h1></div>
+<div class="page-header"><h1><?php echo ($groupID ? preg_replace( '/<GROUPNAME>/' , $name, $Translation["edit group"] ) : $Translation["add new group"]); ?></h1></div>
 <?php if($anonGroupID==$groupID){ ?>
-	<div class="alert alert-warning">Attention! This is the anonymous group.</div>
+	<div class="alert alert-warning"><?php echo $Translation["anonymous group attention"]; ?></div>
 <?php } ?>
-<input type="checkbox" id="showToolTips" value="1" checked><label for="showToolTips">Show tool tips as mouse moves over options</label>
+<input type="checkbox" id="showToolTips" value="1" checked><label for="showToolTips"><?php echo $Translation["show tool tips"]; ?></label>
 <form method="post" action="pageEditGroup.php">
 	<input type="hidden" name="groupID" value="<?php echo $groupID; ?>">
 	<div class="table-responsive"><table class="table table-striped">
 		<tr>
 			<td align="right" class="tdFormCaption" valign="top">
-				<div class="formFieldCaption">Group name</div>
+				<div class="formFieldCaption"><?php echo $Translation["group name"]; ?></div>
 				</td>
 			<td align="left" class="tdFormInput">
-				<input type="text" name="name" <?php echo ($anonGroupID==$groupID ? "readonly" : ""); ?> value="<?php echo $name; ?>" size="20" class="formTextBox">
+				<input type="text" name="name" <?php echo ($anonGroupID==$groupID ? $Translation["readonly"] : ""); ?> value="<?php echo $name; ?>" size="20" class="formTextBox">
 				<br>
-				<?php if($anonGroupID==$groupID){ ?>
-					The name of the anonymous group is read-only here.
-				<?php }else{ ?>
-					If you name the group '<?php echo $adminConfig['anonymousGroup']; ?>', it will be considered the anonymous group<br>
-					that defines the permissions of guest visitors that do not log into the system.
-				<?php } ?>
+				<?php if($anonGroupID==$groupID){ 
+							echo $Translation["readonly group name"]; 
+					  }else{ 
+							echo preg_replace( '/<ANONYMOUSGROUP>/' ,  $adminConfig['anonymousGroup'] , $Translation["anonymous group name"] );
+					  } ?>
 				</td>
 			</tr>
 		<tr>
 			<td align="right" valign="top" class="tdFormCaption">
-				<div class="formFieldCaption">Description</div>
+				<div class="formFieldCaption"><?php echo $Translation["description"] ; ?></div>
 				</td>
 			<td align="left" class="tdFormInput">
 				<textarea name="description" cols="50" rows="5" class="formTextBox"><?php echo $description; ?></textarea>
@@ -202,7 +201,7 @@
 		<?php if($anonGroupID!=$groupID){ ?>
 		<tr>
 			<td align="right" valign="top" class="tdFormCaption">
-				<div class="formFieldCaption">Allow visitors to sign up?</div>
+				<div class="formFieldCaption"><?php echo $Translation["allow visitors sign up"] ; ?></div>
 				</td>
 			<td align="left" class="tdFormInput">
 				<?php
@@ -210,9 +209,9 @@
 						"visitorSignup",
 						array(0, 1, 2),
 						array(
-							"No. Only the admin can add users.",
-							"Yes, and the admin must approve them.",
-							"Yes, and automatically approve them."
+							$Translation["admin add users"],
+							$Translation["admin approve users"],
+							$Translation["automatically approve users"]
 						),
 						($groupID ? $visitorSignup : $adminConfig['defaultSignUp'])
 					);
@@ -229,23 +228,23 @@
 			<td colspan="2" class="tdFormHeader">
 				<table class="table table-striped">
 					<tr>
-						<td class="tdFormHeader" colspan="5"><h2>Table permissions for this group</h2></td>
+						<td class="tdFormHeader" colspan="5"><h2><?php echo $Translation["group table permissions"] ; ?></h2></td>
 						</tr>
 					<?php
 						// permissions arrays common to the radio groups below
 						$arrPermVal=array(0, 1, 2, 3);
-						$arrPermText=array("No", "Owner", "Group", "All");
+						$arrPermText=array($Translation["no"], $Translation["owner"], $Translation["group"] , $Translation["all"] );
 					?>
 					<tr>
-						<td class="tdHeader"><div class="ColCaption">Table</div></td>
-						<td class="tdHeader"><div class="ColCaption">Insert</div></td>
-						<td class="tdHeader"><div class="ColCaption">View</div></td>
-						<td class="tdHeader"><div class="ColCaption">Edit</div></td>
-						<td class="tdHeader"><div class="ColCaption">Delete</div></td>
+						<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["table"] ; ?></div></td>
+						<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["insert"] ; ?></div></td>
+						<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["view"] ; ?></div></td>
+						<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["edit"] ; ?></div></td>
+						<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["delete"] ; ?></div></td>
 						</tr>
 				<!-- customers table -->
 					<tr>
-						<td class="tdCaptionCell" valign="top">Customers</td>
+						<td class="tdCaptionCell" valign="top"><?php echo $Translation["customers"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(customers_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="customers_insert" value="1" <?php echo ($customers_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
@@ -267,7 +266,7 @@
 						</tr>
 				<!-- employees table -->
 					<tr>
-						<td class="tdCaptionCell" valign="top">Employees</td>
+						<td class="tdCaptionCell" valign="top"><?php echo $Translation["employees"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(employees_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="employees_insert" value="1" <?php echo ($employees_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
@@ -289,7 +288,7 @@
 						</tr>
 				<!-- orders table -->
 					<tr>
-						<td class="tdCaptionCell" valign="top">Orders</td>
+						<td class="tdCaptionCell" valign="top"><?php echo $Translation["orders"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(orders_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="orders_insert" value="1" <?php echo ($orders_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
@@ -311,7 +310,7 @@
 						</tr>
 				<!-- order_details table -->
 					<tr>
-						<td class="tdCaptionCell" valign="top">Order Items</td>
+						<td class="tdCaptionCell" valign="top"><?php echo $Translation["order items"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(order_details_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="order_details_insert" value="1" <?php echo ($order_details_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
@@ -333,7 +332,7 @@
 						</tr>
 				<!-- products table -->
 					<tr>
-						<td class="tdCaptionCell" valign="top">Products</td>
+						<td class="tdCaptionCell" valign="top"><?php echo $Translation["products"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(products_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="products_insert" value="1" <?php echo ($products_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
@@ -355,7 +354,7 @@
 						</tr>
 				<!-- categories table -->
 					<tr>
-						<td class="tdCaptionCell" valign="top">Product Categories</td>
+						<td class="tdCaptionCell" valign="top"><?php echo $Translation["product categories"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(categories_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="categories_insert" value="1" <?php echo ($categories_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
@@ -377,7 +376,7 @@
 						</tr>
 				<!-- suppliers table -->
 					<tr>
-						<td class="tdCaptionCell" valign="top">Suppliers</td>
+						<td class="tdCaptionCell" valign="top"><?php echo $Translation["suppliers"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(suppliers_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="suppliers_insert" value="1" <?php echo ($suppliers_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
@@ -399,7 +398,7 @@
 						</tr>
 				<!-- shippers table -->
 					<tr>
-						<td class="tdCaptionCell" valign="top">Shippers</td>
+						<td class="tdCaptionCell" valign="top"><?php echo $Translation["shippers"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(shippers_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="shippers_insert" value="1" <?php echo ($shippers_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
@@ -424,7 +423,7 @@
 			</tr>
 		<tr>
 			<td colspan="2" align="right" class="tdFormFooter">
-				<input type="submit" name="saveChanges" value="Save changes">
+				<input type="submit" name="saveChanges" value="<?php echo $Translation["save changes"] ; ?>">
 				</td>
 			</tr>
 		</table></div>

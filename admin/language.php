@@ -63,9 +63,41 @@
 	$Translation["can not delete group remove members"] = "Can\'t delete this group. Please remove members first.";
 	$Translation["can not delete group transfer records"] = "Can\'t delete this group. Please transfer its data records to another group first..";
 	
+	//pageEditGroup.php
+	$Translation["group exists error"] = "Error: Group name already exists. You must choose a unique group name.";
+	$Translation["group not found error"] = "Error: Group not found!";								 	
+	$Translation["edit group"] = "Edit Group '<GROUPNAME>'";
+	$Translation["add new group"] = "Add New Group";
+	$Translation["anonymous group attention"] = "Attention! This is the anonymous group.";
+	$Translation["show tool tips"] = "Show tool tips as mouse moves over options";
+	$Translation["group name"] = "Group name";
+	$Translation["readonly"] = "readonly";
+	$Translation["readonly group name"] = "The name of the anonymous group is read-only here.";
+	$Translation["anonymous group name"] = "If you name the group '<ANONYMOUSGROUP>', it will be considered the anonymous group<br>that defines the permissions of guest visitors that do not log into the system.";
 	
+	$Translation["description"] = "Description";
+	$Translation["allow visitors sign up"] = 'Allow visitors to sign up?';
+	$Translation["admin add users"] = "No. Only the admin can add users.";
+	$Translation["admin approve users"] = "Yes, and the admin must approve them.";
+	$Translation["automatically approve users"] = "Yes, and automatically approve them.";
+	$Translation["group table permissions"] = "Table permissions for this group";
+	$Translation["no"] = "No";
+	$Translation["owner"] = "Owner";
+	$Translation["group"] = "Group";
+	$Translation["all"] = "All";
+	$Translation["insert"] = "Insert";
+	$Translation["view"] = "View";
+	$Translation["edit"] = "Edit";
+	$Translation["delete"] = "Delete";
+	$Translation["customers"] = "Customers";
+	$Translation["employees"] = "Employees";
+	$Translation["orders"] = "Orders";
+	$Translation["order items"] = "Order Items";
+	$Translation["products"] = "Products";
+	$Translation["product categories"] = "Product Categories";
+	$Translation["suppliers"] = "Suppliers";
+	$Translation["shippers"] = "Shippers";
+	$Translation["save changes"] = "Save changes";
 	
-
-
 
 ?>
