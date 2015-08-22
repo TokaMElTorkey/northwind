@@ -236,25 +236,13 @@
 		?>
 		<div class="alert alert-danger">
 			<p><strong><?php echo $Translation["attention"] ; ?></strong></p>
-			<p id="adminWarning" ><?php if($adminConfig['adminUsername'] == 'admin'){
+			<p><?php if($adminConfig['adminUsername'] == 'admin'){
 					echo $Translation['security risk admin'];
 			}else{
 					echo $Translation['security risk'];
 			} ?></p>
 		</div>
 		
-		<script>
-		
-			$j( function(){
-		  
-				var alertMessage =  $j('#adminWarning').html() ;
-				//alertMessage = alertMessage.replace("<ADMINLINK>", "<a href='pageSettings.php'><?php echo $Translation['admin settings'] ; ?> </a>");
-				alertMessage = alertMessage.replace("<adminlink>", "<a href='pageSettings.php'><?php echo $Translation['admin settings'] ; ?> </a>");
-				$j('#adminWarning').html( alertMessage ) ;	
-			  
-		  })
-		
-		</script>
 		
 		
 	<?php  } ?>
