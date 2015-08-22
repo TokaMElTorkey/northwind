@@ -7,13 +7,13 @@
 
 	// make sure group has no members
 	if(sqlValue("select count(1) from membership_users where groupID='$groupID'")){
-		errorMsg("Can't delete this group. Please remove members first.");
+		errorMsg($Translation["can not delete group remove members"]);
 		include("$currDir/incFooter.php");
 	}
 
 	// make sure group has no records
 	if(sqlValue("select count(1) from membership_userrecords where groupID='$groupID'")){
-		errorMsg("Can't delete this group. Please transfer its data records to another group first..");
+		errorMsg($Translation["can not delete group transfer records");
 		include("$currDir/incFooter.php");
 	}
 

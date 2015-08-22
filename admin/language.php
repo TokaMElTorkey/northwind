@@ -46,7 +46,7 @@
 	$Translation["assigned table records to group and member"] = "Assigned <NUMBER> records of table '<TABLE>' to group '<GROUP>' , member '<MEMBERID>'";
 	
 	$Translation['data ownership assign'] = "Assign ownership to data that has no owners";
-	$Translation['records ownership done'] = "All records in all tables have owners now.<br>Back to <a href=\"pageHome.php\">Admin homepage</a>.";
+	$Translation['records ownership done'] = "All records in all tables have owners now.<br>Back to <a href='pageHome.php'>Admin homepage</a>.";
 	$Translation['select group'] = "Select group";
 	$Translation['data ownership'] = "Sometimes, you might have tables with data that were entered before implementing this AppGini membership management system, or entered using other applications unaware of AppGini ownership system. This data currently has no owners. This page allows you to assign owner groups and owner members to this data.";
 	
@@ -58,25 +58,13 @@
 	$Translation["assign new owners"] = "Assign new owners";
 	$Translation["please wait"] = "Please wait ...";	
 	$Translation["if no owner member assigned"] = '* If you assign no owner member here, you can still use the <a href="pageTransferOwnership.php">Batch Transfer Wizard</a> later to do so.';
-
+	
+	//pageDeleteGroup.php
+	$Translation["can not delete group remove members"] = "Can\'t delete this group. Please remove members first.";
+	$Translation["can not delete group transfer records"] = "Can\'t delete this group. Please transfer its data records to another group first..";
 	
 	
 	
-	
-	
-	
-		
-	
-	
-
-	
-
-	
-	
-
-
-
-
 
 
 
