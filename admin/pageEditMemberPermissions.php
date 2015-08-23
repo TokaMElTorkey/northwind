@@ -98,12 +98,12 @@
 <?php
 	if($_GET['saved']){
 		?>
-		<div id="savedNotification" class="status">Member permissions have been saved successfully.</div>
+		<div id="savedNotification" class="status"><?php echo  $Translation["member permissions saved"]  ; ?></div>
 		<script> setTimeout("document.getElementById('savedNotification').style.display='none';", 5000); </script>
 		<?php
 	}elseif($_GET['reset']){
 		?>
-		<div id="resetNotification" class="status">Member permissions have been reset to the same as his group.</div>
+		<div id="resetNotification" class="status"><?php echo  $Translation["member permissions reset"] ; ?></div>
 		<script> setTimeout("document.getElementById('resetNotification').style.display='none';", 5000); </script>
 		<?php
 	}
@@ -114,20 +114,20 @@
 	<input type="hidden" name="memberID" value="<?php echo $memberID; ?>">
 	<div class="table-responsive"><table class="table table-striped">
 		<tr>
-			<td class="tdFormHeader" colspan="5"><div class="page-header"><h1>Table permissions for user <a href="pageEditMember.php?memberID=<?php echo urlencode($memberID); ?>" title="View member details"><?php echo $memberID; ?></a> of group <a href="pageEditGroup.php?groupID=<?php echo $groupID; ?>" title="View group details and permissions"><?php echo $group; ?></a></h1></div></td>
+			<td class="tdFormHeader" colspan="5"><div class="page-header"><h1><?php echo str_replace (array( '<MEMBER>' , '<MEMBERID>'  , '<GROUPID>' , '<GROUP>' ) , array(urlencode($memberID) , $memberID , $groupID , $group) , $Translation["user table permissions"] ); ?></h1></div></td>
 			</tr>
 <?php
 	if(!db_num_rows($res2)){
 		?>
 		<tr>
-			<td class="tdFormHeader" colspan="5" align="center"><div class="alert alert-info">This member doesn't currently have any special permissions. This list shows the permissions of his group.</div></td>
+			<td class="tdFormHeader" colspan="5" align="center"><div class="alert alert-info"><?php echo  $Translation["no member permissions"] ; ?></div></td>
 			</tr>
 		<?php
 	}else{
 		?>
 		<tr>
 			<td colspan="5" align="center" class="tdFormFooter">
-				<input type="submit" name="resetPermissions" value="Reset member permissions" onclick="return confirm('This would remove all special permissions of this user and he will have the same permissions as his group. Are you sure you want to do that?')" />
+				<input type="submit" name="resetPermissions" value="<?php echo  $Translation['reset member permissions'] ; ?>" onclick="return confirm('<?php echo  $Translation["remove special permissions"] ; ?>')" />
 				</td>
 			</tr>
 		<?php
@@ -135,14 +135,14 @@
 
 			// permissions arrays common to the radio groups below
 			$arrPermVal=array(0, 1, 2, 3);
-			$arrPermText=array("No", "Owner", "Group", "All");
+			$arrPermText=array( $Translation["No"] , $Translation["owner"] , $Translation["group"] ,  $Translation["all"] );
 		?>
 		<tr>
-			<td class="tdHeader"><div class="ColCaption">Table</div></td>
-			<td class="tdHeader"><div class="ColCaption">Insert</div></td>
-			<td class="tdHeader"><div class="ColCaption">View</div></td>
-			<td class="tdHeader"><div class="ColCaption">Edit</div></td>
-			<td class="tdHeader"><div class="ColCaption">Delete</div></td>
+			<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["table"] ; ?></div></td>
+			<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["insert"] ; ?></div></td>
+			<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["view"] ; ?></div></td>
+			<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["edit"] ; ?></div></td>
+			<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["delete"] ; ?></div></td>
 			</tr>
 <?php
 	foreach($tables as $t=>$tc){
@@ -172,7 +172,7 @@
 ?>
 		<tr>
 			<td colspan="5" align="right" class="tdFormFooter">
-				<input type="submit" name="saveChanges" value="Save changes">
+				<input type="submit" name="saveChanges" value="<?php echo  $Translation["save changes"] ; ?>">
 				</td>
 			</tr>
 		</table></div>

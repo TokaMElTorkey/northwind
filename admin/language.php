@@ -121,6 +121,16 @@
 	$Translation["banned"] = "Banned?";
 	$Translation["comments"] = "Comments";
 	
+	
+	//pageEditMemberPermissions.php
+	$Translation["member permissions saved"] = "Member permissions have been saved successfully.";
+	$Translation["member permissions reset"] = "Member permissions have been reset to the same as his group.";
+		
+	$Translation["user table permissions"] = "Table permissions for user <a href='pageEditMember.php?memberID=<MEMBER>' title='View member details'><MEMBERID></a> of group <a href='pageEditGroup.php?groupID=<GROUPID>'  title='View group details and permissions'><GROUP></a>";
+	
+	$Translation["no member permissions"] = 'This member doesn\'t currently have any special permissions. This list shows the permissions of his group.';
+	$Translation["reset member permissions"] = "Reset member permissions";
+	$Translation["remove special permissions"] = 'This would remove all special permissions of this user and he will have the same permissions as his group. Are you sure you want to do that?';
+	
 ?>
-
 
