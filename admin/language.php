@@ -213,10 +213,30 @@
 	$Translation["record details"] = "Membership Management -- Record details";
 	$Translation['table name'] = "Table: <TABLENAME>";
 	
-?>
+	
+	//pageRebuildFields.php
+	$Translation['create or update table'] = "An attempt to <ACTION> the field <i><FIELD></i> in <i><TABLE></i> table was made by executing this query: <pre><QUERY></pre> Results are shown below.";
 
-
-
+	$Translation['view or rebuild fields'] = "View/Rebuild fields";
+	$Translation['show deviations only'] = "Show deviations only";
+	$Translation['show all fields'] = "Show all fields";
+	$Translation['compare tables page'] = "This page compares the tables and fields structure/schema as designed in AppGini to the actual database structure and allows you to fix any deviations.";
+	
+	$Translation['field'] = "Field";
+	$Translation['AppGini definition'] = "AppGini definition";
+	$Translation['database definition'] = "Current definition in the database";
+	$Translation['table name title'] = "<TABLENAME> table";
+	$Translation['does not exist'] = "Doesn't exist!";
+	$Translation['create field'] = "Create the field by running an ADD COLUMN query.";
+	$Translation['create it'] = "Create it";
+	$Translation['fix field'] = "Fix the field by running an ALTER COLUMN query so that its definition becomes the same as that in AppGini.";
+	$Translation['fix it'] = "Fix it";
+	
+	$Translation['field update warning'] = "DANGER!! In some cases, this might lead to data loss, truncation, or corruption. It might be a better idea sometimes to update the field in AppGini to match that in the database. Would you still like to continue?";
+	
+	$Translation['no deviations found'] = "No deviations found. All fields OK!";
+	$Translation['error fields'] = "Found <CREATENUM> non-existing fields that need to be created.<br>Found <UPDATENUM> deviating fields that might need to be updated.";
 	
 
+?>
 
