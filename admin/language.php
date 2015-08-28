@@ -33,7 +33,7 @@
 	$Translation['batch transfer'] = "Batch Transfer Wizard";
 	$Translation['mail all users'] = "Mail All Users";
 	$Translation['AppGini forum'] = "AppGini Community Forum";
-	$Translation["user's area"] = "User's area";
+	$Translation["user's area"] = 'User\'s area';
 	$Translation["sign out"] = "Sign out";
 	
 	$Translation["attention"] = "Attention!";
@@ -60,8 +60,8 @@
 	$Translation["if no owner member assigned"] = '* If you assign no owner member here, you can still use the <a href="pageTransferOwnership.php">Batch Transfer Wizard</a> later to do so.';
 	
 	//pageDeleteGroup.php
-	$Translation["can not delete group remove members"] = "Can\'t delete this group. Please remove members first.";
-	$Translation["can not delete group transfer records"] = "Can\'t delete this group. Please transfer its data records to another group first..";
+	$Translation["can not delete group remove members"] = 'Can\'t delete this group. Please remove members first.';
+	$Translation["can not delete group transfer records"] = 'Can\'t delete this group. Please transfer its data records to another group first..';
 	
 	//pageEditGroup.php
 	$Translation["group exists error"] = "Error: Group name already exists. You must choose a unique group name.";
@@ -187,19 +187,28 @@
 	$Translation["loading bigprof feed"] = "Loading @bigprof feed ...";
 	$Translation["remove feed"] = "Remove this feed";
 	
-		
+	
+	
+	//pageMail.php
+	$Translation["can not send mail"] = "You can not send emails currently. The configured sender email address is not valid.	Please <a href='pageSettings.php'>correct it first</a> then try again.";
+	
+	$Translation["all groups"] = "All groups";
+	$Translation["no recipient"] = "Couldn't find recipient. Please make sure you provide a valid recipient.";
+	$Translation["invalid subject line"] = "Invalid subject line.";
+	$Translation["no recipient found"] = "Couldn't find any recipients. Please make sure you provide a valid recipient.";
+	$Translation["mail queue not saved"] = "Couldn't save mail queue. Please make sure the directory '<CURRDIR>' is writeable (chmod 755 or chmod 777).";
+	$Translation["send mail"]  = "Send mail message to a member/group";
+	$Translation["send mail to all members"] = "You are sending an email to all members. This could take a lot of time and affect your server performance. If you have a huge number of members, we don't recommend sending an email to all of them at once.";
+
+	$Translation["from"] = "From";
+	$Translation["change setting"] = "Change this setting";
+	$Translation["to"] = "To";
+	$Translation["subject"] = "Subject";
+	$Translation["message"] = "Message";
+	$Translation["send message"] = "Send Message";
+	
+	
 ?>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
