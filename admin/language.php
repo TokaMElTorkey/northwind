@@ -208,12 +208,15 @@
 	$Translation["send message"] = "Send Message";
 	
 	
+	
+	//pagePrintRecord.php
+	$Translation["record details"] = "Membership Management -- Record details";
+	$Translation['table name'] = "Table: <TABLENAME>";
+	
 ?>
 
 
 
-
-
-
+	
 
 
