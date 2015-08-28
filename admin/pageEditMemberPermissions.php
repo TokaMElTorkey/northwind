@@ -135,7 +135,7 @@
 
 			// permissions arrays common to the radio groups below
 			$arrPermVal=array(0, 1, 2, 3);
-			$arrPermText=array( $Translation["No"] , $Translation["owner"] , $Translation["group"] ,  $Translation["all"] );
+			$arrPermText=array( $Translation["no"] , $Translation["owner"] , $Translation["group"] ,  $Translation["all"] );
 		?>
 		<tr>
 			<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["table"] ; ?></div></td>

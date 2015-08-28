@@ -132,5 +132,40 @@
 	$Translation["reset member permissions"] = "Reset member permissions";
 	$Translation["remove special permissions"] = 'This would remove all special permissions of this user and he will have the same permissions as his group. Are you sure you want to do that?';
 	
+	
+	//pageEditOwnership.php
+	$Translation["invalid table"] = "Invalid table.";
+	$Translation["invalid primary key"] = "Invalid primary key value";
+	$Translation["record not found"] = "Record not found ... if it was imported externally, try assigning an owner from the admin area.";
+	$Translation["invalid username"] = "Invalid username";
+	$Translation["record not found error"] = "Error: Record not found!";
+	$Translation["edit Record Ownership"] = "Edit Record Ownership";
+	$Translation["owner group"] = "Owner group";
+	$Translation["view all records by group"] = "View all records by this group";
+	$Translation["owner member"] = "Owner member";
+	$Translation["view all records by member"] = "View all records by this member";
+	$Translation["switch record ownership"] = "If you want to switch ownership of this record to a member of another group, you must change the owner group and save changes first.";
+	$Translation["record created on"] = "Record created on";
+	$Translation["record modified on"] = "Record modified on";
+	$Translation["view all records of table"] = "View all records of this table";
+	$Translation["record data"] = "Record data";
+	$Translation["print"] = "Print";
+	$Translation["could not retrieve field list"] = "Couldn't retrieve field list from '<TABLENAME>'";
+	$Translation["field name"] = "Field name";
+	$Translation["value"] = "Value";
+	
+	
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
 
