@@ -13,7 +13,7 @@
 
 	// make sure group has no records
 	if(sqlValue("select count(1) from membership_userrecords where groupID='$groupID'")){
-		errorMsg($Translation["can not delete group transfer records");
+		errorMsg($Translation["can not delete group transfer records"]);
 		include("$currDir/incFooter.php");
 	}
 

@@ -24,7 +24,7 @@
 	$Translation['members'] = "Members";
 	$Translation['view members'] = "View Members";
 	$Translation['add member'] = "Add Member";
-	$Translation["view members' records"] = "View Members\' Records";  
+	$Translation["view members' records"] = "View Members' Records";  
 	$Translation["utilities"] = "Utilities"; 
 	$Translation["admin settings"] = "Admin Settings"; 
 	$Translation["rebuild thumbnails"] = "Rebuild Thumbnails"; 
@@ -33,7 +33,7 @@
 	$Translation['batch transfer'] = "Batch Transfer Wizard";
 	$Translation['mail all users'] = "Mail All Users";
 	$Translation['AppGini forum'] = "AppGini Community Forum";
-	$Translation["user's area"] = "User\'s area";
+	$Translation["user's area"] = "User's area";
 	$Translation["sign out"] = "Sign out";
 	
 	$Translation["attention"] = "Attention!";
@@ -155,7 +155,46 @@
 	$Translation["value"] = "Value";
 	
 	
+	//pageHome.php
+	$Translation["visitor sign up"] = '<a href="../membership_signup.php" target="_blank">Visitor sign up</a> is disabled because there are no groups where visitors can sign up currently. To enable visitor sign-up, set at least one group to allow visitor sign-up.';
+	
+	$Translation["table data without owner"] = 'You have data in one or more tables that doesn\'t have an owner. To assign an owner group for this data, <a href="pageAssignOwners.php">click here</a>.';
+	
+	$Translation["membership management homepage"] = "Membership Management Homepage";
+	$Translation["newest updates"] = "Newest Updates";
+	$Translation["view record details"] = "View record details";
+	$Translation["newest entries"] = "Newest Entries";
+	$Translation["available add-ons"] = "Available add-ons";
+	$Translation["more info"] = "More info";
+	$Translation["close"] = "Close";
+	$Translation["view add-ons"] = "View all add-ons";
+	$Translation["top members"] = "Top Members";
+	$Translation["edit member details"] = "Edit member details";
+	$Translation["view member records"] = "View member's data records";
+	$Translation["records"] = "records";
+	$Translation["members stats"] = "Members Stats";
+	$Translation["total groups"] = "Total groups";
+	$Translation["active members"] = "Active members";
+	$Translation["view active members"] = "View active members";
+	$Translation["members awaiting approval"] = "Members awaiting approval";
+	$Translation["view members awaiting approval"] = "View members awaiting approval";
+	$Translation["banned members"] = "Banned members";
+	$Translation["view banned members"] = "View banned members";
+	$Translation["total members"] = "Total members";
+	$Translation["view all members"] = "View all members";
+	$Translation["BigProf tweets"]  = "Tweets By BigProf Software";
+	$Translation["follow BigProf"] = "Follow @bigprof";
+	$Translation["loading bigprof feed"] = "Loading @bigprof feed ...";
+	$Translation["remove feed"] = "Remove this feed";
+	
+		
 ?>
+
+
+
+
+
+
 
 
 
