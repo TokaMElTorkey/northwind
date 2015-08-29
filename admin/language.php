@@ -310,5 +310,49 @@
 	$Translation['twitter feed'] = "Our Twitter feed helps keep you informed of our latest news, useful resources, new releases, and many other helpful tips.";
 	
 	
+	//pageTransferOwnership.php
+	$Translation['invalid source member'] = "Invalid source member selected.";
+	$Translation['invalid destination member'] = "Invalid destination member selected.";
+	$Translation['moving member'] = "Moving member '<MEMBERID>' and his data from group '<SOURCEGROUP>' to group '<DESTINATIONGROUP>' ...";
+	$Translation['data records transferred'] = "Member '<MEMBERID>' now belongs to group '<NEWGROUP>'. Data records transferred: <DATARECORDS>.";
+	$Translation['moving data'] = "Moving data of member '<SOURCEMEMBER>' from group '<SOURCEGROUP>' to member '<DESTINATIONMEMBER>' from group '<DESTINATIONGROUP>' ...";
+	
+	$Translation['member records status'] = "Member '<SOURCEMEMBER>' of group '<SOURCEGROUP>' had <DATABEFORE> data records. <TRANSFERSTATUS> to member '<DESTINATIONMEMBER>' of group '<DESTINATIONGROUP>'.";
+	
+	$Translation['moving all group members'] = "Moving all members and data of group '<SOURCEGROUP>' to group '<DESTINATIONGROUP>' ...";
+	$Translation['failed transferring group members'] = "Operation failed. No members were transferred from group '<SOURCEGROUP>' to '<DESTINATIONGROUP>'.";
+	$Translation['group members transferred'] = "All members of group '<SOURCEGROUP>' now belong to '<DESTINATIONGROUP>'. ";
+	$Translation['failed transfer data records'] = "However, data records failed to transfer.";
+	$Translation['data records were transferred'] = "<DATABEFORE> data records were transferred.";
+	
+	$Translation['moving group data to member'] = "Moving data of all members of group '<SOURCEGROUP>' to member '<DESTINATIONMEMBER>' from group '<DESTINATIONGROUP>' ...";
+	
+	$Translation['moving group data to member status'] = "<NUMBER> record(s) were transferred from group '<SOURCEGROUP>' to member '<DESTINATIONMEMBER>' of group '<DESTINATIONGROUP>'";
+	$Translation['status'] = "STATUS:";
+	$Translation['batch transfer link'] = 'To repeat the same batch transfer again later you can <a href= "pageTransferOwnership.php?sourceGroupID=<SOURCEGROUP>&amp;sourceMemberID=<SOURCEMEMBER>&amp;destinationGroupID=<DESTINATIONGROUP>&amp;destinationMemberID=<DESTINATIONMEMBER>&amp;moveMembers=<MOVEMEMBERS>">bookmark or copy this link</a>.';
+		
+	$Translation['ownership batch transfer'] = "Batch Transfer Of Ownership";
+	$Translation['step 1'] = "STEP 1:";
+	$Translation['batch transfer wizard'] = "The batch transfer wizard allows you to transfer data records of one or all members of a group (the <i>source group</i>) to a member of another group (the <i>destination member</i> of the <i>destination group</i>)";
+	
+	$Translation['source group'] = "Source group";
+	$Translation['update'] = "Update";
+	$Translation['next step'] = "Next Step";
+	$Translation['group statistics'] = "This group has <MEMBERS> members, and <RECORDS> data records.";
+	$Translation['step 2'] = "STEP 2:";
+	$Translation['source member message'] = "The source member could be one member or all members of the source group.";
+	$Translation['source member'] = "Source member";
+	$Translation['all group members'] = "All members of '<GROUPNAME>'";
+	$Translation['member statistics'] = "This member has <RECORDS> data records.";
+	$Translation['step 3'] = "STEP 3:";
+	$Translation['destination group message'] = "The destination group could be the same or different from the source group. Only groups that have members are listed below.";
+	$Translation['destination group'] = "Destination group";
+	$Translation['step 4'] = "STEP 4:";
+	$Translation['destination member message'] = "The destination member will be the new owner of the data records of the source	member.";
+	$Translation['destination member'] = "Destination member";
+	$Translation['begin transfer'] = "Begin Transfer";	
+	$Translation['move records'] = "You could either move records from the source member(s) to a member in the destination group, or move the source member(s), together with their data records to the destination group.";
+	$Translation['move data records to member'] = "Move data records to this member:";
+	$Translation['move source member to group'] = "Move source member(s) and all his/their data records to the '<GROUPNAME>' group.";
+					
 ?>
-
