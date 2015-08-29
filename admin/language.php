@@ -251,7 +251,12 @@
 	$Translation['done'] = "Done.";
 	$Translation['finished status'] = "Status: finished. You can close this page now.";
 	
+	//pageSender.php
+	$Translation['invalid mail queue'] = "Invalid mail queue.";
+	$Translation['sending message failed'] = " -- Sending message to '<EMAIL>': Failed.";
+	$Translation['sending message ok'] = " -- Sending message to '<EMAIL>': Ok.";
+	$Translation['done!'] = "Done!";
+	$Translation['close page'] = "You may close this page now or browse to some other page.";
+	$Translation['mail log'] = "Mail log:";
 	
-
 ?>
-

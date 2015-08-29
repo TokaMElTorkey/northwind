@@ -6,13 +6,13 @@
 
 	$queue = $_GET['queue'];
 	if(!preg_match('/^[a-f0-9]{32}$/i', $queue)){
-		echo "<div class=\"status\">Invalid mail queue.</div>";
+		echo "<div class=\"status\">{$Translation['invalid mail queue']}</div>";
 		include("$currDir/incFooter.php");
 	}
 
 	$queueFile="$currDir/$queue.php";
 	if(!is_file($queueFile)){
-		echo "<div class=\"status\">Invalid mail queue.</div>";
+		echo "<div class=\"status\">{$Translation['invalid mail queue']}</div>";
 		include("$currDir/incFooter.php");
 	}
 
@@ -23,9 +23,9 @@
 	foreach($to as $email){
 		$i++;
 		if(!@mail($email, $mailSubject, $mailMessage, "From: ".$adminConfig['senderName']." <".$adminConfig['senderEmail'].">")){
-			@fwrite($fLog, @date("d.m.Y H:i:s")." -- Sending message to '$email': Failed.\n");
+			@fwrite($fLog, @date("d.m.Y H:i:s").str_replace ( "<EMAIL>" , $email , $Translation['sending message failed'] )."\n");
 		}else{
-			@fwrite($fLog, @date("d.m.Y H:i:s")." -- Sending message to '$email': Ok.\n");
+			@fwrite($fLog, @date("d.m.Y H:i:s").str_replace ( "<EMAIL>" , $email , $Translation['sending message ok'] )."\n");
 		}
 		if($i>=$mailsPerBatch){  break; }
 	}
@@ -35,8 +35,8 @@
 		// no more emails in queue
 		@unlink($queueFile);
 		?>
-		<div class="page-header"><h1>Done!</h1></div>You may close this page now or browse to some other page.
-		<br><br><pre style="text-align: left;"><?php echo "Mail log:\n".@implode("", @file("$currDir/mailLog.log")); ?></pre>
+		<div class="page-header"><h1><?php echo  $Translation['done!'] ; ?></h1></div><?php echo  $Translation['close page'] ; ?>
+		<br><br><pre style="text-align: left;"><?php echo "{$Translation['mail log']}\n".@implode("", @file("$currDir/mailLog.log")); ?></pre>
 		<?php
 		@unlink("$currDir/mailLog.log");
 		include("$currDir/incFooter.php");
@@ -46,8 +46,8 @@
 		if(!$fp=fopen($queueFile, "w")){
 			?>
 			<div class="alert alert-danger">
-				Couldn't save mail queue. Please make sure the directory '<?php echo $currDir; ?>' is writeable (chmod 755 or chmod 777).
-				</div>
+				<?php echo str_replace ( "<CURRDIR>" , $currDir , $Translation["mail queue not saved"] ); ?>
+			</div>
 			<?php
 			include("$currDir/incFooter.php");
 		}else{
