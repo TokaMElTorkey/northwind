@@ -114,7 +114,7 @@
 	$Translation["member username"] = "Member username";
 	$Translation["read only username"] = "The username of the guest member is read-only.";
 	$Translation["password"] = "Password";
-	$Translation["change password"] = "Type a password only if you want to change this member\'s<br>password. Otherwise, leave this field empty.";
+	$Translation["change password"] = "Type a password only if you want to change this member's<br>password. Otherwise, leave this field empty.";
 	$Translation["confirm password"] = "Confirm password";
 	$Translation["email"] = "Email";
 	$Translation["approved"] = "Approved?";
@@ -259,4 +259,56 @@
 	$Translation['close page'] = "You may close this page now or browse to some other page.";
 	$Translation['mail log'] = "Mail log:";
 	
+	
+	//pageSettings.php
+	$Translation['invalid security token'] = 'Invalid security token! Please <a href="pageSettings.php">reload the page</a> and try again.';
+	$Translation['unique admin username error'] = "The new admin username is already taken by another member. Please make sure the new admin username is unique.";	
+	$Translation['unique anonymous username error'] = 'The new anonymous username is already taken by another member. Please make sure the username provided is unique.';
+	$Translation['unique anonymous group name error'] = 'The new anonymous group name is already in use by another group. Please make sure the group name provided is unique.';
+	$Translation['admin password mismatch'] = '"Admin password" and "Confirm password" don\'t match.';
+	$Translation['invalid sender email'] = 'Invalid "Sender email".';
+	$Translation['errors occurred'] = "The following errors occured:";
+	$Translation['go back'] = 'Please <a href="pageSettings.php" onclick="history.go(-1); return false;">go back</a> to correct the above error(s) and try again.';
+	$Translation['record updated automatically'] = "Record updated automatically on <DATE>";
+	
+	$Translation['admin settings saved'] = "Admin settings saved successfully.<br>Back to <a href=\"pageSettings.php\">Admin settings</a>.";
+	$Translation['admin settings not saved'] = "Admin settings were NOT saved successfully. Failure reason: <ERROR><br>Back to <a href=\"pageSettings.php\" onclick=\"history.go(-1); return false;\">Admin settings</a>.";
+	$Translation['show tool tips'] = 'Show tool tips as mouse moves over options';
+	$Translation['admin username'] = "Admin username";
+	$Translation['admin password'] = "Admin username";
+	$Translation['change admin password'] = "Type a password only if you want to change the admin password.";
+	$Translation['sender email'] = "Sender email";
+	$Translation['sender name and email'] = "Sender name and email are used in the 'To' field when sending";
+	$Translation['email messages'] = "email messages to groups or members.";
+	$Translation['admin notifications'] = "Admin notifications";
+	$Translation['no email notifications'] = "No email notifications to admin.";
+	$Translation['member waiting approval'] = "Notify admin only when a new member is waiting for approval.";
+	$Translation['new sign-ups'] = "Notify admin for all new sign-ups.";
+	$Translation['sender name'] = "Sender name";
+	$Translation['members custom field 1'] = "Members custom field 1";
+	$Translation['members custom field 2'] = "Members custom field 2";
+	$Translation['members custom field 3'] = "Members custom field 3";
+	$Translation['members custom field 4'] = "Members custom field 4";
+	$Translation['member approval email subject'] = "Member approval<br>email subject";
+	$Translation['member approval email subject control'] = "When the admin approves a member, the member is notified by<br>email that he is approved. You can control the subject of the<br>approval email in this box,  and the content in the box below.";
+	$Translation['member approval email message'] = "Member approval<br>email message";
+	$Translation['MySQL date'] = "MySQL date<br>formatting string";
+	$Translation['MySQL reference'] = 'Please refer to <a href="http://dev.mysql.com/doc/refman/5.0/en/date-and-time-functions.html#function_date-format" target="_blank">the MySQL reference</a> for possible formats.';
+	$Translation['PHP short date'] = "PHP short date<br>formatting string";
+	$Translation['PHP manual'] = 'Please refer to <a href="http://www.php.net/manual/en/function.date.php" target="_blank">the PHP manual</a> for possible formats.'; 
+	$Translation['PHP long date'] = "PHP long date<br>formatting string";
+	$Translation['groups per page'] = "Groups per page";
+	$Translation['members per page'] = "Members per page";
+	$Translation['records per page'] = "Records per page";
+	$Translation['default sign-up mode'] = "Default sign-up mode<br>for new groups";
+	$Translation['no sign-up allowed'] = "No sign-up allowed. Only the admin can add members.";
+	$Translation['admin approve members'] = "Sign-up allowed, but the admin must approve members.";
+	$Translation['automatically approve members'] = "Sign-up allowed, and automatically approve members.";
+	$Translation['anonymous group'] = "Name of the anonymous<br>group";
+	$Translation['anonymous user name'] = "Name of the anonymous<br>user";
+	$Translation['hide twitter feed'] = "Hide Twitter feed<br>in admin homepage?";
+	$Translation['twitter feed'] = "Our Twitter feed helps keep you informed of our latest news, useful resources, new releases, and many other helpful tips.";
+	
+	
 ?>
+
