@@ -237,6 +237,21 @@
 	$Translation['no deviations found'] = "No deviations found. All fields OK!";
 	$Translation['error fields'] = "Found <CREATENUM> non-existing fields that need to be created.<br>Found <UPDATENUM> deviating fields that might need to be updated.";
 	
+	
+	//pageRebuildThumbnails.php
+	$Translation['rebuild thumbnails'] = "Rebuild thumbnails";
+	$Translation['thumbnails utility'] = "Use this utility if you have one or more image fields in a table that don't have thumbnails or have thumbnails with incorrect dimensions.";
+	$Translation['rebuild thumbnails of table'] = "Rebuild thumbnails of table";
+	$Translation['rebuild'] = "Rebuild";
+	
+	$Translation['rebuild thumbnails of table_name'] = "Rebuilding thumbnails of '<i><TABLENAME></i>' table ...";
+	$Translation['do not close page message'] = "Don't close this page until you see a confirmation message that all thumbnails have been built.";	
+	$Translation['rebuild thumbnails status'] = "Status: still rebuilding thumbnails, please wait ...";
+	$Translation['building field thumbnails'] =  "Building thumbnails for '<i><FIELD></i>' field...";
+	$Translation['done'] = "Done.";
+	$Translation['finished status'] = "Status: finished. You can close this page now.";
+	
+	
 
 ?>
 
