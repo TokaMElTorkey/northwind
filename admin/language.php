@@ -354,5 +354,51 @@
 	$Translation['move records'] = "You could either move records from the source member(s) to a member in the destination group, or move the source member(s), together with their data records to the destination group.";
 	$Translation['move data records to member'] = "Move data records to this member:";
 	$Translation['move source member to group'] = "Move source member(s) and all his/their data records to the '<GROUPNAME>' group.";
-					
+	
+	
+	
+	//pageUploadCSV.php
+	$Translation['file not found error'] = "Error: File '<FILENAME>' not found.";
+	$Translation['preview and confirm CSV data'] = "Preview the CSV data then confirm to import it ...";
+	$Translation['display csv file rows'] = "Displaying the first 10 rows of the CSV file ...";
+	$Translation['change CSV settings'] = 'Change CSV settings';
+	$Translation['import CSV data'] = 'Confirm and import CSV data &gt;';
+	$Translation['apply CSV settings'] = 'Apply CSV Settings';
+	$Translation['importing CSV data'] = 'Importing CSV data ...';
+	$Translation['start at estimated record'] = "Starting at record <RECORDNUMBER> of <RECORDS> total estimated records ...";
+	$Translation['table backed up'] = "Table '<TABLE>' backed up as '<TABLENAME>'.";
+	$Translation['table backup not done'] = "Table '<TABLE>' is empty, so no backup was done.";
+	$Translation['importing batch'] = 'Importing batch <BATCH> of <BATCHNUM>: ';
+	$Translation['ok'] = 'Ok';
+	$Translation['records inserted or updated successfully'] = "<RECORDS> records inserted/updated in <SECONDS> seconds.";
+	$Translation['mission accomplished'] = "Mission accomplished!";
+	$Translation['assign a records owner'] = "Assign an owner to the imported records &gt;";
+	$Translation['please wait and do not close'] = "Please wait and don't close this page ...";
+	$Translation['hide advanced options'] = "Hide advanced options";
+	$Translation['show advanced options'] = "Show advanced options";
+	$Translation['import CSV to database'] = "Import a CSV file to the database";
+	$Translation['import CSV to database page'] = "This page allows you to upload a CSV file (for example, one generated from MS Excel) and import it to one of the tables of the database. This makes it so easy to bulk-populate the database with data from other sources rather than manually entering every single record.";
+	$Translation['populate table from CSV'] = "This is the table that you want to populate with data from the CSV file.";
+	$Translation['CSV file'] = "CSV file";
+	$Translation['preview CSV data'] = "Preview CSV data &gt;";
+	$Translation['no table name provided'] = "No table name provided.";
+	$Translation['can not open CSV'] = "Can't open csv file '<FILENAME>'.";
+	$Translation['empty CSV file'] = "The csv file '<FILENAME>' is empty.";
+		
+	$Translation['no CSV file data'] = "The csv file '<FILENAME>' has no data to read." ;
+	$Translation['field separator'] = "Field separator";
+	$Translation['default comma'] = "The default is comma (,)";
+	$Translation['field delimiter'] = "Field delimiter";
+	$Translation['default double-quote'] = 'The default is double-quote (")';
+	$Translation['maximum characters per line'] = "Maximum characters per line";
+	$Translation['trouble importing CSV'] = "If you have trouble importing the CSV file, try increasing this value.";
+	$Translation['ignore lines number'] = "Number of lines to ignore";
+	$Translation['skip lines number'] = "Change this value if you want to skip a specific number of lines in the CSV file.";
+	$Translation['first line field names'] = "The first line of the file contains field names";
+	$Translation['field names must match'] = "Field names must <b>exactly</b> match those in the database.";
+	$Translation['update table records'] = "Update table records if their primary key values match those in the CSV file.";
+	$Translation['ignore CSV table records'] = "If not checked, records in the CSV file having the same primary key values as those in the table <b>will be ignored</b>";
+	$Translation['back up the table'] = "Back up the table before importing CSV data into it.";
+	
 ?>
+
