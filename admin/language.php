@@ -400,5 +400,29 @@
 	$Translation['ignore CSV table records'] = "If not checked, records in the CSV file having the same primary key values as those in the table <b>will be ignored</b>";
 	$Translation['back up the table'] = "Back up the table before importing CSV data into it.";
 	
+	
+	
+	//pageViewGroups.php
+	$Translation['no matching results found'] = "No matching results found.";
+	$Translation['search groups'] = "Search groups";
+	$Translation['find'] = "Find";
+	$Translation['reset'] = "Reset";
+	$Translation['members count'] = "Members count";
+	$Translation['Edit group'] = "Edit group";
+	$Translation['confirm delete group'] = "Are you sure you want to completely delete this group?";
+	$Translation['delete group'] = "Delete group";
+	$Translation['view group records'] = "View group records";
+	$Translation['view group members'] = "View group members";
+	$Translation['send message to group'] = "Send message to group";
+	$Translation['previous'] = "Previous";
+	$Translation['displaying groups'] = "Displaying groups <GROUPNUM1> to <GROUPNUM2> of <GROUPS>";
+	$Translation['next'] = "Next";
+	$Translation['key'] = "Key:";	
+	$Translation['edit group details'] = "Edit group details and permissions.";
+	$Translation['Delete group'] = "Delete group.";
+	$Translation['add member to group'] = "Add a new member to group.";
+	$Translation['view data records'] = "View all data records entered by the group's members.";
+	$Translation['list group members'] = "List all members of a group.";
+	$Translation['send email to all members'] = "Send an email message to all members of a group.";
+	
 ?>
-
