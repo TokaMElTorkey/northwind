@@ -492,6 +492,7 @@
 	function advancedCSVSettingsForm(){
 		getCSVSettings($csvIgnoreNRows, $csvCharsPerLine, $csvFieldSeparator, $csvFieldDelimiter, $csvFieldNamesOnTop, $csvUpdateIfPKExists, $csvBackupBeforeImport);
 		ob_start();
+		include("$currDir/language.php");
 		?>
 		<div style="display: none;" id="advancedOptions">
 		<table class="table table-striped">
