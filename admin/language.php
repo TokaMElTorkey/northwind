@@ -426,7 +426,7 @@
 	$Translation['send email to all members'] = "Send an email message to all members of a group.";
 	
 	//pageViewMembers.php
-	$Translation['search members'] = "Search members <input class='formTextBox' type='text' name='searchMembers' value='<SEARCHHTML>' size='20'> in <ARRFIELDS>";
+	$Translation['search members'] = "Search members <input class='formTextBox' type='text' name='searchMembers' value='<SEARCHHTML>' size='20'> in <HTMLSELECT>";
 	$Translation['any'] = "Any";
 	$Translation['waiting approval'] = "Waiting approval";
 	$Translation['active'] = "Active";

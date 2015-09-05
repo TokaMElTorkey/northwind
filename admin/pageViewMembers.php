@@ -87,7 +87,7 @@
 						<td valign="top" align="center">
 							<input type="hidden" name="page" value="1">
 							<?php 
-								$originalValues =  array ('<SEARCHHTML>','<ARRFIELDS>');
+								$originalValues =  array ('<SEARCHHTML>','<HTMLSELECT>');
 								$arrFields=array(0, 1, 2, 3, 4, 5, 6, 7, 8);
 								$arrFieldCaptions=array('All fields', 'Username', 'Group', 'Email', $adminConfig['custom1'], $adminConfig['custom2'], $adminConfig['custom3'], $adminConfig['custom4'], 'Comments');
 								$htmlSelect = htmlSelect('searchField', $arrFields, $arrFieldCaptions, $searchField);
