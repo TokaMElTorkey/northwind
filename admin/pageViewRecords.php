@@ -38,7 +38,7 @@
 
 	$numRecords=sqlValue("select count(1) from membership_userrecords r left join membership_groups g on r.groupID=g.groupID $where");
 	if(!$numRecords){
-		echo "<div class=\"status\">No matching results found.</div>";
+		echo "<div class=\"status\">{$Translation['no matching results found']}</div>";
 		$noResults=TRUE;
 		$page=1;
 	}else{
@@ -55,7 +55,7 @@
 	$start=($page-1)*$adminConfig['recordsPerPage'];
 
 ?>
-<div class="page-header"><h1>Data Records</h1></div>
+<div class="page-header"><h1><?php echo $Translation['data records'] ; ?></h1></div>
 
 <table class="table table-striped">
 	<tr>
@@ -64,40 +64,40 @@
 				<table class="table">
 					<tr>
 						<td align="center">
-							Group
-							<?php
+							<?php 
+								echo $Translation["group"] ; 
 								echo htmlSQLSelect("groupID", "select groupID, name from membership_groups order by name", $groupID);
 							?>
 							&nbsp; &nbsp; &nbsp; 
-							Member username
+							<?php echo $Translation["member username"] ; ?>
 							<input class="formTextBox" type="text" name="memberID" value="<?php echo $memberID; ?>" size="20">
 							<input type="hidden" name="page" value="1">
 							</td>
 						<td valign="bottom" rowspan="3">
-							<input type="submit" value="Find">
-							<input type="button" value="Reset" onClick="window.location='pageViewRecords.php';">
+							<input type="submit" value="<?php echo $Translation['find'] ; ?>">
+							<input type="button" value="<?php echo $Translation['reset'] ; ?>" onClick="window.location='pageViewRecords.php';">
 							</td>
 						</tr>
 					<tr>
 						<td align="center">
-							Show records from
+							<?php echo $Translation['show records'] ; ?>
 							<?php
 								$arrFields=array('', 'customers', 'employees', 'orders', 'order_details', 'products', 'categories', 'suppliers', 'shippers');
-								$arrFieldCaptions=array('All tables', 'Customers', 'Employees', 'Orders', 'Order Items', 'Products', 'Product Categories', 'Suppliers', 'Shippers');
+								$arrFieldCaptions=array( $Translation['all tables'] , $Translation["customers"] , $Translation["employees"] , $Translation["orders"] , $Translation["order items"] , $Translation["products"] , $Translation["product categories"] , $Translation["suppliers"] , $Translation["shippers"] );
 								echo htmlSelect('tableName', $arrFields, $arrFieldCaptions, $tableName);
 							?>
 							</td>
 						</tr>
 					<tr>
 						<td align="center">
-							Sort records by
+							<?php echo $Translation['sort records'] ; ?>
 							<?php
 								$arrFields=array('dateAdded', 'dateUpdated');
-								$arrFieldCaptions=array('Date created', 'Date modified');
+								$arrFieldCaptions=array( $Translation['date created'] , $Translation['date modified'] );
 								echo htmlSelect('sort', $arrFields, $arrFieldCaptions, $sort);
 
 								$arrFields=array('desc', '');
-								$arrFieldCaptions=array('Newer first', 'Older first');
+								$arrFieldCaptions=array( $Translation['newer first'] , $Translation['older first'] );
 								echo htmlSelect('sortDir', $arrFields, $arrFieldCaptions, $sortDir);
 							?>
 							</td>
@@ -108,12 +108,12 @@
 		</tr>
 	<tr>
 		<td class="tdHeader">&nbsp;</td>
-		<td class="tdHeader"><div class="ColCaption">Username</div></td>
-		<td class="tdHeader"><div class="ColCaption">Group</div></td>
-		<td class="tdHeader"><div class="ColCaption">Table</div></td>
-		<td class="tdHeader"><div class="ColCaption">Created</div></td>
-		<td class="tdHeader"><div class="ColCaption">Modified</div></td>
-		<td class="tdHeader"><div class="ColCaption">Data</div></td>
+		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation['username'] ; ?></div></td>
+		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["group"] ; ?></div></td>
+		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["table"] ; ?></div></td>
+		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation['created'] ; ?></div></td>
+		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation['modified'] ; ?></div></td>
+		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation['data'] ; ?></div></td>
 		</tr>
 <?php
 
@@ -122,8 +122,8 @@
 		?>
 		<tr>
 			<td class="tdCaptionCell" align="left">
-				<a href="pageEditOwnership.php?recID=<?php echo $row[0]; ?>"><img border="0" src="images/edit_icon.gif" alt="Change ownership of this record" title="Change ownership of this record"></a>
-				<a href="pageDeleteRecord.php?recID=<?php echo $row[0]; ?>" onClick="return confirm('Are you sure you want to delete this record?');"><img border="0" src="images/delete_icon.gif" alt="Delete this record" title="Delete this record"></a>
+				<a href="pageEditOwnership.php?recID=<?php echo $row[0]; ?>"><img border="0" src="images/edit_icon.gif" alt="<?php echo $Translation['change record ownership'] ; ?>" title="<?php echo $Translation['change record ownership'] ; ?>"></a>
+				<a href="pageDeleteRecord.php?recID=<?php echo $row[0]; ?>" onClick="return confirm('<?php echo $Translation['sure delete record'] ; ?>');"><img border="0" src="images/delete_icon.gif" alt="<?php echo $Translation['delete record'] ; ?>" title="<?php echo $Translation['delete record'] ; ?>"></a>
 				</td>
 			<td class="tdCell" align="left"><?php echo $row[1]; ?></td>
 			<td class="tdCell" align="left"><?php echo $row[2]; ?></td>
@@ -140,13 +140,17 @@
 			<table width="100%" cellspacing="0">
 				<tr>
 				<td align="left" class="tdFooter">
-					<input type="button" onClick="window.location='pageViewRecords.php?groupID=<?php echo $groupID; ?>&memberID=<?php echo $memberID; ?>&tableName=<?php echo $tableName; ?>&page=<?php echo ($page>1 ? $page-1 : 1); ?>&sort=<?php echo $sort; ?>&sortDir=<?php echo $sortDir; ?>';" value="Previous">
+					<input type="button" onClick="window.location='pageViewRecords.php?groupID=<?php echo $groupID; ?>&memberID=<?php echo $memberID; ?>&tableName=<?php echo $tableName; ?>&page=<?php echo ($page>1 ? $page-1 : 1); ?>&sort=<?php echo $sort; ?>&sortDir=<?php echo $sortDir; ?>';" value="<?php echo $Translation['previous'] ; ?>">
 					</td>
 				<td align="center" class="tdFooter">
-					<?php echo "Displaying records ".($start+1)." to ".($start+db_num_rows($res))." of $numRecords"; ?>
-					</td>
+					<?php 
+						$originalValues =  array ('<RECORDNUM1>','<RECORDNUM2>','<RECORDS>' );
+						$replaceValues = array ( $start+1 , $start+db_num_rows($res) , $numRecords );
+						echo str_replace ( $originalValues , $replaceValues , $Translation['displaying records'] );
+					?>
+				</td>
 				<td align="right" class="tdFooter">
-					<input type="button" onClick="window.location='pageViewRecords.php?groupID=<?php echo $groupID; ?>&memberID=<?php echo $memberID; ?>&tableName=<?php echo $tableName; ?>&page=<?php echo ($page<ceil($numRecords/$adminConfig['recordsPerPage']) ? $page+1 : ceil($numRecords/$adminConfig['recordsPerPage'])); ?>&sort=<?php echo $sort; ?>&sortDir=<?php echo $sortDir; ?>';" value="Next">
+					<input type="button" onClick="window.location='pageViewRecords.php?groupID=<?php echo $groupID; ?>&memberID=<?php echo $memberID; ?>&tableName=<?php echo $tableName; ?>&page=<?php echo ($page<ceil($numRecords/$adminConfig['recordsPerPage']) ? $page+1 : ceil($numRecords/$adminConfig['recordsPerPage'])); ?>&sort=<?php echo $sort; ?>&sortDir=<?php echo $sortDir; ?>';" value="<?php echo $Translation['next'] ; ?>">
 					</td>
 			</tr><table></td>
 		</tr>

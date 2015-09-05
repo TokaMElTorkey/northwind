@@ -116,7 +116,7 @@
 					</tr>
 				<tr>
 					<td><img src="images/edit_icon.gif"> <?php echo $Translation['edit group details'] ; ?></td>
-					<td><img src="images/delete_icon.gif"> <?php echo $Translation['Delete group'] ; ?></td>
+					<td><img src="images/delete_icon.gif"> <?php echo $Translation['delete group'] ; ?>.</td>
 					</tr>
 				<tr>
 					<td><img src="images/add_icon.gif"> <?php echo $Translation['add member to group'] ; ?></td>

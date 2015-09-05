@@ -419,14 +419,14 @@
 	$Translation['next'] = "Next";
 	$Translation['key'] = "Key:";	
 	$Translation['edit group details'] = "Edit group details and permissions.";
-	$Translation['Delete group'] = "Delete group.";
 	$Translation['add member to group'] = "Add a new member to group.";
 	$Translation['view data records'] = "View all data records entered by the group's members.";
 	$Translation['list group members'] = "List all members of a group.";
 	$Translation['send email to all members'] = "Send an email message to all members of a group.";
 	
 	//pageViewMembers.php
-	$Translation['search members'] = "Search members <input class='formTextBox' type='text' name='searchMembers' value='<SEARCHHTML>' size='20'> in <HTMLSELECT>";
+	$Translation['search members'] = "Search members <SEARCH> in <HTMLSELECT>";
+	$Translation['all fields'] = "All fields";
 	$Translation['any'] = "Any";
 	$Translation['waiting approval'] = "Waiting approval";
 	$Translation['active'] = "Active";
@@ -443,12 +443,28 @@
 	$Translation["View member records"] = "View member's records";
 	$Translation["send message to member"] = "Send message to member";
 	$Translation['displaying members'] = "Displaying members <MEMBERNUM1> to <MEMBERNUM2> of <MEMBERS>";
-	$Translation['Edit member details'] = "Edit member details.";
-	$Translation['Delete member'] = "Delete member.";
 	$Translation['activate member'] = "Activate new/banned member.";
 	$Translation['ban member'] = "Ban (suspend) member.";
 	$Translation['view entered member records'] = "View all data records entered by member.";
 	$Translation['send email to member'] = "Send an email message to member.";
 	
+	
+	
+	//pageViewRecords.php
+	$Translation['data records'] = "Data Records";
+	$Translation['show records'] = "Show records from";
+	$Translation['all tables'] = "All tables";
+	$Translation['sort records'] = "Sort records by";
+	$Translation['date created'] = "Date created";
+	$Translation['date modified'] = "Date modified";
+	$Translation['newer first'] = "Newer first";
+	$Translation['older first'] = "Older first";
+	$Translation['created'] = "Created";
+	$Translation['modified'] = "Modified";
+	$Translation['data'] = "Data";
+	$Translation['change record ownership'] = "Change ownership of this record";
+	$Translation['sure delete record'] = "Are you sure you want to delete this record?";
+	$Translation['delete record'] = "Delete this record";
+	$Translation['displaying records'] = "Displaying records <RECORDNUM1> to <RECORDNUM2> of <RECORDS>";
+	
 ?>
-

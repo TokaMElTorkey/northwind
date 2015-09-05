@@ -87,11 +87,12 @@
 						<td valign="top" align="center">
 							<input type="hidden" name="page" value="1">
 							<?php 
-								$originalValues =  array ('<SEARCHHTML>','<HTMLSELECT>');
+								$originalValues =  array ('<SEARCH>','<HTMLSELECT>');
+								$searchValue = "<input class='formTextBox' type='text' name='searchMembers' value='$searchHTML' size='20'>";
 								$arrFields=array(0, 1, 2, 3, 4, 5, 6, 7, 8);
-								$arrFieldCaptions=array('All fields', 'Username', 'Group', 'Email', $adminConfig['custom1'], $adminConfig['custom2'], $adminConfig['custom3'], $adminConfig['custom4'], 'Comments');
+								$arrFieldCaptions=array( $Translation['all fields'] , $Translation['username'] , $Translation["group"] , $Translation["email"] , $adminConfig['custom1'], $adminConfig['custom2'], $adminConfig['custom3'], $adminConfig['custom4'], $Translation["comments"] );
 								$htmlSelect = htmlSelect('searchField', $arrFields, $arrFieldCaptions, $searchField);
-								$replaceValues = array ( $searchHTML , $htmlSelect );
+								$replaceValues = array ( $searchValue , $htmlSelect );
 								echo str_replace ( $originalValues , $replaceValues , $Translation['search members'] );
 							?>
 							</td>
@@ -202,8 +203,8 @@
 					<td colspan="2"><br><b><?php echo $Translation['key'] ; ?></b></td>
 					</tr>
 				<tr>
-					<td><img src="images/edit_icon.gif"> <?php echo $Translation['Edit member details'] ; ?></td>
-					<td><img src="images/delete_icon.gif"> <?php echo $Translation['Delete member'] ; ?></td>
+					<td><img src="images/edit_icon.gif"> <?php echo $Translation['edit member details'] ; ?>.</td>
+					<td><img src="images/delete_icon.gif"> <?php echo $Translation['delete member'] ; ?>.</td>
 					</tr>
 				<tr>
 					<td><img src="images/approve_icon.gif"> <?php echo $Translation['activate member'] ; ?></td>
