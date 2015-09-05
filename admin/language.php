@@ -425,4 +425,30 @@
 	$Translation['list group members'] = "List all members of a group.";
 	$Translation['send email to all members'] = "Send an email message to all members of a group.";
 	
+	//pageViewMembers.php
+	$Translation['search members'] = "Search members <input class='formTextBox' type='text' name='searchMembers' value='<SEARCHHTML>' size='20'> in <ARRFIELDS>";
+	$Translation['any'] = "Any";
+	$Translation['waiting approval'] = "Waiting approval";
+	$Translation['active'] = "Active";
+	$Translation['Banned'] = "Banned";
+	$Translation['username'] = "Username";
+	$Translation['sign up date'] = "Sign up date";
+	$Translation['Status'] = "Status";
+	$Translation['Edit member'] = "Edit member";	
+	$Translation['sure delete user'] = "Are you sure you want to delete user \'<USERNAME>\'?";
+	$Translation['delete member'] = "Delete member";
+	$Translation["approve this member"] = "Approve this member";
+	$Translation["unban this member"] = "Unban this member";
+	$Translation["ban this member"] = "Ban this member";
+	$Translation["View member records"] = "View member's records";
+	$Translation["send message to member"] = "Send message to member";
+	$Translation['displaying members'] = "Displaying members <MEMBERNUM1> to <MEMBERNUM2> of <MEMBERS>";
+	$Translation['Edit member details'] = "Edit member details.";
+	$Translation['Delete member'] = "Delete member.";
+	$Translation['activate member'] = "Activate new/banned member.";
+	$Translation['ban member'] = "Ban (suspend) member.";
+	$Translation['view entered member records'] = "View all data records entered by member.";
+	$Translation['send email to member'] = "Send an email message to member.";
+	
 ?>
+
