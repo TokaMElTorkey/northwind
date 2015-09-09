@@ -275,7 +275,7 @@
 	$Translation['admin settings not saved'] = "Admin settings were NOT saved successfully. Failure reason: <ERROR><br>Back to <a href=\"pageSettings.php\" onclick=\"history.go(-1); return false;\">Admin settings</a>.";
 	$Translation['show tool tips'] = 'Show tool tips as mouse moves over options';
 	$Translation['admin username'] = "Admin username";
-	$Translation['admin password'] = "Admin username";
+	$Translation['admin password'] = "Admin password";
 	$Translation['change admin password'] = "Type a password only if you want to change the admin password.";
 	$Translation['sender email'] = "Sender email";
 	$Translation['sender name and email'] = "Sender name and email are used in the 'To' field when sending";
