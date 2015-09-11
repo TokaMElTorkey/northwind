@@ -37,6 +37,9 @@
 			if($isApproved){
 				notifyMemberApproval($memberID);
 			}
+			
+			// redirect to member editing page
+			redirect("admin/pageEditMember.php?memberID=$memberID&new_member=1");
 
 		}else{ // old member
 
@@ -73,14 +76,20 @@
 			if($isApproved && !$oldIsApproved){
 				notifyMemberApproval($memberID);
 			}
+			
+			// redirect to member editing page
+			redirect("admin/pageEditMember.php?memberID=$memberID");
 		}
 
-		// redirect to member editing page
-		redirect("admin/pageEditMember.php?memberID=$memberID");
 
 	}elseif($_GET['memberID']!=''){
 		// we have an edit request for a member
 		$memberID=makeSafe(strtolower($_GET['memberID']));
+		
+		// display dismissable alert
+		if (isset ($_GET['new_member']) && $_GET['new_member'] == 1 ){
+			$displayCreatedAlert = true;
+		}
 	}elseif($_GET['groupID']!=''){
 		// show the form for adding a new member, and pre-select the provided group
 		$groupID=intval($_GET['groupID']);
@@ -104,6 +113,24 @@
 			$custom3=htmlspecialchars($row['custom3']);
 			$custom4=htmlspecialchars($row['custom4']);
 			$comments=htmlspecialchars($row['comments']);
+			
+			
+			//display dismissible alert if it is a new member
+			if ( $displayCreatedAlert ){ 
+				$id = 'notification-' . rand(); ?>
+			
+				<div id="<?php echo $id ; ?>" class="alert alert-success" style="display: none; padding-top: 6px; padding-bottom: 6px;">
+					<?php echo str_replace ( '<USERNAME>' , $memberID , $Translation['member added']); ?>
+				</div>
+				<script>
+					jQuery(function(){
+							jQuery("#<?php echo $id; ?>").show("slow", function(){
+								setTimeout(function(){ jQuery("#<?php echo $id; ?>").hide("slow"); }, 4000);
+							});
+					});
+				</script>
+	<?php   } 
+			
 		}else{
 			// no such member exists
 			echo "<div class=\"alert alert-danger\">{$Translation['member not found']}</div>";
@@ -122,7 +149,15 @@
 		$userPermissionsNote='';
 	}
 ?>
-<div class="page-header"><h1><?php echo ($memberID ? str_replace ('<MEMBERID>' , $memberID , $Translation["edit member"] ) : $Translation["add new member"].$addend); ?></h1></div>
+<div class="page-header"><h1><?php echo ($memberID ? str_replace ('<MEMBERID>' , $memberID , $Translation["edit member"] ) : $Translation["add new member"].$addend); ?>
+<a id="orders_link" class="btn btn-default btn-lg pull-right hspacer-sm" href="pageViewMembers.php">
+		<?php echo $Translation["back to members"] ; ?>
+</a></h1>
+</div>
+
+
+
+
 <?php if($anonMemberID==$memberID){ ?>
 	<div class="alert alert-warning"><?php echo $Translation["anonymous guest member"] ; ?></div>
 <?php }elseif($memberID==strtolower($adminConfig['adminUsername'])){ ?>

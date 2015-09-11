@@ -121,6 +121,10 @@
 	$Translation["banned"] = "Banned?";
 	$Translation["comments"] = "Comments";
 	
+	$Translation["back to members"] = "Back to members";
+	$Translation["member added"] = "Member <USERNAME> added successfully";
+	
+	
 	
 	//pageEditMemberPermissions.php
 	$Translation["member permissions saved"] = "Member permissions have been saved successfully.";
