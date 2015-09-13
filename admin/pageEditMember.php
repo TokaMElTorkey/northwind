@@ -86,7 +86,7 @@
 		// we have an edit request for a member
 		$memberID=makeSafe(strtolower($_GET['memberID']));
 		
-		// display dismissable alert
+		// display dismissible alert
 		if (isset ($_GET['new_member']) && $_GET['new_member'] == 1 ){
 			$displayCreatedAlert = true;
 		}
@@ -149,10 +149,12 @@
 		$userPermissionsNote='';
 	}
 ?>
-<div class="page-header"><h1><?php echo ($memberID ? str_replace ('<MEMBERID>' , $memberID , $Translation["edit member"] ) : $Translation["add new member"].$addend); ?>
-<a id="orders_link" class="btn btn-default btn-lg pull-right hspacer-sm" href="pageViewMembers.php">
-		<?php echo $Translation["back to members"] ; ?>
-</a></h1>
+<div class="page-header row">
+	<h1><?php echo ($memberID ? str_replace ('<MEMBERID>' , $memberID , $Translation["edit member"] ) : $Translation["add new member"].$addend); ?>
+		<a id="orders_link" class="btn btn-default btn-lg pull-right hspacer-sm col-xs-12 col-sm-3 col-lg-2" href="pageViewMembers.php">
+				<?php echo $Translation["back to members"] ; ?>
+		</a>
+	</h1>
 </div>
 
 
