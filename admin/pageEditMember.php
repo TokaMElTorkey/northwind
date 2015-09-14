@@ -175,7 +175,7 @@
 				</td>
 			<td align="left" class="tdFormInput">
 				<input type="text" name="memberID" <?php echo ($anonMemberID==$memberID ? "readonly" : "");?> id="memberID" value="<?php echo $memberID; ?>" size="20" class="formTextBox">
-				<?php echo ($memberID ? "" : "<input type=\"button\" value=\"Check availability\" onClick=\"window.open('../checkMemberID.php?memberID='+document.getElementById('memberID').value, 'checkMember', 'innerHeight=100,innerWidth=400,dependent=yes,screenX=200,screenY=200,status=no');\">"); ?>
+				<?php echo ($memberID ? "" : "<input type=\"button\" value=\"{$Translation["check availability"]}\" onClick=\"window.open('../checkMemberID.php?memberID='+document.getElementById('memberID').value, 'checkMember', 'innerHeight=100,innerWidth=400,dependent=yes,screenX=200,screenY=200,status=no');\">"); ?>
 				<?php if($anonMemberID==$memberID){ ?>
 				<br><?php echo $Translation["read only username"] ; ?>
 				<?php } ?>

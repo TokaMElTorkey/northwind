@@ -221,7 +221,7 @@
 		<?php } ?>
 		<tr>
 			<td colspan="2" align="right" class="tdFormFooter">
-				<input type="submit" name="saveChanges" value="Save changes">
+				<input type="submit" name="saveChanges" value="<?php echo $Translation["save changes"] ; ?>" >
 				</td>
 			</tr>
 		<tr>
@@ -290,6 +290,7 @@
 					<tr>
 						<td class="tdCaptionCell" valign="top"><?php echo $Translation["orders"] ; ?></td>
 						<td class="tdCell" valign="top">
+							<input onMouseOver="stm(orders_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="orders_insert" value="1" <?php echo ($orders_insert ? "checked class=\"highlight\"" : ""); ?>>
 							<input onMouseOver="stm(orders_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="orders_insert" value="1" <?php echo ($orders_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
 						<td class="tdCell">

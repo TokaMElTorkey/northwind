@@ -80,6 +80,7 @@
 	$Translation["admin approve users"] = "Yes, and the admin must approve them.";
 	$Translation["automatically approve users"] = "Yes, and automatically approve them.";
 	$Translation["group table permissions"] = "Table permissions for this group";
+	$Translation["no"] = "No";
 	$Translation["owner"] = "Owner";
 	$Translation["group"] = "Group";
 	$Translation["all"] = "All";
@@ -112,6 +113,8 @@
 	$Translation["admin member"] = 'Attention! This is the admin member. You can\'t change the username, password or email of this member here, but you can do so in the <a href="pageSettings.php">admin settings</a> page.';
 	
 	$Translation["member username"] = "Member username";
+	$Translation["check availability"] = "Check availability";
+	
 	$Translation["read only username"] = "The username of the guest member is read-only.";
 	$Translation["password"] = "Password";
 	$Translation["change password"] = "Type a password only if you want to change this member's<br>password. Otherwise, leave this field empty.";
