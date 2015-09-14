@@ -291,7 +291,6 @@
 						<td class="tdCaptionCell" valign="top"><?php echo $Translation["orders"] ; ?></td>
 						<td class="tdCell" valign="top">
 							<input onMouseOver="stm(orders_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="orders_insert" value="1" <?php echo ($orders_insert ? "checked class=\"highlight\"" : ""); ?>>
-							<input onMouseOver="stm(orders_addTip, toolTipStyle);" onMouseOut="htm();" type="checkbox" name="orders_insert" value="1" <?php echo ($orders_insert ? "checked class=\"highlight\"" : ""); ?>>
 							</td>
 						<td class="tdCell">
 							<?php

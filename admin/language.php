@@ -8,13 +8,10 @@
 	$Translation['sending mails'] = "Sending mails might take some time. Please don't close this page until you see the 'Done' message.";
 	$Translation['complete step 4'] = "Please complete step 4 by selecting the member you want to transfer records to.";
 	$Translation['info'] = "Info";
-	
 	$Translation['sure move member'] = 'Are you sure you want to move member \'<MEMBER>\' and his data from group \'<OLDGROUP>\' to group \'<NEWGROUP>\'?';
 	$Translation['sure move data of member'] = 'Are you sure you want to move data of member \'<OLDMEMBER>\' from group \'<OLDGROUP>\' to member \'<NEWMEMBER>\' from group \'<NEWGROUP>\'?';
-	
 	$Translation['sure move all members'] = 'Are you sure you want to move all members and data from group \'<OLDGROUP>\' to group \'<NEWGROUP>\'?';
 	$Translation['sure move data of all members'] = 'Are you sure you want to move data of all members of group \'<OLDGROUP>\' to member \'<MEMBER>\' from group \'<NEWGROUP>\'?';
-		
 	$Translation['toggle navigation'] = "Toggle navigation";
 	$Translation['admin area'] = "Admin Area";
 	$Translation['groups'] = "Groups";
@@ -35,7 +32,6 @@
 	$Translation['AppGini forum'] = "AppGini Community Forum";
 	$Translation["user's area"] = 'User\'s area';
 	$Translation["sign out"] = "Sign out";
-	
 	$Translation["attention"] = "Attention!";
 	$Translation['security risk admin'] = 'You are using the default admin username and password. This is a huge security risk. Please change at least the admin password from the <a href="pageSettings.php">Admin Settings</a> page <em>immediately</em>.';
 	$Translation['security risk'] = 'You are using the default admin password. This is a huge security	risk. Please change the admin password from the <a href="pageSettings.php">Admin Settings</a> page <em>immediately</em>.' ;
@@ -49,7 +45,6 @@
 	$Translation['records ownership done'] = "All records in all tables have owners now.<br>Back to <a href='pageHome.php'>Admin homepage</a>.";
 	$Translation['select group'] = "Select group";
 	$Translation['data ownership'] = "Sometimes, you might have tables with data that were entered before implementing this AppGini membership management system, or entered using other applications unaware of AppGini ownership system. This data currently has no owners. This page allows you to assign owner groups and owner members to this data.";
-	
 	$Translation["table"] = "Table";
 	$Translation["records with no owners"] = "Records with no owners";
 	$Translation["new owner group"] = "New owner group";
@@ -73,7 +68,6 @@
 	$Translation["group name"] = "Group name";
 	$Translation["readonly group name"] = "The name of the anonymous group is read-only here.";
 	$Translation["anonymous group name"] = "If you name the group '<ANONYMOUSGROUP>', it will be considered the anonymous group<br>that defines the permissions of guest visitors that do not log into the system.";
-	
 	$Translation["description"] = "Description";
 	$Translation["allow visitors sign up"] = 'Allow visitors to sign up?';
 	$Translation["admin add users"] = "No. Only the admin can add users.";
@@ -111,10 +105,8 @@
 	$Translation["add new member"] = "Add New Member";
 	$Translation["anonymous guest member"] = "Attention! This is the anonymous (guest) member.";
 	$Translation["admin member"] = 'Attention! This is the admin member. You can\'t change the username, password or email of this member here, but you can do so in the <a href="pageSettings.php">admin settings</a> page.';
-	
 	$Translation["member username"] = "Member username";
 	$Translation["check availability"] = "Check availability";
-	
 	$Translation["read only username"] = "The username of the guest member is read-only.";
 	$Translation["password"] = "Password";
 	$Translation["change password"] = "Type a password only if you want to change this member's<br>password. Otherwise, leave this field empty.";
@@ -123,7 +115,6 @@
 	$Translation["approved"] = "Approved?";
 	$Translation["banned"] = "Banned?";
 	$Translation["comments"] = "Comments";
-	
 	$Translation["back to members"] = "Back to members";
 	$Translation["member added"] = "Member <USERNAME> added successfully";
 	
@@ -132,9 +123,7 @@
 	//pageEditMemberPermissions.php
 	$Translation["member permissions saved"] = "Member permissions have been saved successfully.";
 	$Translation["member permissions reset"] = "Member permissions have been reset to the same as his group.";
-		
 	$Translation["user table permissions"] = "Table permissions for user <a href='pageEditMember.php?memberID=<MEMBER>' title='View member details'><MEMBERID></a> of group <a href='pageEditGroup.php?groupID=<GROUPID>'  title='View group details and permissions'><GROUP></a>";
-	
 	$Translation["no member permissions"] = 'This member doesn\'t currently have any special permissions. This list shows the permissions of his group.';
 	$Translation["reset member permissions"] = "Reset member permissions";
 	$Translation["remove special permissions"] = 'This would remove all special permissions of this user and he will have the same permissions as his group. Are you sure you want to do that?';
@@ -164,9 +153,7 @@
 	
 	//pageHome.php
 	$Translation["visitor sign up"] = '<a href="../membership_signup.php" target="_blank">Visitor sign up</a> is disabled because there are no groups where visitors can sign up currently. To enable visitor sign-up, set at least one group to allow visitor sign-up.';
-	
 	$Translation["table data without owner"] = 'You have data in one or more tables that doesn\'t have an owner. To assign an owner group for this data, <a href="pageAssignOwners.php">click here</a>.';
-	
 	$Translation["membership management homepage"] = "Membership Management Homepage";
 	$Translation["newest updates"] = "Newest Updates";
 	$Translation["view record details"] = "View record details";
@@ -195,10 +182,8 @@
 	$Translation["remove feed"] = "Remove this feed";
 	
 	
-	
 	//pageMail.php
 	$Translation["can not send mail"] = "You can not send emails currently. The configured sender email address is not valid.	Please <a href='pageSettings.php'>correct it first</a> then try again.";
-	
 	$Translation["all groups"] = "All groups";
 	$Translation["no recipient"] = "Couldn't find recipient. Please make sure you provide a valid recipient.";
 	$Translation["invalid subject line"] = "Invalid subject line.";
@@ -206,14 +191,12 @@
 	$Translation["mail queue not saved"] = "Couldn't save mail queue. Please make sure the directory '<CURRDIR>' is writeable (chmod 755 or chmod 777).";
 	$Translation["send mail"]  = "Send mail message to a member/group";
 	$Translation["send mail to all members"] = "You are sending an email to all members. This could take a lot of time and affect your server performance. If you have a huge number of members, we don't recommend sending an email to all of them at once.";
-
 	$Translation["from"] = "From";
 	$Translation["change setting"] = "Change this setting";
 	$Translation["to"] = "To";
 	$Translation["subject"] = "Subject";
 	$Translation["message"] = "Message";
 	$Translation["send message"] = "Send Message";
-	
 	
 	
 	//pagePrintRecord.php
@@ -228,7 +211,6 @@
 	$Translation['show deviations only'] = "Show deviations only";
 	$Translation['show all fields'] = "Show all fields";
 	$Translation['compare tables page'] = "This page compares the tables and fields structure/schema as designed in AppGini to the actual database structure and allows you to fix any deviations.";
-	
 	$Translation['field'] = "Field";
 	$Translation['AppGini definition'] = "AppGini definition";
 	$Translation['database definition'] = "Current definition in the database";
@@ -238,9 +220,7 @@
 	$Translation['create it'] = "Create it";
 	$Translation['fix field'] = "Fix the field by running an ALTER COLUMN query so that its definition becomes the same as that in AppGini.";
 	$Translation['fix it'] = "Fix it";
-	
 	$Translation['field update warning'] = "DANGER!! In some cases, this might lead to data loss, truncation, or corruption. It might be a better idea sometimes to update the field in AppGini to match that in the database. Would you still like to continue?";
-	
 	$Translation['no deviations found'] = "No deviations found. All fields OK!";
 	$Translation['error fields'] = "Found <CREATENUM> non-existing fields that need to be created.<br>Found <UPDATENUM> deviating fields that might need to be updated.";
 	
@@ -250,13 +230,13 @@
 	$Translation['thumbnails utility'] = "Use this utility if you have one or more image fields in a table that don't have thumbnails or have thumbnails with incorrect dimensions.";
 	$Translation['rebuild thumbnails of table'] = "Rebuild thumbnails of table";
 	$Translation['rebuild'] = "Rebuild";
-	
 	$Translation['rebuild thumbnails of table_name'] = "Rebuilding thumbnails of '<i><TABLENAME></i>' table ...";
 	$Translation['do not close page message'] = "Don't close this page until you see a confirmation message that all thumbnails have been built.";	
 	$Translation['rebuild thumbnails status'] = "Status: still rebuilding thumbnails, please wait ...";
 	$Translation['building field thumbnails'] =  "Building thumbnails for '<i><FIELD></i>' field...";
 	$Translation['done'] = "Done.";
 	$Translation['finished status'] = "Status: finished. You can close this page now.";
+	
 	
 	//pageSender.php
 	$Translation['invalid mail queue'] = "Invalid mail queue.";
@@ -277,7 +257,6 @@
 	$Translation['errors occurred'] = "The following errors occured:";
 	$Translation['go back'] = 'Please <a href="pageSettings.php" onclick="history.go(-1); return false;">go back</a> to correct the above error(s) and try again.';
 	$Translation['record updated automatically'] = "Record updated automatically on <DATE>";
-	
 	$Translation['admin settings saved'] = "Admin settings saved successfully.<br>Back to <a href=\"pageSettings.php\">Admin settings</a>.";
 	$Translation['admin settings not saved'] = "Admin settings were NOT saved successfully. Failure reason: <ERROR><br>Back to <a href=\"pageSettings.php\" onclick=\"history.go(-1); return false;\">Admin settings</a>.";
 	$Translation['show tool tips'] = 'Show tool tips as mouse moves over options';
@@ -341,7 +320,6 @@
 	$Translation['ownership batch transfer'] = "Batch Transfer Of Ownership";
 	$Translation['step 1'] = "STEP 1:";
 	$Translation['batch transfer wizard'] = "The batch transfer wizard allows you to transfer data records of one or all members of a group (the <i>source group</i>) to a member of another group (the <i>destination member</i> of the <i>destination group</i>)";
-	
 	$Translation['source group'] = "Source group";
 	$Translation['update'] = "Update";
 	$Translation['next step'] = "Next Step";
@@ -361,7 +339,6 @@
 	$Translation['move records'] = "You could either move records from the source member(s) to a member in the destination group, or move the source member(s), together with their data records to the destination group.";
 	$Translation['move data records to member'] = "Move data records to this member:";
 	$Translation['move source member to group'] = "Move source member(s) and all his/their data records to the '<GROUPNAME>' group.";
-	
 	
 	
 	//pageUploadCSV.php
@@ -390,8 +367,7 @@
 	$Translation['preview CSV data'] = "Preview CSV data &gt;";
 	$Translation['no table name provided'] = "No table name provided.";
 	$Translation['can not open CSV'] = "Can't open csv file '<FILENAME>'.";
-	$Translation['empty CSV file'] = "The csv file '<FILENAME>' is empty.";
-		
+	$Translation['empty CSV file'] = "The csv file '<FILENAME>' is empty.";		
 	$Translation['no CSV file data'] = "The csv file '<FILENAME>' has no data to read." ;
 	$Translation['field separator'] = "Field separator";
 	$Translation['default comma'] = "The default is comma (,)";
@@ -406,8 +382,7 @@
 	$Translation['update table records'] = "Update table records if their primary key values match those in the CSV file.";
 	$Translation['ignore CSV table records'] = "If not checked, records in the CSV file having the same primary key values as those in the table <b>will be ignored</b>";
 	$Translation['back up the table'] = "Back up the table before importing CSV data into it.";
-	
-	
+
 	
 	//pageViewGroups.php
 	$Translation['no matching results found'] = "No matching results found.";
@@ -430,6 +405,7 @@
 	$Translation['view data records'] = "View all data records entered by the group's members.";
 	$Translation['list group members'] = "List all members of a group.";
 	$Translation['send email to all members'] = "Send an email message to all members of a group.";
+
 	
 	//pageViewMembers.php
 	$Translation['search members'] = "Search members <SEARCH> in <HTMLSELECT>";
@@ -454,8 +430,7 @@
 	$Translation['ban member'] = "Ban (suspend) member.";
 	$Translation['view entered member records'] = "View all data records entered by member.";
 	$Translation['send email to member'] = "Send an email message to member.";
-	
-	
+
 	
 	//pageViewRecords.php
 	$Translation['data records'] = "Data Records";
