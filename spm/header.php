@@ -1,15 +1,8 @@
-
-
-
-
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-
-
-
 
 	<head>
 		<meta charset="iso-8859-1">
@@ -20,20 +13,20 @@
 		<title><?php echo ucwords('SPM'); ?> </title>
 		
 		<?php 	
-
 			$currDir = dirname(__FILE__);
+			/* Ensure that the folder was installed correctly */
 			try{
-			if ( !@include("../defaultLang.php") ){ 
-				throw new Exception ('The SPM folder is not installed correctly, you must put the folder inside your root project folder.');
-			}
+				if ( !@include("../defaultLang.php") ){ 
+					throw new Exception ('The SPM folder was not installed correctly, you must put the folder inside your root project folder.');
+				}
 			}catch(Exception $e) {   ?>
-				<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">				</head>
+					<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">				
+				</head>
 				<body>
-				<br>
-				<div class="container">
-					<div class="panel panel-danger"><div class="panel-heading"><h3 class="panel-title">Error:</h3></div><div class="panel-body"><p class="text-danger"><?php echo $e->getMessage();?></p></div></div></div>
-				</div>
+					<br>
+					<div class="container">
+						<div class="panel panel-danger"><div class="panel-heading"><h3 class="panel-title">Error:</h3></div><div class="panel-body"><p class="text-danger"><?php echo $e->getMessage();?></p></div></div></div>
+					</div>
 				</body>
 				</html>
 				<?php 
@@ -43,7 +36,7 @@
 			include("../language.php");
 			include("../lib.php");
 		
-	?>
+		?>
 
 		<link id="browser_favicon" rel="shortcut icon" href="../resources/images/appgini-icon.png">
 
@@ -60,6 +53,16 @@
 		<script>var $j = jQuery.noConflict();</script>
 		<script src="../resources/initializr/js/vendor/bootstrap.min.js"></script>
 		<script>
+		
+			function random_string(string_length){
+				var text = "";
+				var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+				for(var i = 0; i < string_length; i++)
+					text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+				return text;
+			}
 			/**
 			 * options object. The following members can be provided:
 			 *    url: iframe url to load
@@ -155,25 +158,53 @@
 			}
 		</script>
 		
+		
+		<script>
+			// VALIDATION FUNCTIONS FOR VARIOUS PAGES
+			$j( function(){
+		
+					$j('form[name=spmForm]').submit(function(e) {
+						$j('.alert-danger').addClass('hidden').html('');
+						var fileName = document.forms["spmForm"]["uploadedFile"].value;
+						if ( fileName == null || fileName == "") {
+							modal_window({ message: '<div class="alert alert-error">You must upload a file</div>', title: "Error" });
+							return false;
+						}else if ( !fileName.match(/^.*\.axp/i) ){
+							modal_window({ message: '<div class="alert alert-error">You must upload a (.axp) file</div>', title: "Error" });
+							return false;
+						}
+						return true;
+				})
+			});
+		</script>
+
 
 	</head>
 	<body>
-		<div class="container"><br><br><br>
+		<div class="container">
+		
+			<?php if(!$_REQUEST['Embedded']){ ?>
+				<?php echo htmlUserBar(); ?>
+				<div style="height: 70px;" class="hidden-print"></div>
+			<?php } ?>
+
+			<!-- process notifications -->
+			<div style="height: 60px; margin: -15px 0 -45px;">
+				<?php if(function_exists('showNotifications')) echo showNotifications(); ?>
+			</div>
+
 	<?php
 
-		
-		
-		
 		/* grant access to the groups 'Admins' only */
 		$mi = getMemberInfo();
 		if( ! ($mi['admin']  && ( (is_string($mi['group']) && $mi['group'] =='Admins') || ( is_array($mi['group']) && array_search("Admins" , $mi['group']))))){
-			echo error_message('Access denied.<br>Please, <a href=\'http://localhost/new_task/northwind/index.php?signIn=1\' >Log in</a> as administrator to access this page');;
+			echo error_message('Access denied.<br>Please, <a href=\'http://localhost/new_task/northwind/index.php?signIn=1\' >Log in</a> as administrator to access this page.');;
 			exit;
 		}
 		
-
+		/* Ensure that the projects folder has write permission */
 		if ( ! is_writable( $currDir."/projects" )){
-			echo error_message('Please, change the permission of the \'projects\' folder to be writeable');		
+			echo error_message('Please, change the permission of the \'projects\' folder to be writeable.');		
 			exit;
 		}
 
