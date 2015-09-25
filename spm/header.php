@@ -13,7 +13,7 @@
 		<title><?php echo ucwords('SPM'); ?> </title>
 		
 		<?php 	
-			$currDir = dirname(__FILE__);
+			$currentDirectory = dirname(__FILE__);
 			/* Ensure that the folder was installed correctly */
 			try{
 				if ( !@include("../defaultLang.php") ){ 
@@ -197,13 +197,14 @@
 
 		/* grant access to the groups 'Admins' only */
 		$mi = getMemberInfo();
-		if( ! ($mi['admin']  && ( (is_string($mi['group']) && $mi['group'] =='Admins') || ( is_array($mi['group']) && array_search("Admins" , $mi['group']))))){
+		if( ! ($mi['admin'] && ((is_string($mi['group']) && $mi['group'] =='Admins') || ( is_array($mi['group']) && array_search("Admins" , $mi['group']))))){
 			echo error_message('Access denied.<br>Please, <a href=\'http://localhost/new_task/northwind/index.php?signIn=1\' >Log in</a> as administrator to access this page.');;
 			exit;
 		}
 		
+
 		/* Ensure that the projects folder has write permission */
-		if ( ! is_writable( $currDir."/projects" )){
+		if ( ! is_writable( $currentDirectory."/projects" )){
 			echo error_message('Please, change the permission of the \'projects\' folder to be writeable.');		
 			exit;
 		}
