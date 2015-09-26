@@ -120,22 +120,23 @@
 	$currentProjects = scandir ( "./projects"  );
 	$currentProjects = array_diff($currentProjects, array('.', '..'));
 	$projectsNum = count($currentProjects);
-?>
-<a href="" onclick="event.preventDefault(); jsDisplayProjects();" ><?php echo ($projectsNum?" or open a project you uploaded before( $projectsNum project(s) found )":""); ?></a>
+
+if ($projectsNum){ ?>
+	<a href="" onclick="event.preventDefault(); jsDisplayProjects();"> or open a project you uploaded before( <?php echo $projectsNum; ?> project(s) found )</a>
 
 
-<script>
-	function jsDisplayProjects(){
-		modal_window({ message: '<?php
-			foreach ( $currentProjects as $projName ){
-				echo "<a href=\"project.php?".md5($projName)."\">$projName <span class=\'glyphicon glyphicon-chevron-right\'></span></a><br>";
-			}
-		?>', title: "Current projects" });
-	}
-</script>
-
+	<script>
+		function jsDisplayProjects(){
+			modal_window({ message: '<?php
+				foreach ( $currentProjects as $projName ){
+					echo "<a href=\"project.php?".md5($projName)."\">$projName <span class=\'glyphicon glyphicon-chevron-right\'></span></a><br>";
+				}
+			?>', title: "Current projects" });
+		}
+	</script>
 
 <?php
+	}
 	include("../footer.php");
 ?>
 
