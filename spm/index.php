@@ -45,7 +45,7 @@
 			}
 			
 			//check existing projects' names 
-			$currentProjects = scandir ( "./projects" , SCANDIR_SORT_DESCENDING );
+			$currentProjects = scandir ( "./projects"  );
 			
 			natsort($currentProjects);
 			$currentProjects = array_reverse ( $currentProjects );
@@ -115,6 +115,25 @@
 	<input type="file" name="uploadedFile" >
 	<input type="submit" name="submit" value="Submit" >
 </form>
+
+<?php 
+	$currentProjects = scandir ( "./projects"  );
+	$currentProjects = array_diff($currentProjects, array('.', '..'));
+	$projectsNum = count($currentProjects);
+?>
+<a href="" onclick="event.preventDefault(); jsDisplayProjects();" ><?php echo ($projectsNum?" or open a project you uploaded before( $projectsNum project(s) found )":""); ?></a>
+
+
+<script>
+	function jsDisplayProjects(){
+		modal_window({ message: '<?php
+			foreach ( $currentProjects as $projName ){
+				echo "<a href=\"project.php?".md5($projName)."\">$projName <span class=\'glyphicon glyphicon-chevron-right\'></span></a><br>";
+			}
+		?>', title: "Current projects" });
+	}
+</script>
+
 
 <?php
 	include("../footer.php");
