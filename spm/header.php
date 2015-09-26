@@ -13,7 +13,6 @@
 		<title><?php echo ucwords('SPM'); ?> </title>
 		
 		<?php 	
-			$currentDirectory = dirname(__FILE__);
 			/* Ensure that the folder was installed correctly */
 			try{
 				if ( !@include("../defaultLang.php") ){ 
@@ -174,7 +173,7 @@
 							return false;
 						}
 						return true;
-				})
+					})
 			});
 		</script>
 
@@ -204,7 +203,7 @@
 		
 
 		/* Ensure that the projects folder has write permission */
-		if ( ! is_writable( $currentDirectory."/projects" )){
+		if ( ! is_writable( "./projects" )){
 			echo error_message('Please, change the permission of the \'projects\' folder to be writeable.');		
 			exit;
 		}

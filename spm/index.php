@@ -25,6 +25,13 @@
 				default:
 					throw new RuntimeException('Unknown errors.');
 			}
+			
+			
+
+			//Check filesize here. (~1MB)
+			if ($ext != "axp") {
+				throw new RuntimeException('You must upload a (.axp) file');
+			}
 
 			//Check filesize here. (~1MB)
 			if ($_FILES['uploadedFile']['size'] > 1048576) {
@@ -33,28 +40,35 @@
 
 			
 			// $_FILES['uploadedFile']['name'] validation
-			if( !preg_match('/^[a-z0-9-]+\.axp$/i', $_FILES['uploadedFile']['name'] )) {
-				throw new RuntimeException('File was not uploaded. The file can only contain "a-z", "0-9" and "-".');
+			if( !preg_match('/^[a-z0-9-_]+\.axp$/i', $_FILES['uploadedFile']['name'] )) {
+				throw new RuntimeException('File was not uploaded. The file can only contain "a-z", "0-9", "_" and "-".');
 			}
 			
 			//check existing projects' names 
 			$currentProjects = scandir ( "./projects" , SCANDIR_SORT_DESCENDING );
+			
+			natsort($currentProjects);
+			$currentProjects = array_reverse ( $currentProjects );
+			
 			$renameFlag = false;
+
 			foreach ( $currentProjects as $projName ){
 				if ( preg_match('/^'.$filename.'(-[0-9]+)?.axp$/i', $projName )) {
 					
 					$matches = array();
+					if ( !strcmp ( $_FILES['uploadedFile']['name'] , $projName) ){
+						$newName = $filename."-"."1.axp";
+						$renameFlag = true;
+					}else{
 					
-					//increment number at the end of the name ( sorted desc, first one is the largest number)
-					if (preg_match('/(-\d+)\.axp$/i', $projName, $matches)){
+						//increment number at the end of the name ( sorted desc, first one is the largest number)
+						preg_match('/(-[0-9]+)\.axp$/i', $projName, $matches);
 						$number = preg_replace("/[^0-9]/", '', $matches[0]);
 						$newName = $filename."-".(((int)$number )+1).".axp";
 						$renameFlag = true;
 						break;
-					}else{
-						$newName = $filename."-"."1.axp";
-						$renameFlag = true;
 					}
+					
 				}else{
 					//found name without number at the previous loop, and name with number not found at this loop
 					if ($renameFlag){
@@ -91,12 +105,10 @@
 			<?php
 
 		} catch (RuntimeException $e) {
-			echo error_message($e->getMessage());
+			echo "<div class='alert alert-danger'>{$e->getMessage()}</div>";
 		}
 	}
 ?>
-
-<div class="hidden alert alert-danger" ></div>
 
 <form method="post" name="spmForm"  onSubmit="jsValidateASP();"  autocomplete="off"  enctype="multipart/form-data" >
 	<input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
