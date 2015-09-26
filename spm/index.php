@@ -28,12 +28,12 @@
 			
 			
 
-			//Check filesize here. (~1MB)
+			//Check extention
 			if ($ext != "axp") {
 				throw new RuntimeException('You must upload a (.axp) file');
 			}
 
-			//Check filesize here. (~1MB)
+			//Check filesize (~1MB)
 			if ($_FILES['uploadedFile']['size'] > 1048576) {
 				throw new RuntimeException('Exceeded filesize limit.');
 			}
