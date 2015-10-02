@@ -1,9 +1,7 @@
 <?php
 	include("header.php");
 ?>
-<div id="response" ></div>
-<!--<form method="post" name="spmForm"  id="my-awesome-dropzone" class="dropzone" onSubmit="jsValidateASP();"  autocomplete="off"  enctype="multipart/form-data" >
-</form>-->
+
 
 <div class="container-fluid">
   <div class="row">
@@ -14,9 +12,9 @@
   </div>
   <hr>
   <div> 
-
-	<form method="post"  id="my-awesome-dropzone" class="dropzone"  autocomplete="off"  enctype="multipart/form-data" >
-		<div class="dz-default dz-message"><span>Drop files here to upload</span></div>
+	<div id="response" ></div>
+	<form method="post"  id="my-awesome-dropzone" class="dropzone col-md-12 col-xs-12"  autocomplete="off"  enctype="multipart/form-data" >
+		<div class="dz-default dz-message"><img src="images/dropzone.png"><div data-dz-errormessage ><fcvfvf</div></div>
 	  </form>
 	</form>
   </div>
@@ -28,13 +26,20 @@
 		margin: auto !important;
 	}	
 	.dropzone {
-	    border: 1px solid rgba(0,0,0,0.03);
-		min-height: 150px;
+	    border: 3px dotted blue;
+		min-height: 100px;
 		-webkit-border-radius: 3px;
 		border-radius: 3px;
 		background: rgba(0,0,0,0.03);
 		padding: 23px;
 	}
+	
+	.dz-default > img{
+		max-width:100%;
+		max-height:100%;
+	}
+	
+	
 </style>
 
 <script>
@@ -49,27 +54,32 @@
 	  },
 	    init: function() {
             this.on("success", function(file, response) {
+				$j(".dropzone").css( "border" ,"3px dotted blue");
 				response = JSON.parse(response);
 				if ( response["response-type"] =="success"){
-				
-					var successDiv = $j("<div>", {id: "foo", class: "alert alert-success" , style: "display: none; padding-top: 6px; padding-bottom: 6px;"});
+					var successDiv = $j("<div>", {class: "alert alert-success" , style: "display: none; padding-top: 6px; padding-bottom: 6px;"});
 					successDiv.html(response.data);
-					$j("#response").html(successDiv);
-					dismissibleMsg( successDiv , response.location )
-				}else{
-					$j("#response").html("<div class='alert alert-danger'>"+response.data+"</div>");
-					this.removeFile(file);
+					$j("#response").show().html(successDiv);
+					dismissibleMsg( successDiv , response.location );
 				}
-          
-            })
-			this.on("error", function(file){
-				if (!file.accepted) this.removeFile(file);
-                $j("#response").html("<div class='alert alert-danger'>You must upload a (.axp) file</div>");
+            });
+			this.on("error", function(file, response){
+				if($j.type(response) === "string"){
+					response = "You must upload a (.axp) file"; //dropzone sends it's own error messages in string
+				}else{
+					response = response['error'];
+				}
+					
+				$j("#response").html("<div class='alert alert-danger'>"+response+"</div>");
+				$j(".dropzone").css( "border" ,"3px dotted red");
+				
+				setTimeout( myfunc, 5000 , file , this);
 			});
         }
 	}
-  
-  
+  	function myfunc(file , elm){
+			elm.removeFile(file);
+	}
   
 	function dismissibleMsg( element , location ){
 	  $j(element).show("slow", function(){
@@ -87,7 +97,7 @@
 	$projectsNum = count($currentProjects);
 
 if ($projectsNum){ ?>
-	<a href="" onclick="event.preventDefault(); jsDisplayProjects();"> or open a project you uploaded before( <?php echo $projectsNum; ?> project(s) found )</a>
+	<h4 class="pull-right" ><a href="" onclick="event.preventDefault(); jsDisplayProjects();"> Or open a project you uploaded before( <?php echo $projectsNum; ?> project(s) found )</a></h4>
 
 
 	<script>

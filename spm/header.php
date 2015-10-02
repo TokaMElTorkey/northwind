@@ -170,11 +170,6 @@
 	<body>
 		<div class="container">
 		
-			<?php if(!$_REQUEST['Embedded']){ ?>
-				<?php echo htmlUserBar(); ?>
-				<div style="height: 70px;" class="hidden-print"></div>
-			<?php } ?>
-
 			<!-- process notifications -->
 			<div style="height: 60px; margin: -15px 0 -45px;">
 				<?php if(function_exists('showNotifications')) echo showNotifications(); ?>

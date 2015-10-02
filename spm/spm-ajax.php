@@ -1,5 +1,7 @@
 <?php
 		
+		
+	
 	/* get max. file size from php.ini configuration */
 	function parse_size($size) {
 	$unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
@@ -99,11 +101,12 @@
 				));
 			}	
 			
-		} catch (RuntimeException $e) {
+		} catch (RuntimeException $e){
+			header('Content-Type: application/json');
+			header($_SERVER['SERVER_PROTOCOL'] . 'error; Content-Type: application/json', true, 400);
 			echo json_encode(array(
-				"response-type" =>"error",
-				"data" => $e->getMessage() 
-			));
+					"error" => $e->getMessage()
+				));
 		}
 	
 ?>
