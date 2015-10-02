@@ -44,13 +44,15 @@
 			<link rel="stylesheet" href="../resources/initializr/css/bootstrap-theme.css">
 		<!--<![endif]-->
 		<link rel="stylesheet" href="../dynamic.css.php">
-
+		
 		<!--[if lt IE 9]>
 			<script src="resources/initializr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 		<![endif]-->
 		<script src="../resources/jquery/js/jquery-1.11.2.min.js"></script>
 		<script>var $j = jQuery.noConflict();</script>
-		<script src="../resources/initializr/js/vendor/bootstrap.min.js"></script>
+		<script src="../resources/initializr/js/vendor/bootstrap.min.js"></script>	
+		<link rel="stylesheet" href="../resources/dropzone/dropzone.min.css">
+		<script src="../resources/dropzone/dropzone.min.js"></script>
 		<script>
 		
 			function random_string(string_length){
@@ -160,21 +162,7 @@
 		
 		<script>
 			// VALIDATION FUNCTIONS FOR VARIOUS PAGES
-			$j( function(){
-		
-					$j('form[name=spmForm]').submit(function(e) {
-						$j('.alert-danger').addClass('hidden').html('');
-						var fileName = document.forms["spmForm"]["uploadedFile"].value;
-						if ( fileName == null || fileName == "") {
-							modal_window({ message: '<div class="alert alert-error">You must upload a file</div>', title: "Error" });
-							return false;
-						}else if ( !fileName.match(/^.*\.axp/i) ){
-							modal_window({ message: '<div class="alert alert-error">You must upload a (.axp) file</div>', title: "Error" });
-							return false;
-						}
-						return true;
-					})
-			});
+			
 		</script>
 
 
