@@ -4,3 +4,4 @@
 /admin/add-ons.cache
 /hooks/customers-dv.js
 /hooks/customers-tv.js
+/spm/projects/*.axp
