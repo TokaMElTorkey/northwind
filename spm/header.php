@@ -7,8 +7,32 @@
 	}
 	@include("../language.php");
 	@include("../lib.php");
-?>
 
+	#########################################################
+	function spm_error_message($msg, $back_url = ''){
+		ob_start();
+		echo '<div class="panel panel-danger">';
+			echo '<div class="panel-heading"><h3 class="panel-title">Error:</h3></div>';
+			echo '<div class="panel-body"><p class="text-danger">' . $msg . '</p>';
+			if($back_url !== false){ // explicitly passing false suppresses the back link completely
+				echo '<div class="text-center">';
+				if($back_url){
+					echo '<a href="' . $back_url . '" class="btn btn-danger btn-lg vspacer-lg"><i class="glyphicon glyphicon-chevron-left"></i> < Back </a>';
+				}else{
+					echo '<a href="#" class="btn btn-danger btn-lg vspacer-lg" onclick="history.go(-1); return false;"><i class="glyphicon glyphicon-chevron-left"></i> < Back </a>';
+				}
+				echo '</div>';
+			}
+			echo '</div>';
+		echo '</div>';
+		$out = ob_get_contents();
+		ob_end_clean();
+
+		return $out;
+	}
+	#########################################################
+
+?>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -21,7 +45,7 @@
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title><?php echo ucwords('SPM'); ?> </title>
+		<title>Search Page Maker for AppGini</title>
 		
 		<?php
 			if ($installationError){ ?>
@@ -46,6 +70,7 @@
 			<link rel="stylesheet" href="../resources/initializr/css/bootstrap-theme.css">
 		<!--<![endif]-->
 		<link rel="stylesheet" href="../dynamic.css.php">
+		<link rel="stylesheet" href="../resources/dropzone/dropzone.min.css">
 		
 		<!--[if lt IE 9]>
 			<script src="resources/initializr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -53,7 +78,6 @@
 		<script src="../resources/jquery/js/jquery-1.11.2.min.js"></script>
 		<script>var $j = jQuery.noConflict();</script>
 		<script src="../resources/initializr/js/vendor/bootstrap.min.js"></script>	
-		<link rel="stylesheet" href="../resources/dropzone/dropzone.min.css">
 		<script src="../resources/dropzone/dropzone.min.js"></script>
 		<script>
 		
@@ -177,51 +201,27 @@
 				<?php if(function_exists('showNotifications')) echo showNotifications(); ?>
 			</div>
 
-	<?php
-	
-	#########################################################
-	function spm_error_message($msg, $back_url = ''){
-		ob_start();
-		echo '<div class="panel panel-danger">';
-			echo '<div class="panel-heading"><h3 class="panel-title">Error:</h3></div>';
-			echo '<div class="panel-body"><p class="text-danger">' . $msg . '</p>';
-			if($back_url !== false){ // explicitly passing false suppresses the back link completely
-				echo '<div class="text-center">';
-				if($back_url){
-					echo '<a href="' . $back_url . '" class="btn btn-danger btn-lg vspacer-lg"><i class="glyphicon glyphicon-chevron-left"></i> < Back </a>';
-				}else{
-					echo '<a href="#" class="btn btn-danger btn-lg vspacer-lg" onclick="history.go(-1); return false;"><i class="glyphicon glyphicon-chevron-left"></i> < Back </a>';
+			<?php
+			
+				/* grant access to the groups 'Admins' only */
+				$mi = getMemberInfo();
+				if( ! ($mi['admin'] && ((is_string($mi['group']) && $mi['group'] =='Admins') || ( is_array($mi['group']) && array_search("Admins" , $mi['group']))))){
+					echo "<br>".spm_error_message('Access denied.<br>Please, <a href=\'../index.php?signIn=1\' >Log in</a> as administrator to access this page.' , false);
+					exit;
 				}
-				echo '</div>';
-			}
-			echo '</div>';
-		echo '</div>';
-		$out = ob_get_contents();
-		ob_end_clean();
+				
 
-		return $out;
-	}
-	#########################################################
+				/* Ensure that the projects folder has write permission */
+				if ( !file_exists ("./projects" )){
+					 if (!mkdir ( "./projects" , 0775)){
+						echo "<br>".spm_error_message('Could not create projects directory.<br>Please,create \'projects\' directory inside the SPM root directory',false);		
+						exit;
+					}
+				}
+				
+				if ( ! is_writable( "./projects" )){
+					echo "<br>".spm_error_message('Please, change the permission of the \'projects\' folder to be writeable.',false);		
+					exit;
+				}
 
-		/* grant access to the groups 'Admins' only */
-		$mi = getMemberInfo();
-		if( ! ($mi['admin'] && ((is_string($mi['group']) && $mi['group'] =='Admins') || ( is_array($mi['group']) && array_search("Admins" , $mi['group']))))){
-			echo "<br>".spm_error_message('Access denied.<br>Please, <a href=\'../index.php?signIn=1\' >Log in</a> as administrator to access this page.' , false);
-			exit;
-		}
-		
-
-		/* Ensure that the projects folder has write permission */
-		if ( !file_exists ("./projects" )){
-			 if (!mkdir ( "./projects" , 0775)){
-				echo "<br>".spm_error_message('Could not create projects directory.<br>Please,create \'projects\' directory inside the SPM root directory',false);		
-				exit;
-			}
-		}
-		
-		if ( ! is_writable( "./projects" )){
-			echo "<br>".spm_error_message('Please, change the permission of the \'projects\' folder to be writeable.',false);		
-			exit;
-		}
-
-	?>
+			?>
