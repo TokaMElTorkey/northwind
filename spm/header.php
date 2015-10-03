@@ -30,7 +30,7 @@
 				<body>
 					<br>
 					<div class="container">
-						<div class="panel panel-danger"><div class="panel-heading"><h3 class="panel-title">Error:</h3></div><div class="panel-body"><p class="text-danger"><?php echo 'The SPM folder was not installed correctly, you must put the folder inside your root project folder.';?></p></div></div></div>
+						<div class="panel panel-danger"><div class="panel-heading"><h3 class="panel-title">Error:</h3></div><div class="panel-body"><p class="text-danger">The SPM folder was not installed correctly, you must put the folder inside your root project folder.</p></div></div></div>
 					</div>
 				</body>
 				</html>
