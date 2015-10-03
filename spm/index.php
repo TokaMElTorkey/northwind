@@ -2,23 +2,23 @@
 	include(dirname(__FILE__)."/header.php");
 ?>
 
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-12">
-    	<h3>Search Page Maker for AppGini</h3>  
-		<h5>Upload your AppGini project file</h5>  
-    </div>
-  </div>
-  <hr>
-  <div> 
-	<div id="response" ></div>
-	<form method="post"  id="my-awesome-dropzone" class="dropzone col-md-12 col-xs-12"  autocomplete="off"  enctype="multipart/form-data" >
-		<div class="dz-default dz-message"><img src="images/dropzone.png"><div data-dz-errormessage ><fcvfvf</div></div>
-	  </form>
-	</form>
-  </div>
+<div class="page-header">
+	<h1>Search Page Maker for AppGini</h1>
 </div>
+
+<div> 
+	<div id="response"></div>
+	<form method="post"  id="my-awesome-dropzone" class="dropzone col-md-12 col-xs-12"  autocomplete="off"  enctype="multipart/form-data" >
+		<div class="dz-default dz-message">
+			<h1>
+				Drag your AppGini project file (*.axp) here to open it.
+				<br><small>Or click to open the upload dialog.</small>
+			</h1>
+			<div data-dz-errormessage ><fcvfvf</div>
+		</div>
+	</form>
+</div>
+
 
 <style>
 	.dz-image , .dz-preview{
@@ -52,7 +52,7 @@
 	  accept: function(file, done) {
 		done();
 	  },
-	    init: function() {
+	  init: function() {
             this.on("success", function(file, response) {
 				$j(".dropzone").css( "border" ,"3px dotted blue");
 				response = JSON.parse(response);
@@ -75,7 +75,7 @@
 				
 				setTimeout( myfunc, 5000 , file , this);
 			});
-        }
+      }
 	}
   	function myfunc(file , elm){
 			elm.removeFile(file);
@@ -96,21 +96,21 @@
 	$currentProjects = array_diff($currentProjects, array('.', '..'));
 	$projectsNum = count($currentProjects);
 
-if ($projectsNum){ ?>
-	<h4 class="pull-right" ><a href="" onclick="event.preventDefault(); jsDisplayProjects();"> Or open a project you uploaded before( <?php echo $projectsNum; ?> project(s) found )</a></h4>
+	if ($projectsNum){ ?>
+		<h4 class="pull-right" ><a href="" onclick="event.preventDefault(); jsDisplayProjects();"> Or open a project you uploaded before (<?php echo ($projectsNum == 1 ? 'one project' : "{$projectsNum} projects"); ?> found)</a></h4>
 
 
-	<script>
-		function jsDisplayProjects(){
-			modal_window({ message: '<?php
-				foreach ( $currentProjects as $projName ){
-					echo "<a href=\"project.php?".md5($projName)."\">$projName <span class=\'glyphicon glyphicon-chevron-right\'></span></a><br>";
-				}
-			?>', title: "Current projects" });
-		}
-	</script>
+		<script>
+			function jsDisplayProjects(){
+				modal_window({ message: '<?php
+					foreach ( $currentProjects as $projName ){
+						echo "<a href=\"project.php?".md5($projName)."\">$projName <span class=\'glyphicon glyphicon-chevron-right\'></span></a><br>";
+					}
+				?>', title: "Current projects" });
+			}
+		</script>
 
-<?php
+		<?php 
 	}
 ?>
 
