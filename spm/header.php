@@ -1,3 +1,14 @@
+<?php 	
+	/* Ensure that the folder was installed correctly */
+	
+	$installationError = false;
+	if ( !@include("../defaultLang.php") ){ 
+	   $installationError = true;
+	}
+	@include("../language.php");
+	@include("../lib.php");
+?>
+
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -12,29 +23,20 @@
 
 		<title><?php echo ucwords('SPM'); ?> </title>
 		
-		<?php 	
-			/* Ensure that the folder was installed correctly */
-			try{
-				if ( !@include("../defaultLang.php") ){ 
-					throw new Exception ('The SPM folder was not installed correctly, you must put the folder inside your root project folder.');
-				}
-			}catch(Exception $e) {   ?>
-					<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">				
+		<?php
+			if ($installationError){ ?>
+				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">				
 				</head>
 				<body>
 					<br>
 					<div class="container">
-						<div class="panel panel-danger"><div class="panel-heading"><h3 class="panel-title">Error:</h3></div><div class="panel-body"><p class="text-danger"><?php echo $e->getMessage();?></p></div></div></div>
+						<div class="panel panel-danger"><div class="panel-heading"><h3 class="panel-title">Error:</h3></div><div class="panel-body"><p class="text-danger"><?php echo 'The SPM folder was not installed correctly, you must put the folder inside your root project folder.';?></p></div></div></div>
 					</div>
 				</body>
 				</html>
-				<?php 
-				exit;
-
+			<?php 
+			exit;
 			}
-			include("../language.php");
-			include("../lib.php");
-		
 		?>
 
 		<link id="browser_favicon" rel="shortcut icon" href="../resources/images/appgini-icon.png">
@@ -176,18 +178,49 @@
 			</div>
 
 	<?php
+	
+	#########################################################
+	function spm_error_message($msg, $back_url = ''){
+		ob_start();
+		echo '<div class="panel panel-danger">';
+			echo '<div class="panel-heading"><h3 class="panel-title">Error:</h3></div>';
+			echo '<div class="panel-body"><p class="text-danger">' . $msg . '</p>';
+			if($back_url !== false){ // explicitly passing false suppresses the back link completely
+				echo '<div class="text-center">';
+				if($back_url){
+					echo '<a href="' . $back_url . '" class="btn btn-danger btn-lg vspacer-lg"><i class="glyphicon glyphicon-chevron-left"></i> < Back </a>';
+				}else{
+					echo '<a href="#" class="btn btn-danger btn-lg vspacer-lg" onclick="history.go(-1); return false;"><i class="glyphicon glyphicon-chevron-left"></i> < Back </a>';
+				}
+				echo '</div>';
+			}
+			echo '</div>';
+		echo '</div>';
+		$out = ob_get_contents();
+		ob_end_clean();
+
+		return $out;
+	}
+	#########################################################
 
 		/* grant access to the groups 'Admins' only */
 		$mi = getMemberInfo();
 		if( ! ($mi['admin'] && ((is_string($mi['group']) && $mi['group'] =='Admins') || ( is_array($mi['group']) && array_search("Admins" , $mi['group']))))){
-			echo error_message('Access denied.<br>Please, <a href=\'http://localhost/new_task/northwind/index.php?signIn=1\' >Log in</a> as administrator to access this page.');;
+			echo "<br>".spm_error_message('Access denied.<br>Please, <a href=\'../index.php?signIn=1\' >Log in</a> as administrator to access this page.' , false);
 			exit;
 		}
 		
 
 		/* Ensure that the projects folder has write permission */
+		if ( !file_exists ("./projects" )){
+			 if (!mkdir ( "./projects" , 0775)){
+				echo "<br>".spm_error_message('Could not create projects directory.<br>Please,create \'projects\' directory inside the SPM root directory',false);		
+				exit;
+			}
+		}
+		
 		if ( ! is_writable( "./projects" )){
-			echo error_message('Please, change the permission of the \'projects\' folder to be writeable.');		
+			echo "<br>".spm_error_message('Please, change the permission of the \'projects\' folder to be writeable.',false);		
 			exit;
 		}
 

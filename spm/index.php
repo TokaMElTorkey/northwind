@@ -1,5 +1,5 @@
 <?php
-	include("header.php");
+	include(dirname(__FILE__)."/header.php");
 ?>
 
 
@@ -59,7 +59,7 @@
 				if ( response["response-type"] =="success"){
 					var successDiv = $j("<div>", {class: "alert alert-success" , style: "display: none; padding-top: 6px; padding-bottom: 6px;"});
 					successDiv.html(response.data);
-					$j("#response").show().html(successDiv);
+					$j("#response").html(successDiv);
 					dismissibleMsg( successDiv , response.location );
 				}
             });

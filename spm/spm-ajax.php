@@ -42,11 +42,9 @@
 				default:
 					throw new RuntimeException('Unknown errors.');
 			}
-			
-			
-
+		
 			//Check extention
-			if (strtolower($ext) != "axp") {
+			if ( strtolower($ext) != "axp") {
 				throw new RuntimeException('You must upload a (.axp) file');
 			}
 			
