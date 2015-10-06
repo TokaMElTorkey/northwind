@@ -14,7 +14,6 @@
 				Drag your AppGini project file (*.axp) here to open it.
 				<br><small>Or click to open the upload dialog.</small>
 			</h1>
-			<div data-dz-errormessage ><fcvfvf</div>
 		</div>
 	</form>
 </div>
