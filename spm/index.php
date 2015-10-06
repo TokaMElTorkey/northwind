@@ -8,7 +8,7 @@
 
 <div> 
 	<div id="response"></div>
-	<form method="post"  id="my-awesome-dropzone" class="dropzone col-md-12 col-xs-12"  autocomplete="off"  enctype="multipart/form-data" >
+	<form method="post" id="my-awesome-dropzone" class="dropzone" autocomplete="off" enctype="multipart/form-data">
 		<div class="dz-default dz-message">
 			<h1>
 				Drag your AppGini project file (*.axp) here to open it.
