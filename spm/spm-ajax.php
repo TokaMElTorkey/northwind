@@ -95,7 +95,7 @@
 				echo json_encode(array(
 					"response-type" =>"success",
 					"data" => "File uploaded successfully.".($renameFlag?"<br>The project name already exists, the file was renamed to $newName .":""),		
-					"location" => "project.php?".md5($renameFlag?$newName:$_FILES['uploadedFile']['name'])
+					"location" => "project.php?axp=".md5($renameFlag?$newName:$_FILES['uploadedFile']['name'])
 				));
 			}	
 			

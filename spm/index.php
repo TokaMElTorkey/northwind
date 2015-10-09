@@ -103,7 +103,7 @@
 			function jsDisplayProjects(){
 				modal_window({ message: '<?php
 					foreach ( $currentProjects as $projName ){
-						echo "<a href=\"project.php?".md5($projName)."\">$projName <span class=\'glyphicon glyphicon-chevron-right\'></span></a><br>";
+						echo "<a href=\"project.php?axp=".md5($projName)."\">$projName <span class=\'glyphicon glyphicon-chevron-right\'></span></a><br>";
 					}
 				?>', title: "Current projects" });
 			}
