@@ -135,15 +135,15 @@ try{
 	}
 
 	function getType(currentType , field){
-		if (currentType ==1 ){  		//boolean
+		if (currentType ==1 ){  								//boolean
 			type= "checkbox"
-		}else if (currentType <9 ){  	//number
+		}else if (currentType <9 ){  							//number
 			type= "number range";
-		}else if (currentType == 9 || currentType == 13 ){	//date
+		}else if (currentType == 9 || currentType == 13 ){		//date
 			type= "date range";
-		}else if (currentType == 10 ){	//dateTime
+		}else if (currentType == 10 ){							//dateTime
 			type= "date/time range";
-		}else if (currentType < 13 ){  	//time
+		}else if (currentType < 13 ){  							//time
 			type= "time range";
 		}else{
 			type="text";
