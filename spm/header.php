@@ -72,13 +72,23 @@
 		<link rel="stylesheet" href="../dynamic.css.php">
 		<link rel="stylesheet" href="./resources/dropzone/dropzone.min.css">
 		
+
+
+		<!-- jquery ui -->
+		<link rel="stylesheet" href="./resources/jquery-ui-1.11.2/jquery-ui.min.css">
+
 		<!--[if lt IE 9]>
 			<script src="resources/initializr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 		<![endif]-->
 		<script src="../resources/jquery/js/jquery-1.11.2.min.js"></script>
+
+		<!-- jquery ui -->
+		<script src="./resources/jquery-ui-1.11.2/jquery-ui.min.js"></script>
+
 		<script>var $j = jQuery.noConflict();</script>
 		<script src="../resources/initializr/js/vendor/bootstrap.min.js"></script>	
 		<script src="./resources/dropzone/dropzone.min.js"></script>
+
 		<script>
 		
 			function random_string(string_length){
