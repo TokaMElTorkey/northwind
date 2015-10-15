@@ -43,19 +43,14 @@ try{
 
 <style>
 	#tables{
-		min-height: 110px;
+		min-height: 150px;
 		overflow-Y:scroll;
 	}
 	#choosenFields,#fields{
-		min-height: 60px;
+		min-height: 95px;
 		overflow-Y:scroll;
 	}
-	.clicked{
-	    background-color: #79BD9A;
-	    color: green;
-	}
 	.item{
-		padding:10px;
 		cursor:pointer;
 	}
 </style>
@@ -70,12 +65,13 @@ try{
 </div>
 
 
-<div id="tables" class="col-md-3 col-xs-12">
+<div id="tables" class="col-md-3 col-xs-12 list-group"  >
+
 
 	<?php
 	for ( $i= 0 ; $i < count ($xmlFile->table) ; $i++ ){ ?>
-		<div onclick="showFields(<?php echo $i; ?> , this)" style="padding:10px;cursor:pointer;"> <?php if (!empty($xmlFile->table[$i]->tableIcon)){ ?><img src="./resources/table_icons/<?php echo $xmlFile->table[$i]->tableIcon ;?>" alt="<?php echo $xmlFile->table[$i]->tableIcon ; ?>" >  <?php } echo ((String)($xmlFile->table[$i]->caption));	?> </div>
-
+	<a href="#" class="list-group-item" onclick="showFields( event , <?php echo $i; ?> , this)" > <?php if (!empty($xmlFile->table[$i]->tableIcon)){ ?><img src="./resources/table_icons/<?php echo $xmlFile->table[$i]->tableIcon ;?>" alt="<?php echo $xmlFile->table[$i]->tableIcon ; ?>" >  <?php } echo ((String)($xmlFile->table[$i]->caption));	?> </a>
+ 
 	<?php
 		//convert cData fields to string
 		for ( $j= 0 ; $j < count ($xmlFile->table[$i]->field) ; $j++ ){ 
@@ -85,19 +81,17 @@ try{
 	}
 	?>
 </div>
-<div class="col-md-9 col-xs-12">
-	<div class="col-md-8">
-	 	<h4><b>Fields in search page ( drag to re-order )</b></h4>
-	 	<div id="choosenFields" >
-	 	</div>
-	</div>
 
-	<div  class="col-md-4">
-	 	<h4><b>Available fields/options</b></h4>
-		<div id="fields" style="border:solid 1px black;">
-		</div>
-	</div>
+<div class="col-md-6 col-xs-12">
+ 	<h4><b>Fields in search page ( drag to re-order )</b></h4>
+ 	<div id="choosenFields" class="list-group" >
+ 	</div>
+</div>
 
+<div  class="col-md-3 col-xs-12">
+ 	<h4><b>Available fields/options</b></h4>
+	<div id="fields" class="list-group">
+	</div>
 </div>
 <h4 class="pull-left" ><a href="./index.php"> < Or open another project</a></h4>
 <?php
@@ -111,8 +105,8 @@ try{
 
 	$j( document ).ready( function(){
 
-		$j("#tables").height( $j(window).height() - $j("#tables").offset().top - $j(".pull-left").height() - 20 );
-		$j("#choosenFields, #fields").height( $j(window).height() - $j("#fields").offset().top-  $j(".pull-left").height() -20 );
+		$j("#tables").height( $j(window).height() - $j("#tables").offset().top - $j(".pull-left").height() - 40 );
+		$j("#choosenFields, #fields").height( $j(window).height() - $j("#fields").offset().top-  $j(".pull-left").height() -40 );
 
 		$j("#choosenFields").droppable({
 			tolerance: "intersect",
@@ -136,19 +130,19 @@ try{
 		
 		//add resize event
 		$j( window ).resize(function() {
-  			$j("#tables").height( $j(window).height() - $j("#tables").offset().top -  $j(".pull-left").height()-20);
-  			$j("#choosenFields, #fields").height( $j(window).height() - $j("#fields").offset().top -  $j(".pull-left").height()-20);
+  			$j("#tables").height( $j(window).height() - $j("#tables").offset().top -  $j(".pull-left").height()-40);
+  			$j("#choosenFields, #fields").height( $j(window).height() - $j("#fields").offset().top -  $j(".pull-left").height()-40);
 		});
 	});
 
 
 	var xmlFile = <?php echo $xmlFile; ?>;
 
-	function showFields( tableNum , elm){
-
+	function showFields( e , tableNum , elm){
+		e.preventDefault();
 		$j("#fields, #choosenFields").html('');
-		$j("#tables div").removeClass("clicked");
-		$j(elm).addClass("clicked");
+		$j("#tables a").removeClass("active");
+		$j(elm).addClass("active");
 		var field, type={} ,currentType,table;
 		
 
@@ -167,12 +161,12 @@ try{
 					currentType = parseInt (field.dataType);
 					type = getType(currentType , field, type);
 
-					$j("#fields").append('<div class="ui-widget-content item" id='+tableNum+"-"+i+' ><span class="'+type.icon+'" ></span>     ' +field.caption +" ( "+type.name+" ) </div>");	
+					$j("#fields").append('<div class="list-group-item ui-widget-content item" id='+tableNum+"-"+i+' ><span class="'+type.icon+'" ></span>     ' +field.caption +" ( "+type.name+" ) </div>");	
 				}
 		}
 
-		$j("#fields").append('<div class="ui-widget-content item"><span class="glyphicon glyphicon-collapse-down" ></span>     Order by  ( section ) </div>');	
-		$j("#fields").append('<div class="ui-widget-content item"><span class="glyphicon glyphicon-user" ></span>     User/group/all  ( section ) </div>');	
+		$j("#fields").append('<div class="list-group-item ui-widget-content item"><span class="glyphicon glyphicon-collapse-down" ></span>     Order by  ( section ) </div>');	
+		$j("#fields").append('<div class="list-group-item ui-widget-content item"><span class="glyphicon glyphicon-user" ></span>     User/group/all  ( section ) </div>');	
 
 		$j("#fields div").draggable({
 		    appendTo: "body",
