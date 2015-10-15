@@ -56,10 +56,10 @@ try{
 </style>
 
 
-<div class="page-header">
+<div class="page-header row">
 	<h1>Search Page Maker for AppGini</h1>
 	<h1><a href="./index.php">Projects</a> > <?php echo substr( $projectFile , 0 , strrpos( $projectFile , ".")); ?>
-	<button class="pull-right btn btn-success btn-lg"><span class="glyphicon glyphicon-play"></span>  Create Search Pages</button>
+	<button class="pull-right btn btn-success btn-lg col-md-3 col-xs-12"><span class="glyphicon glyphicon-play"></span>  Create Search Pages</button>
 	</h1>
 
 </div>
