@@ -105,36 +105,57 @@ try{
 
 	$j( document ).ready( function(){
 
+		// sort divs by id in $fields section
+		$j.fn.sortDivs = function sortDivs() {
+		    $j("> div", this[0]).sort(custom_sort).appendTo(this[0]);
+		    function custom_sort(a, b){ return (parseInt($j(b).attr("data-sort")) < parseInt($j(a).attr("data-sort"))) ? 1 : -1; }
+		}
+
 		$j("#tables").height( $j(window).height() - $j("#tables").offset().top - $j(".pull-left").height() - 40 );
-		$j("#choosenFields, #fields").height( $j(window).height() - $j("#fields").offset().top-  $j(".pull-left").height() -40 );
+		$j("#choosenFields, #fields").height( $j("#tables").height() -  $j("h4").first().height() -20);
 
-		$j("#choosenFields").droppable({
-			tolerance: "intersect",
-			accept: ".ui-widget-content",
-			activeClass: "ui-state-default",
-			hoverClass: "ui-state-hover",
-			drop: function(event, ui) {
-				$j("#choosenFields").append($j(ui.draggable));
-			}
-		});
 
-		$j("#fields").droppable({
-			tolerance: "intersect",
-			accept: ".ui-widget-content",
-			activeClass: "ui-state-default",
-			hoverClass: "ui-state-hover",
-			drop: function(event, ui) {
-				$j("#fields").append($j(ui.draggable));
+	    $j( "#choosenFields" ).sortable({
+	        connectWith: "#fields",
+	        cursor: "move",
+			update: function (event, ui) {
+	        	updateList()
 			}
-		});
-		
+	    }).disableSelection();
+
+
+	    $j( "#fields" ).sortable({
+			cursor: "move",
+			//stop ordering the fields
+			beforeStop: function (event, ui) {
+				if($j(ui.helper).parent().attr('id') === 'fields' && $j(ui.placeholder).parent().attr('id') === 'fields'){
+				   return false; 
+				}
+			},
+			tolerance: 'pointer',
+			receive: function (event, ui) {
+				$j("#fields").sortDivs();
+			},
+			connectWith: "#choosenFields",
+	    }).disableSelection();
+
 		//add resize event
 		$j( window ).resize(function() {
   			$j("#tables").height( $j(window).height() - $j("#tables").offset().top -  $j(".pull-left").height()-40);
-  			$j("#choosenFields, #fields").height( $j(window).height() - $j("#fields").offset().top -  $j(".pull-left").height()-40);
+			$j("#choosenFields, #fields").height( $j("#tables").height() - $j("h4").first().height() -20 );		
 		});
 	});
 
+	function updateList(){
+			var ids= [];
+        	var tableNumber = $j("#choosenFields").attr('data-table');
+
+        	//update array 
+        	$j("#choosenFields").find("div").each(function() {
+   				 ids.push( $j(this).attr("data-sort") );
+			});
+			xmlFile.table[tableNumber]['spm'] =  ids;
+	}
 
 	var xmlFile = <?php echo $xmlFile; ?>;
 
@@ -149,32 +170,50 @@ try{
 		//check number of tables
 		if ($j.isArray(xmlFile.table)){      				//>1 table
 			table = xmlFile.table[tableNum];
+			$j("#fields, #choosenFields").attr('data-table',tableNum );
 		}else{     											//1 table only
 			table = xmlFile.table;
+		}
+		var chosenElements;
+		if (table.spm){
+			chosenElements = new Array(table.spm.length);
 		}
 		for (var i = 0 ; i< table.field.length ; i++){
 				field = table.field[i];
 
 				//checks if the field is filtered, not an image, not auto-filled
 				if ( (field.notFiltered == "False") && (field.tableImage=="False") && (field.detailImage=="False") && (field.autoFill=="False") ){
-
 					currentType = parseInt (field.dataType);
 					type = getType(currentType , field, type);
 
-					$j("#fields").append('<div class="list-group-item ui-widget-content item" id='+tableNum+"-"+i+' ><span class="'+type.icon+'" ></span>     ' +field.caption +" ( "+type.name+" ) </div>");	
+					position = $j.inArray( String(i) , table.spm );
+					if ( position!== -1){
+					  	chosenElements[position] = '<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="'+type.icon+'" ></span>     ' +field.caption +" ( "+type.name+" ) </div>";
+					}else{
+						$j("#fields").append('<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="'+type.icon+'" ></span>     ' +field.caption +" ( "+type.name+" ) </div>");	
+					}
+
 				}
 		}
-
-		$j("#fields").append('<div class="list-group-item ui-widget-content item"><span class="glyphicon glyphicon-collapse-down" ></span>     Order by  ( section ) </div>');	
-		$j("#fields").append('<div class="list-group-item ui-widget-content item"><span class="glyphicon glyphicon-user" ></span>     User/group/all  ( section ) </div>');	
-
-		$j("#fields div").draggable({
-		    appendTo: "body",
-		    cursor: "move",
-		    helper: 'clone',
-		    revert: "invalid"
-		});
 		
+		position = $j.inArray( String(i) , table.spm );
+		if ( position !== -1){
+			chosenElements[position] = '<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="glyphicon glyphicon-collapse-down" ></span>     Order by  ( section ) </div>';
+		}else{
+			$j("#fields").append('<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="glyphicon glyphicon-collapse-down" ></span>     Order by  ( section ) </div>');	
+		}	
+		i++;
+
+		position = $j.inArray( String(i) , table.spm );
+		if ( position !== -1){
+			chosenElements[position] = '<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="glyphicon glyphicon-user" ></span>     User/group/all  ( section ) </div>';
+		}else{
+			 $j("#fields").append('<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="glyphicon glyphicon-user" ></span>     User/group/all  ( section ) </div>');	
+		}
+
+		if ( chosenElements){
+			$j("#choosenFields").html(chosenElements.join(" "));
+		}
 	}
 
 	function getType(currentType , field , type){
