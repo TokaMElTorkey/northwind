@@ -108,7 +108,7 @@ try{
 		// sort divs by id in $fields section
 		$j.fn.sortDivs = function sortDivs() {
 		    $j("> div", this[0]).sort(custom_sort).appendTo(this[0]);
-		    function custom_sort(a, b){ return (parseInt($j(b).attr("data-sort")) < parseInt($j(a).attr("data-sort"))) ? 1 : -1; }
+		    function custom_sort(a, b){ return (parseInt($j(b).data("sort")) < parseInt($j(a).data("sort"))) ? 1 : -1; }
 		}
 
 		$j("#tables").height( $j(window).height() - $j("#tables").offset().top - $j(".pull-left").height() - 40 );
@@ -118,7 +118,13 @@ try{
 	    $j( "#choosenFields" ).sortable({
 	        connectWith: "#fields",
 	        cursor: "move",
-			update: function (event, ui) {
+			stop: function (event, ui) {
+	        	updateList()
+			},
+			receive: function (event, ui) {
+	        	updateList()
+			},
+			remove: function (event, ui) {
 	        	updateList()
 			}
 	    }).disableSelection();
@@ -148,7 +154,7 @@ try{
 
 	function updateList(){
 			var ids= [];
-        	var tableNumber = $j("#choosenFields").attr('data-table');
+        	var tableNumber = $j("#choosenFields").data('table');
 
         	//update array 
         	$j("#choosenFields").find("div").each(function() {
@@ -170,7 +176,7 @@ try{
 		//check number of tables
 		if ($j.isArray(xmlFile.table)){      				//>1 table
 			table = xmlFile.table[tableNum];
-			$j("#fields, #choosenFields").attr('data-table',tableNum );
+			$j("#fields, #choosenFields").data('table',tableNum );
 		}else{     											//1 table only
 			table = xmlFile.table;
 		}
