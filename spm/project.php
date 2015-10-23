@@ -177,12 +177,9 @@ try{
 			  data: {
 			  	projFile: "<?php echo $projectFile; ?>",
 			  	tableNumber: (tableNumber?tableNumber:0),
-			  	data: (ids.length==0?null:ids)
+			  	data: (ids.length==0?"":ids)
 			  },
 			  success: function(response){
-			  		//$j(".page-header").html(response);
-			  		//console.log(response);
-
 			  },
 			});
 	}
