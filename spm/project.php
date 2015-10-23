@@ -95,7 +95,6 @@ try{
 </div>
 <h4 class="pull-left" ><a href="./index.php"> < Or open another project</a></h4>
 <?php
-	//var_dump($xmlFile->table[2]->field[6]);
 	$xmlFile = json_encode($xmlFile);
 ?>
 
@@ -111,8 +110,15 @@ try{
 		    function custom_sort(a, b){ return (parseInt($j(b).data("sort")) < parseInt($j(a).data("sort"))) ? 1 : -1; }
 		}
 
+		//adjust div heights
 		$j("#tables").height( $j(window).height() - $j("#tables").offset().top - $j(".pull-left").height() - 40 );
 		$j("#choosenFields, #fields").height( $j("#tables").height() -  $j("h4").first().height() -20);
+
+		//add resize event
+		$j( window ).resize(function() {
+  			$j("#tables").height( $j(window).height() - $j("#tables").offset().top -  $j(".pull-left").height()-40);
+			$j("#choosenFields, #fields").height( $j("#tables").height() - $j("h4").first().height() -20 );		
+		});
 
 
 	    $j( "#choosenFields" ).sortable({
@@ -145,25 +151,46 @@ try{
 			connectWith: "#choosenFields",
 	    }).disableSelection();
 
-		//add resize event
-		$j( window ).resize(function() {
-  			$j("#tables").height( $j(window).height() - $j("#tables").offset().top -  $j(".pull-left").height()-40);
-			$j("#choosenFields, #fields").height( $j("#tables").height() - $j("h4").first().height() -20 );		
-		});
+
+	    $j('#tables > a').first().trigger('click');
+
+
 	});
 
 	function updateList(){
-			var ids= [];
+			var ids='';
         	var tableNumber = $j("#choosenFields").data('table');
 
         	//update array 
         	$j("#choosenFields").find("div").each(function() {
-   				 ids.push( $j(this).attr("data-sort") );
+   				 ids+=( $j(this).attr("data-sort") )+":";
 			});
-			xmlFile.table[tableNumber]['spm'] =  ids;
+
+        	//one/many tables in project
+			currentTable = ( (typeof tableNumber != 'undefined')?xmlFile.table[tableNumber]:xmlFile.table);
+			currentTable['spm'] =  ids;
+
+			//update project file
+			$j.ajax({
+			  type: "POST",
+			  url: "project-ajax.php",
+			  data: {
+			  	projFile: "<?php echo $projectFile; ?>",
+			  	tableNumber: (tableNumber?tableNumber:0),
+			  	data: (ids.length==0?null:ids)
+			  },
+			  success: function(response){
+			  		//$j(".page-header").html(response);
+			  		//console.log(response);
+
+			  },
+			});
 	}
 
 	var xmlFile = <?php echo $xmlFile; ?>;
+	
+	//sava fields' data types
+	var tableData = [];
 
 	function showFields( e , tableNum , elm){
 		e.preventDefault();
@@ -182,35 +209,52 @@ try{
 		}
 		var chosenElements;
 		if (table.spm){
-			chosenElements = new Array(table.spm.length);
+			chosenElements = new Array(table.spm.split(":").length);
 		}
-		for (var i = 0 ; i< table.field.length ; i++){
+
+		//get data types ( only for the first time the table is clicked )
+		if (!tableData[tableNum]){
+			tableData[tableNum] = {};
+			for (var i = 0 ; i< table.field.length ; i++){
 				field = table.field[i];
 
 				//checks if the field is filtered, not an image, not auto-filled
 				if ( (field.notFiltered == "False") && (field.tableImage=="False") && (field.detailImage=="False") && (field.autoFill=="False") ){
 					currentType = parseInt (field.dataType);
-					type = getType(currentType , field, type);
-
-					position = $j.inArray( String(i) , table.spm );
-					if ( position!== -1){
-					  	chosenElements[position] = '<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="'+type.icon+'" ></span>     ' +field.caption +" ( "+type.name+" ) </div>";
-					}else{
-						$j("#fields").append('<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="'+type.icon+'" ></span>     ' +field.caption +" ( "+type.name+" ) </div>");	
-					}
-
+					node = getType( currentType , field);
+					tableData[tableNum][String(i)]=node;
 				}
+			}
 		}
+
+		//display data
 		
-		position = $j.inArray( String(i) , table.spm );
+		//convert ids string into array
+		var spmDataArray = [];
+
+		if(table.spm){
+			var spmDataArray = table.spm.split(":");	
+		}
+
+		$j.each(tableData[tableNum], function( key, value ) {
+			position = $j.inArray( key , spmDataArray );
+			if ( position!== -1){
+			  	chosenElements[position] = '<div class="list-group-item ui-state-default  item" data-sort='+key+'><span class="'+value.icon+'" ></span>     ' +value.caption +" ( "+value.name+" ) </div>";
+			}else{
+				$j("#fields").append('<div class="list-group-item ui-state-default  item" data-sort='+key+'><span class="'+value.icon+'" ></span>     ' +value.caption +" ( "+value.name+" ) </div>");	
+			}
+		});
+
+		//fixed sections part
+		i=9001;   //ORDER BY
+		position = $j.inArray( String(i) , spmDataArray );
 		if ( position !== -1){
 			chosenElements[position] = '<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="glyphicon glyphicon-collapse-down" ></span>     Order by  ( section ) </div>';
 		}else{
 			$j("#fields").append('<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="glyphicon glyphicon-collapse-down" ></span>     Order by  ( section ) </div>');	
 		}	
-		i++;
-
-		position = $j.inArray( String(i) , table.spm );
+		i++;  //USER/GROUP/ALL
+		position = $j.inArray( String(i) , spmDataArray );
 		if ( position !== -1){
 			chosenElements[position] = '<div class="list-group-item ui-state-default  item" data-sort='+i+'><span class="glyphicon glyphicon-user" ></span>     User/group/all  ( section ) </div>';
 		}else{
@@ -222,44 +266,45 @@ try{
 		}
 	}
 
-	function getType(currentType , field , type){
+	function getType( currentType , field ){
+		var nodeData={};
 		if (currentType ==1 ){  								//boolean
-			type.name= "checkbox";
-			type.icon = "glyphicon glyphicon-check";
-
+			nodeData.name= "checkbox";
+			nodeData.icon = "glyphicon glyphicon-check";
 		}else if (currentType <9 ){  							//number
-			type.name= "number range";
-			type.icon = "glyphicon glyphicon-resize-horizontal";
+			nodeData.name= "number range";
+			nodeData.icon = "glyphicon glyphicon-resize-horizontal";
 
 		}else if (currentType == 9 || currentType == 13 ){		//date
-			type.name= "date range";
-			type.icon = "glyphicon glyphicon-calendar";
+			nodeData.name= "date range";
+			nodeData.icon = "glyphicon glyphicon-calendar";
 
 		}else if (currentType == 10 ){							//dateTime
-			type.name= "date/time range";
-			type.icon = "glyphicon glyphicon-calendar";
+			nodeData.name= "date/time range";
+			nodeData.icon = "glyphicon glyphicon-calendar";
 
 		}else if (currentType < 13 ){  							//time
-			type.name= "time range";
-			type.icon = "glyphicon glyphicon-time";
+			nodeData.name= "time range";
+			nodeData.icon = "glyphicon glyphicon-time";
 
 		}else{
-			type.name="text";
-			type.icon="glyphicon glyphicon-text-size";
+			nodeData.name="text";
+			nodeData.icon="glyphicon glyphicon-text-size";
 		}
 
 		//lookup/unique
 		if (!  $j.isEmptyObject(field.parentTable) ||  (field.unique=="true") ){
-			type.name="drop down";
-			type.icon = "glyphicon glyphicon-align-justify";
+			nodeData.name="drop down";
+			nodeData.icon = "glyphicon glyphicon-align-justify";
 
 		//options list
 		}else if (!  $j.isEmptyObject(field.CSValueList)){
-			type.name="multi select";
-			type.icon = "glyphicon glyphicon-align-justify";
+			nodeData.name="multi select";
+			nodeData.icon = "glyphicon glyphicon-align-justify";
 		}
+		nodeData.caption = field.caption;
 
-		return type;
+		return nodeData;
 	}
 
 </script>
