@@ -1,45 +1,15 @@
 <?php
 	include(dirname(__FILE__)."/header.php");
 
-// VALIDATIONS
-try{
-		// validate project name
-		if (!isset($_GET['axp'])){
-			throw new RuntimeException('Project file not found.');
-		}
-
-		$projects = scandir ( "./projects"  );
-		$projects = array_diff($projects, array('.', '..'));
-		$userProject = $_GET['axp'];
-		$projectFile = null;
-
-		foreach ( $projects as $project ){
-			if ($userProject == md5($project)){
-				$projectFile = $project ;
-				break;
-			}
-		}
-		if (!$projectFile) throw new RuntimeException('Project file not found.');
-
-		// validate simpleXML extension enabled
-		if (! function_exists(simpleXML_load_file)){
-			throw new RuntimeException('Please, enable simplexml extention in your php.ini configuration file.');
-		}
-
-
-		// validate that the file is not corrupted
-		@$xmlFile = simpleXML_load_file("./projects/$projectFile");
-		if (!$xmlFile ){
-			throw new RuntimeException('Invalid axp file.');
-		}		
-
-} catch (RuntimeException $e){
-			echo "<br>".spm_error_message( $e->getMessage());
-			exit;
-}
+	// validate project name
+	if (!isset($_GET['axp'])){
+		echo 'Project file not found.';
+		exit;
+	}
+	$projectFile = '';
+	$xmlFile = getXMLFile( $_GET['axp'] , $projectFile);
 //-----------------------------------------------------------------------------------------
 ?>
-
 
 <style>
 	#tables{
@@ -59,11 +29,10 @@ try{
 <div class="page-header row">
 	<h1>Search Page Maker for AppGini</h1>
 	<h1><a href="./index.php">Projects</a> > <?php echo substr( $projectFile , 0 , strrpos( $projectFile , ".")); ?>
-	<button class="pull-right btn btn-success btn-lg col-md-3 col-xs-12"><span class="glyphicon glyphicon-play"></span>  Create Search Pages</button>
+	<a href="output-folder.php?axp=<?php echo $_GET['axp']; ?>" class="pull-right btn btn-success btn-lg col-md-3 col-xs-12"><span class="glyphicon glyphicon-play"></span>  Create Search Pages</a>
 	</h1>
 
 </div>
-
 
 <div id="tables" class="col-md-3 col-xs-12 list-group"  >
 
@@ -94,6 +63,7 @@ try{
 	</div>
 </div>
 <h4 class="pull-left" ><a href="./index.php"> < Or open another project</a></h4>
+
 <?php
 	$xmlFile = json_encode($xmlFile);
 ?>
@@ -215,8 +185,8 @@ try{
 			for (var i = 0 ; i< table.field.length ; i++){
 				field = table.field[i];
 
-				//checks if the field is filtered, not an image, not auto-filled
-				if ( (field.notFiltered == "False") && (field.tableImage=="False") && (field.detailImage=="False") && (field.autoFill=="False") ){
+				//checks if the field is filtered, not auto-filled, not youtube/googlemap(embed is empty), not img/any file (allowImageUpload)
+				if ( (field.notFiltered == "False") && (field.autoFill=="False")  && ($j.isEmptyObject(field.embed))  && (field.allowImageUpload=="False")){
 					currentType = parseInt (field.dataType);
 					node = getType( currentType , field);
 					tableData[tableNum][String(i)]=node;
@@ -276,11 +246,11 @@ try{
 			nodeData.name= "date range";
 			nodeData.icon = "glyphicon glyphicon-calendar";
 
-		}else if (currentType == 10 ){							//dateTime
+		}else if (currentType < 12 ){							//dateTime
 			nodeData.name= "date/time range";
 			nodeData.icon = "glyphicon glyphicon-calendar";
 
-		}else if (currentType < 13 ){  							//time
+		}else if (currentType == 12 ){  							//time
 			nodeData.name= "time range";
 			nodeData.icon = "glyphicon glyphicon-time";
 
@@ -289,20 +259,26 @@ try{
 			nodeData.icon="glyphicon glyphicon-text-size";
 		}
 
-		//lookup/unique
-		if (!  $j.isEmptyObject(field.parentTable) ||  (field.unique=="true") ){
+		//lookup
+		if (!  $j.isEmptyObject(field.parentTable) ){
 			nodeData.name="drop down";
 			nodeData.icon = "glyphicon glyphicon-align-justify";
 
 		//options list
 		}else if (!  $j.isEmptyObject(field.CSValueList)){
-			nodeData.name="multi select";
+			nodeData.name="radio buttons / drop down";
 			nodeData.icon = "glyphicon glyphicon-align-justify";
+		
+		//checkbox regardless the type
+		}else if( field.checkBox == "True"){
+			nodeData.name= "checkbox";
+			nodeData.icon = "glyphicon glyphicon-check";
 		}
 		nodeData.caption = field.caption;
 
 		return nodeData;
 	}
+
 
 </script>
 

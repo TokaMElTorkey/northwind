@@ -25,4 +25,32 @@ if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['pr
 	$xmlFile->table[$tableNum]->spm= $data;
 
 	$xmlFile->asXML("./projects/".$projName);
+
+/**
+  *  validate the given project folder
+  **/
+
+}else if ( isset($_POST['actionName']) && $_POST['actionName'] == 'validatePath'){
+
+	$path = $_POST['path'];
+
+	try{
+		if (! is_dir($path)){
+			throw new RuntimeException('Invalid path');
+		}
+		
+
+		if ( ! ( file_exists("$path\lib.php") && file_exists("$path\db.php") && file_exists("$path\index.php") ) ){
+			throw new RuntimeException('The given path is not a valid AppGini project path');
+		}
+		if (! is_writable($path."/hooks")){
+			throw new RuntimeException('The hooks folder is not writable');
+		}
+	} catch (RuntimeException $e){
+			echo  $e->getMessage();
+			exit;
+	}
+	
+
+	echo "ok";
 }
