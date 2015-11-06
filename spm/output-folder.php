@@ -39,7 +39,7 @@
 
 <h4>Full path to your application folder</h4>
 <div class='form-group'>
-	<input onkeyup='validatePath(this)' type='text' class='form-control col-md-11 col-xs-9' value='<?php echo addslashes(dirname(dirname(__FILE__))); ?>'>
+	<input onkeyup='validatePath(this)' type='text' class='form-control col-md-11 col-xs-9' value='<?php echo dirname(dirname(__FILE__)); ?>'>
 </div>
 <button data-toggle='popover' title='' data-content='' class='transparent btn'>
 	<i class='glyphicon glyphicon-ok' id='mark' style='color:#30C313;' ></i>
