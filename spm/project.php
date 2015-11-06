@@ -235,10 +235,7 @@
 
 	function getType( currentType , field ){
 		var nodeData={};
-		if (currentType ==1 ){  								//boolean
-			nodeData.name= "checkbox";
-			nodeData.icon = "glyphicon glyphicon-check";
-		}else if (currentType <9 ){  							//number
+		if (currentType <9 ){  									//number
 			nodeData.name= "number range";
 			nodeData.icon = "glyphicon glyphicon-resize-horizontal";
 
@@ -250,7 +247,7 @@
 			nodeData.name= "date/time range";
 			nodeData.icon = "glyphicon glyphicon-calendar";
 
-		}else if (currentType == 12 ){  							//time
+		}else if (currentType == 12 ){  						//time
 			nodeData.name= "time range";
 			nodeData.icon = "glyphicon glyphicon-time";
 
