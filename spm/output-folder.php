@@ -47,7 +47,7 @@
 <br>
 <h5><i>For example: /var/www/my-app</i></h5>
 <center>
-	<button id="start" onclick="" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-play" ></span>  Start</button>
+	<a id="start" href="generate.php?axp=<?php echo $_GET['axp']; ?>"  class="btn btn-success btn-lg"><span class="glyphicon glyphicon-play" ></span>   Start</a>
 </center>
 
 
