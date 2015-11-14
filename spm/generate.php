@@ -40,6 +40,9 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
 
     echo "<br>Generating search page code for '".(string)$xmlFile->table[$i]->caption."' table<br>";
 
+    //mapping fields indexes to match filter Values
+    $filterIdxArray = mapIndex( $xmlFile->table[$i]->field );
+    
     
     $fileContent = '';
     $filterCounter = 0;
@@ -64,8 +67,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
 
        
         $field = $xmlFile->table[$i]->field[$fieldNum]; 
-        $fieldNum++;
-        getFieldType($fileContent, $field, $fieldNum , $filterCounter , $xmlFile->table[$i]->name);
+        getFieldType($fileContent, $field, $filterIdxArray[$fieldNum] , $filterCounter , $xmlFile->table[$i]->name);
         $fileContent.='
             <!-- ########################################################## -->
             ';
@@ -75,7 +77,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     //save fields in file
     $fileContent.='
     <div style="margin-top:10px;" ><button class="btn btn-success btn-lg" >Apply</button></div>';
-    $fileName = (string)$xmlFile->table[$i]->caption."_filter.php";
+    $fileName = $xmlFile->table[$i]->name."_filter.php";
     file_put_contents( $fileName , $fileContent);
 
 echo "<br><br>";
@@ -117,9 +119,8 @@ function getFieldType(&$fileContent, $field, $fieldNum, &$filterCounter , $table
     } else if ($currentType == 12) {                        //time
 
     } else {                                                //text
-        
+        getTextFilter($fileContent, $field, $fieldNum, $filterCounter);
     }
-    return $retVal;
 
 }
 
@@ -340,8 +341,7 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
         <input type="hidden" id="filterfield_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
     </div>
 
-
-<script>
+    <script>
 
     $j(function(){
         /* display a drop-down of categories that populates its content from ajax_combo.php */
@@ -386,9 +386,55 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
     $retVal = ob_get_contents();
     ob_end_clean();
     $fileContent.=$retVal;
+}
 
 
+function getTextFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
+
+
+    ob_start();
+    ?>
+    
+     <div style="margin-top:20px;">
+        <label><?php echo (string) $field->caption; ?> (contains) </label>
+
+        <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
+        <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
+        <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="like">
+        <input type="text" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+    </div>
+
+
+    <?php
+    $retVal = ob_get_contents();
+    ob_end_clean();
+    $fileContent.=$retVal;
+}
+
+
+
+
+function mapIndex ( $fields ){
+
+    $idx = 1;
+    $mapper = array();
+    for ( $i = 0 ; $i < count ($fields); $i++ ){
+
+
+        $field = $fields[$i];
+        if ( ( $field->notFiltered == "True") || ($field->tableImage=="True") || ($field->detailImage=="True") ){
+            //those indexes will not be considered
+            continue;
+        }
+        $mapper[$i] = $idx;
+        $idx++;
+    }
+    return $mapper;
 
 }
+
+
+
+
 
 ?>

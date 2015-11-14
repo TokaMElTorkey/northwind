@@ -235,7 +235,24 @@
 
 	function getType( currentType , field ){
 		var nodeData={};
-		if (currentType <9 ){  									//number
+		
+
+		//lookup
+		if (!  $j.isEmptyObject(field.parentTable) ){
+			nodeData.name="drop down";
+			nodeData.icon = "glyphicon glyphicon-align-justify";
+
+		//options list
+		}else if (!  $j.isEmptyObject(field.CSValueList)){
+			nodeData.name="radio buttons / drop down";
+			nodeData.icon = "glyphicon glyphicon-align-justify";
+		
+		//checkbox regardless the type
+		}else if( field.checkBox == "True"){
+			nodeData.name= "checkbox";
+			nodeData.icon = "glyphicon glyphicon-check";
+			
+		}else if (currentType <9 ){  									//number
 			nodeData.name= "number range";
 			nodeData.icon = "glyphicon glyphicon-resize-horizontal";
 
@@ -256,21 +273,7 @@
 			nodeData.icon="glyphicon glyphicon-text-size";
 		}
 
-		//lookup
-		if (!  $j.isEmptyObject(field.parentTable) ){
-			nodeData.name="drop down";
-			nodeData.icon = "glyphicon glyphicon-align-justify";
-
-		//options list
-		}else if (!  $j.isEmptyObject(field.CSValueList)){
-			nodeData.name="radio buttons / drop down";
-			nodeData.icon = "glyphicon glyphicon-align-justify";
 		
-		//checkbox regardless the type
-		}else if( field.checkBox == "True"){
-			nodeData.name= "checkbox";
-			nodeData.icon = "glyphicon glyphicon-check";
-		}
 		nodeData.caption = field.caption;
 
 		return nodeData;
