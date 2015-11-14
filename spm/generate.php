@@ -46,6 +46,8 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     
     $fileContent = '';
     $filterCounter = 0;
+    $includeDatetimePicker = false;
+
     $fieldIdxArray = explode(":", $xmlFile->table[$i]->spm );
     array_pop($fieldIdxArray); //remove last element (empty)
 
@@ -74,9 +76,22 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         echo "<br>'".(string)$field->caption."' field : OK";
     
     }
-    //save fields in file
+    
+    //add submit button
     $fileContent.='
     <div style="margin-top:10px;" ><button class="btn btn-success btn-lg" >Apply</button></div>';
+
+
+    //includes
+    if ($includeDatetimePicker){
+        $fileContent= '
+    <!-- load bootstrap datetime-picker-->
+    <link rel="stylesheet" href="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+    <script src="resources/bootstrap-datetimepicker/require/moment.min.js"></script>
+    <script src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    '.$fileContent; 
+    }
+
     $fileName = $xmlFile->table[$i]->name."_filter.php";
     file_put_contents( $fileName , $fileContent);
 
@@ -111,12 +126,21 @@ function getFieldType(&$fileContent, $field, $fieldNum, &$filterCounter , $table
         getNumberFilter($fileContent, $field, $fieldNum, $filterCounter);
         $filterCounter++;
 
-    } else if ($currentType == 9 || $currentType == 13) {   //date
-
+    } else if ($currentType == 9){                          //date
+       
+        $GLOBALS['includeDatetimePicker'] = true;
+        getDateFilter($fileContent, $field, $fieldNum, $filterCounter);
+        $filterCounter++;
 
     } else if ($currentType < 12) {                         //dateTime
 
+        $GLOBALS['includeDatetimePicker'] = true;
+
     } else if ($currentType == 12) {                        //time
+        $GLOBALS['includeDatetimePicker'] = true;
+
+    } else if ($currentType == 13) {                        //year
+        $GLOBALS['includeDatetimePicker'] = true;
 
     } else {                                                //text
         getTextFilter($fileContent, $field, $fieldNum, $filterCounter);
@@ -403,6 +427,55 @@ function getTextFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="like">
         <input type="text" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
     </div>
+
+
+    <?php
+    $retVal = ob_get_contents();
+    ob_end_clean();
+    $fileContent.=$retVal;
+}
+
+
+function getDateFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
+
+
+    ob_start();
+    ?>
+    
+     
+    <div style="margin-top:20px;">
+        <label>Show <?php echo (string) $field->caption; ?> between </label>
+        <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
+        <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="greater-than-or-equal-to">
+        <input type="text"  id="from-date_<?php echo $fieldNum; ?>"  name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
+
+        <?php $filterCounter++; ?>
+        and 
+        <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
+        <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
+        <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="less-than-or-equal-to">
+        <input type="text"  id="to-date_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
+    </div>
+
+    <script>
+        //date
+        $j("#from-date_<?php echo $fieldNum; ?> , #to-date_<?php echo $fieldNum; ?> ").datetimepicker({
+            
+            format: 'M/D/YYYY'   //config
+            
+        });
+
+        $j("#from-date_<?php echo $fieldNum; ?>" ).on('dp.change' , function(e){
+        
+            date = moment(e.date).add(1, 'month');  
+            $j("#to-date_<?php echo $fieldNum; ?> ").val(date.format('M/D/YYYY')).data("DateTimePicker").minDate(e.date);
+
+        });
+        
+    </script>
+
+    
+
 
 
     <?php
