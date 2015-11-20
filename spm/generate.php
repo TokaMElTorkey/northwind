@@ -46,7 +46,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     
     $fileContent = '';
     $filterCounter = 0;
-    $includeDatetimePicker = false;
+    $includeDatetimePicker = $includeOrderBy = $includeGroups = false;
 
     $fieldIdxArray = explode(":", $xmlFile->table[$i]->spm );
     array_pop($fieldIdxArray); //remove last element (empty)
@@ -57,12 +57,15 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
 
         //sections 
         if ($fieldNum > 9000){
-            // handle sections case
+            if ( $fieldNum == 9001 ){
+                $includeOrderBy = true;
+            }else{
+                 $includeGroups = true;
+            }
             continue;
         }
 
         $filterCounter++;   //number of filter fields
-
         if ($filterCounter>12){
             break; /********/
         }
@@ -76,65 +79,13 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         echo "<br>'".(string)$field->caption."' field : OK";
     
     }
+
+    //includes
+    includeDefaultParts($fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups );
     
     //add submit button
     $fileContent.='
     <div style="margin-top:10px;" ><button class="btn btn-success btn-lg" >Apply</button></div>';
-
-
-    //includes
-    if ($includeDatetimePicker){
-        $fileContent= '
-    <!-- load bootstrap datetime-picker-->
-    <link rel="stylesheet" href="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
-    <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/moment.min.js"></script>
-    <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/transition.js"></script>
-    <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/collapse.js"></script>
-    <script type="text/javascript" src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-    '.$fileContent.'
-    <script>
-    ko.bindingHandlers.dateTimePicker = {
-    init: function (element, valueAccessor, allBindingsAccessor) {
-        //initialize datepicker with some optional options
-        var options = allBindingsAccessor().dateTimePickerOptions || {};
-        $(element).datetimepicker(options);
-
-        //when a user changes the date, update the view model
-        ko.utils.registerEventHandler(element, "dp.change", function (event) {
-            var value = valueAccessor();
-            if (ko.isObservable(value)) {
-                if (event.date != null && !(event.date instanceof Date)) {
-                    value(event.date.toDate());
-                } else {
-                    value(event.date);
-                }
-            }
-        });
-
-        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-            var picker = $(element).data("DateTimePicker");
-            if (picker) {
-                picker.destroy();
-            }
-        });
-    },
-    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-
-        var picker = $(element).data("DateTimePicker");
-        //when the view model is updated, update the widget
-        if (picker) {
-            var koDate = ko.utils.unwrapObservable(valueAccessor());
-
-            //in case return from server datetime i am get in this form for example /Date(93989393)/ then fomat this
-            koDate = (typeof (koDate) !== "object") ? new Date(parseFloat(koDate.replace(/[^0-9]/g, ""))) : koDate;
-
-            picker.date(koDate);
-        }
-    }
-};
-<script>
-    '; 
-    }
 
     $fileName = $xmlFile->table[$i]->name."_filter.php";
     file_put_contents( $fileName , $fileContent);
@@ -239,8 +190,10 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         ?>';
         ob_start();
         ?>
-        <div style="margin-top:20px;">
-            <label><?php echo (string) $field->caption; ?></label>
+        <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
+            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+
+
             <div id="<?php echo $fieldNum; ?>_DropDown"><span></span></div>
 
             <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
@@ -275,20 +228,25 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         ob_start();
         ?>
 
-        <div style="margin-top:20px;">
-            <label><?php echo (string) $field->caption; ?></label>
+        <div class="row" style="border-bottom: dotted 2px #DDD;">
+            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+            
+            <div class="col-md-8 col-md-offset-3">
 
-            <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
-            <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
-            <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
-            <input type="hidden" name="FilterValue[<?php echo $filterCounter; ?>]" id="<?php echo $fieldNum; ?>_currValue" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3"><br>
+                    <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
+                    <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
+                    <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
+                    <input type="hidden" name="FilterValue[<?php echo $filterCounter; ?>]" id="<?php echo $fieldNum; ?>_currValue" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
 
-        <?php foreach ($options as $option) { ?>
-                <input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" value="<?php echo $option; ?>"><?php echo $option; ?>
-
-            <?php } ?>
+                <?php foreach ($options as $option) { ?>
+                        <div class="radio">
+                            <label>
+                                 <input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" value="<?php echo $option; ?>"><?php echo $option; ?>
+                            </label>
+                        </div>
+                 <?php } ?>
+            </div>
         </div>
-
         <script>
             //for population
             var filterValue_<?php echo $fieldNum; ?> = '<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>';
@@ -312,17 +270,26 @@ function getCheckboxFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
     ?>
 
 
-    <div style="margin-top:20px;">
-        <label><?php echo (string) $field->caption; ?></label>
+          
 
+    <div class="row" style="border-bottom: dotted 2px #DDD;">
+         
+                <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+                <div class="col-md-8 col-md-offset-3">
+                <div class="radio">
+                    <label><input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="1" > Checked</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="null"> Unchecked</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="" checked> Any</label>
+               </div>
+            </div>
 
-        <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
-        <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
-        <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" id="filter_<?php echo $fieldNum; ?>" value="equal-to">
-
-        <input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="1" > Checked   
-        <input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="null"> Unchecked   
-        <input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="" checked> Any
+            <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
+            <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
+            <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" id="filter_<?php echo $fieldNum; ?>" value="equal-to">
 
     </div>
 
@@ -362,21 +329,25 @@ function getNumberFilter( &$fileContent, $field, $fieldNum, &$filterCounter){
     ob_start();
     ?>
 
-    <div style="margin-top:20px;">
+     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
         
-        <label><?php echo (string) $field->caption; ?> between </label>
-        
+        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <div class="col-md-1 vspacer-lg">Between </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="greater-than-or-equal-to">
-        <input type="text" class="numeric" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+        <div class="col-md-2 vspacer-md">
+            <input type="text" class="numeric form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+        </div>
 
         <?php $filterCounter++; ?>
-        and 
+        <div class="col-md-1 text-center vspacer-lg"> and </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="less-than-or-equal-to">
-        <input type="text" class="numeric" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+        <div class="col-md-2 vspacer-md">
+            <input type="text" class="numeric form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+        </div>
     </div>
 
     
@@ -412,8 +383,9 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
     ?>
     
 
-    <div style="margin-top:20px;">
-        <label><?php echo (string) $field->caption; ?></label>
+     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
+
+        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
         <div id="filter_<?php echo $fieldNum; ?>"></span></div>
 
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
@@ -476,13 +448,15 @@ function getTextFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
     ob_start();
     ?>
     
-     <div style="margin-top:20px;">
-        <label><?php echo (string) $field->caption; ?> (contains) </label>
-
+     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
+        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <div class="col-md-1 text-center vspacer-lg"> Contains </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="like">
-        <input type="text" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+        <div class="col-md-5 vspacer-md">
+            <input type="text" class="form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+        </div>
     </div>
 
 
@@ -498,20 +472,25 @@ function getDatePreFilter (&$fileContent, $field, $fieldNum, $filterCounter){
     ?>
     
      
-    <div style="margin-top:20px;">
-        <label>Show <?php echo (string) $field->caption; ?> between </label>
+     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
 
+        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <div class="col-md-1 vspacer-lg">Between </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="greater-than-or-equal-to">
-        <input type="text"  id="from-date_<?php echo $fieldNum; ?>"  name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
+        <div class="col-md-2 vspacer-md">
+            <input type="text"  class="form-control" id="from-date_<?php echo $fieldNum; ?>"  name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
+        </div>
 
         <?php $filterCounter++; ?>
-        and 
+        <div class="col-md-1 text-center vspacer-lg"> and </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="less-than-or-equal-to">
-        <input type="text"  id="to-date_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
+        <div class="col-md-2 vspacer-md">
+            <input type="text" class="form-control" id="to-date_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
+        </div>
     </div>
 
     <?php
@@ -632,6 +611,170 @@ function getYearFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 }
 
 
+
+function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups ){
+    
+    if ($includeOrderBy){
+    
+        $fileContent.='    
+
+        <!-- sorting header  -->   
+        <div class="row" style="border-bottom: solid 2px #DDD;">
+            <div class="col-md-offset-2 col-md-8 vspacer-lg"><strong>order by</strong></div>
+        </div>
+        <!-- sorting rules -->
+        <?php
+        // Fields list
+        $sortFields = new Combo;
+        $sortFields->ListItem = $this->ColCaption;
+        $sortFields->ListData = $this->ColNumber;
+
+        // sort direction
+        $sortDirs = new Combo;
+        $sortDirs->ListItem = array("ascending" , "descending" );
+        $sortDirs->ListData = array("asc", "desc");
+        $num_rules = min(maxSortBy, count($this->ColCaption));
+
+        for($i = 0; $i < $num_rules; $i++){
+            $sfi = $sd = "";
+            if(isset($orderBy[$i])) foreach($orderBy[$i] as $sfi => $sd);
+
+            $sortFields->SelectName = "OrderByField$i";
+            $sortFields->SelectID = "OrderByField$i";
+            $sortFields->SelectedData = $sfi;
+            $sortFields->SelectedText = "";
+            $sortFields->Render();
+
+            $sortDirs->SelectName = "OrderDir$i";
+            $sortDirs->SelectID = "OrderDir$i";
+            $sortDirs->SelectedData = $sd;
+            $sortDirs->SelectedText = "";
+            $sortDirs->Render();
+
+            $border_style = ($i == $num_rules - 1 ? "solid 2px #DDD" : "dotted 1px #DDD");
+            ?>
+            <!-- sorting rule -->
+            <div class="row" style="border-bottom: <?php echo $border_style; ?>;">
+                <div class="col-xs-2 vspacer-md hidden-md hidden-lg"><strong><?php echo ($i ? "then by" : "order by"); ?></strong></div>
+                <div class="col-md-2 col-md-offset-2 vspacer-md hidden-xs hidden-sm text-right"><strong><?php echo ($i ? "then by" : "order by"); ?></strong></div>
+                <div class="col-xs-6 col-md-4 vspacer-md"><?php echo $sortFields->HTML; ?></div>
+                <div class="col-xs-4 col-md-2 vspacer-md"><?php echo $sortDirs->HTML; ?></div>
+            </div>
+            <?php
+        }
+        ?>';
+        echo "<br>'Order by' section included: OK";
+    }
+
+
+    //-----------------------------------------------------------------------------------
+
+    if ($includeGroups){
+    
+        $fileContent.='    
+            <?php
+                // ownership options
+                $mi = getMemberInfo();
+                $adminConfig = config("adminConfig");
+                $isAnonymous = ($mi["group"] == $adminConfig["anonymousGroup"]);
+
+                if(!$isAnonymous){
+                    ?>
+                    <!-- ownership header  --> 
+                    <div class="row filterByOwnership" style="border-bottom: solid 2px #DDD;">
+                        <div class="col-md-offset-2 col-md-8 vspacer-lg"><strong>Records to display</strong></div>
+                    </div>
+
+                    <!-- ownership options -->
+                    <div class="row" style="border-bottom: dotted 2px #DDD;">
+                        <div class="col-md-8 col-md-offset-2">
+                            <div class="radio filterByOwnership">
+                                <label>
+                                    <input type="radio" name="DisplayRecords" id="DisplayRecordsUser" value="user"/>
+                                    Only your own records
+                                </label>
+                            </div>
+                            <div class="radio filterByOwnership">
+                                <label>
+                                    <input type="radio" name="DisplayRecords" id="DisplayRecordsGroup" value="group"/>
+                                    All records owned by your group
+                                </label>
+                            </div>
+                            <div class="radio filterByOwnership">
+                                <label>
+                                    <input type="radio" name="DisplayRecords" id="DisplayRecordsAll" value="all"/>
+                                    All records
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+            ?>
+
+
+            <script>
+                var FiltersPerGroup = <?php echo $FiltersPerGroup; ?>;
+
+                function filterGroupDisplay(groupIndex, hide, animate){
+                    for(i = ((groupIndex - 1) * FiltersPerGroup + 1); i <= (groupIndex * FiltersPerGroup); i++){
+                        if(animate){
+                            if(hide) jQuery("div.FilterSet" + i).fadeOut();
+                            if(!hide) jQuery("div.FilterSet" + i).fadeIn(function(){
+                                jQuery("#FilterField_" + ((groupIndex - 1) * FiltersPerGroup + 1) + "_").focus();
+                            });
+                        }else{
+                            if(hide) jQuery("div.FilterSet" + i).hide();
+                            if(!hide) jQuery("div.FilterSet" + i).show(function(){
+                                jQuery("#FilterField_" + ((groupIndex - 1) * FiltersPerGroup + 1) + "_").focus();
+                            });
+                        }
+                    }
+                }
+
+                jQuery(function(){
+                    for(i = (FiltersPerGroup + 1); i <= (3 * FiltersPerGroup); i++){
+                        jQuery("div.FilterSet" + i).hide();
+                    }
+                    jQuery("#FilterAnd_" + (FiltersPerGroup + 1) + "_").change(function(){
+                        filterGroupDisplay(2, (jQuery(this).val() ? false : true), true);
+                    });
+                    jQuery("#FilterAnd_" + (2 * FiltersPerGroup + 1) + "_").change(function(){
+                        filterGroupDisplay(3, (jQuery(this).val() ? false : true), true);
+                    });
+
+                    if(jQuery("#FilterAnd_" + (    FiltersPerGroup + 1) + "_").val()){ filterGroupDisplay(2); }
+                    if(jQuery("#FilterAnd_" + (2 * FiltersPerGroup + 1) + "_").val()){ filterGroupDisplay(3); }
+
+                    var DisplayRecords = "<?php echo $_REQUEST["DisplayRecords"]; ?>";
+
+                    switch(DisplayRecords){
+                        case "user":
+                            jQuery("#DisplayRecordsUser").prop("checked", true);
+                            break;
+                        case "group":
+                            jQuery("#DisplayRecordsGroup").prop("checked", true);
+                            break;
+                        default:
+                            jQuery("#DisplayRecordsAll").prop("checked", true);
+                    }
+                });
+            </script>
+            ';
+            echo "<br>'User/group/all' section included: OK";
+    }
+    //-----------------------------------------------------------------------------------
+    if ($includeDatetimePicker){
+        $fileContent = '
+        <!-- load bootstrap datetime-picker-->
+        <link rel="stylesheet" href="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+        <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/moment.min.js"></script>
+        <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/transition.js"></script>
+        <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/collapse.js"></script>
+        <script type="text/javascript" src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+        '.$fileContent ;
+    }
+}
 
 function mapIndex ( $fields ){
 
