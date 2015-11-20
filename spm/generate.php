@@ -87,9 +87,53 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         $fileContent= '
     <!-- load bootstrap datetime-picker-->
     <link rel="stylesheet" href="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
-    <script src="resources/bootstrap-datetimepicker/require/moment.min.js"></script>
-    <script src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-    '.$fileContent; 
+    <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/moment.min.js"></script>
+    <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/transition.js"></script>
+    <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/collapse.js"></script>
+    <script type="text/javascript" src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    '.$fileContent.'
+    <script>
+    ko.bindingHandlers.dateTimePicker = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        //initialize datepicker with some optional options
+        var options = allBindingsAccessor().dateTimePickerOptions || {};
+        $(element).datetimepicker(options);
+
+        //when a user changes the date, update the view model
+        ko.utils.registerEventHandler(element, "dp.change", function (event) {
+            var value = valueAccessor();
+            if (ko.isObservable(value)) {
+                if (event.date != null && !(event.date instanceof Date)) {
+                    value(event.date.toDate());
+                } else {
+                    value(event.date);
+                }
+            }
+        });
+
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            var picker = $(element).data("DateTimePicker");
+            if (picker) {
+                picker.destroy();
+            }
+        });
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+
+        var picker = $(element).data("DateTimePicker");
+        //when the view model is updated, update the widget
+        if (picker) {
+            var koDate = ko.utils.unwrapObservable(valueAccessor());
+
+            //in case return from server datetime i am get in this form for example /Date(93989393)/ then fomat this
+            koDate = (typeof (koDate) !== "object") ? new Date(parseFloat(koDate.replace(/[^0-9]/g, ""))) : koDate;
+
+            picker.date(koDate);
+        }
+    }
+};
+<script>
+    '; 
     }
 
     $fileName = $xmlFile->table[$i]->name."_filter.php";
@@ -129,18 +173,28 @@ function getFieldType(&$fileContent, $field, $fieldNum, &$filterCounter , $table
     } else if ($currentType == 9){                          //date
        
         $GLOBALS['includeDatetimePicker'] = true;
+        getDatePreFilter($fileContent, $field, $fieldNum, $filterCounter);
         getDateFilter($fileContent, $field, $fieldNum, $filterCounter);
         $filterCounter++;
 
     } else if ($currentType < 12) {                         //dateTime
 
         $GLOBALS['includeDatetimePicker'] = true;
+        getDatePreFilter($fileContent, $field, $fieldNum, $filterCounter);
+        getDateTimeFilter($fileContent, $field, $fieldNum, $filterCounter);
+        $filterCounter++;  
 
     } else if ($currentType == 12) {                        //time
         $GLOBALS['includeDatetimePicker'] = true;
+        getDatePreFilter($fileContent, $field, $fieldNum, $filterCounter);
+        getTimeFilter($fileContent, $field, $fieldNum, $filterCounter);
+        $filterCounter++;  
 
     } else if ($currentType == 13) {                        //year
         $GLOBALS['includeDatetimePicker'] = true;
+        getDatePreFilter($fileContent, $field, $fieldNum, $filterCounter);
+        getYearFilter($fileContent, $field, $fieldNum, $filterCounter);
+        $filterCounter++;  
 
     } else {                                                //text
         getTextFilter($fileContent, $field, $fieldNum, $filterCounter);
@@ -309,7 +363,10 @@ function getNumberFilter( &$fileContent, $field, $fieldNum, &$filterCounter){
     ?>
 
     <div style="margin-top:20px;">
+        
         <label><?php echo (string) $field->caption; ?> between </label>
+        
+        <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="greater-than-or-equal-to">
         <input type="text" class="numeric" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
@@ -436,15 +493,15 @@ function getTextFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 }
 
 
-function getDateFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
-
-
+function getDatePreFilter (&$fileContent, $field, $fieldNum, $filterCounter){
     ob_start();
     ?>
     
      
     <div style="margin-top:20px;">
         <label>Show <?php echo (string) $field->caption; ?> between </label>
+
+        <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="greater-than-or-equal-to">
         <input type="text"  id="from-date_<?php echo $fieldNum; ?>"  name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
@@ -457,26 +514,35 @@ function getDateFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         <input type="text"  id="to-date_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
     </div>
 
+    <?php
+    $retVal = ob_get_contents();
+    ob_end_clean();
+    $fileContent.=$retVal;
+}
+
+
+function getDateFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
+
+
+    ob_start();
+    ?>
+    
     <script>
         //date
         $j("#from-date_<?php echo $fieldNum; ?> , #to-date_<?php echo $fieldNum; ?> ").datetimepicker({
             
-            format: 'M/D/YYYY'   //config
+            format: 'MM/DD/YYYY'   //config
             
         });
 
         $j("#from-date_<?php echo $fieldNum; ?>" ).on('dp.change' , function(e){
         
             date = moment(e.date).add(1, 'month');  
-            $j("#to-date_<?php echo $fieldNum; ?> ").val(date.format('M/D/YYYY')).data("DateTimePicker").minDate(e.date);
+            $j("#to-date_<?php echo $fieldNum; ?> ").val(date.format('MM/DD/YYYY')).data("DateTimePicker").minDate(e.date);
 
         });
         
     </script>
-
-    
-
-
 
     <?php
     $retVal = ob_get_contents();
@@ -484,6 +550,86 @@ function getDateFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
     $fileContent.=$retVal;
 }
 
+
+function getDateTimeFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
+
+    ob_start();?>
+
+
+    <script>
+        //date
+        $j("#from-date_<?php echo $fieldNum; ?> , #to-date_<?php echo $fieldNum; ?> ").datetimepicker({
+            
+            format: 'YYYY-MM-DD HH:mm:ss'   //config
+            
+        });
+
+        $j("#from-date_<?php echo $fieldNum; ?>" ).on('dp.change' , function(e){
+        
+            date = moment(e.date).add(1, 'month');  
+            $j("#to-date_<?php echo $fieldNum; ?> ").val(date.format('YYYY-MM-DD HH:mm:ss')).data("DateTimePicker").minDate(e.date);
+
+        });
+        
+    </script>
+
+    <?php
+    $retVal = ob_get_contents();
+    ob_end_clean();
+    $fileContent.=$retVal;
+}
+
+
+
+function getTimeFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
+
+    ob_start();?>
+
+    <script>
+        $j("#from-date_<?php echo $fieldNum; ?> , #to-date_<?php echo $fieldNum; ?> ").datetimepicker({
+            format: 'HH:mm:ss'   //config
+        });
+
+        $j("#from-date_<?php echo $fieldNum; ?>" ).on('dp.change' , function(e){
+        
+            date = moment(e.date).add(1, 'hour');  
+            $j("#to-date_<?php echo $fieldNum; ?> ").val(date.format('HH:mm:ss')).data("DateTimePicker").minDate(e.date);
+
+        });
+        
+    </script>
+
+    <?php
+    $retVal = ob_get_contents();
+    ob_end_clean();
+    $fileContent.=$retVal;
+}
+
+
+function getYearFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
+
+    ob_start();?>
+
+    <script>
+        $j("#from-date_<?php echo $fieldNum; ?> , #to-date_<?php echo $fieldNum; ?> ").datetimepicker({
+            format: 'YYYY' ,  //config
+            viewMode: 'years'
+        });
+
+        $j("#from-date_<?php echo $fieldNum; ?>" ).on('dp.change' , function(e){
+        
+            date = moment(e.date).add(1, 'year');  
+            $j("#to-date_<?php echo $fieldNum; ?> ").val(date.format('YYYY')).data("DateTimePicker").minDate(e.date);
+
+        });
+        
+    </script>
+
+    <?php
+    $retVal = ob_get_contents();
+    ob_end_clean();
+    $fileContent.=$retVal;
+}
 
 
 
