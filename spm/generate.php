@@ -158,20 +158,20 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
     //check data length
     if (count($options) > 6) {     //DROPDOWN
     
-        //convert options to select2 format
-        $optionsList = array();
-        for ($i = 0; $i < count($options); $i++) {
-            $optionsList[] = (object) array(
-                        "id" => $i,
-                        "text" => $options[$i]
-            );
-        }
-        $optionsList = json_encode($optionsList);
-
+        
         $fileContent.= '
         <?php
         	 $options = ' . json_encode($options) . ';
-        	 $optionsList = \'' . "$optionsList" . '\';
+        
+            //convert options to select2 format
+            $optionsList = array();
+            for ($i = 0; $i < count($options); $i++) {
+                $optionsList[] = (object) array(
+                            "id" => $i,
+                            "text" => $options[$i]
+                );
+            }
+            $optionsList = json_encode($optionsList);
 
         
         //convert value to select2 format
@@ -196,16 +196,16 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
             <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
             <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
             <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
-            <input type="hidden" name="FilterValue[<?php echo $filterCounter; ?>]" id="<?php echo $fieldNum; ?>_currValue" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+            <input type="hidden" name="FilterValue[<?php echo $filterCounter; ?>]" id="<?php echo $fieldNum; ?>_currValue" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="3">
             
         </div>
 
         <script>
-            var populate_<?php echo $fieldNum; ?> = <?php echo addslashes("<?php echo \$filtervalueObj ;?>"); ?>
+            var populate_<?php echo $fieldNum; ?> = <?php echo '<'.'?php echo $filtervalueObj ;?>'; ?>
             
             $j(function () {
                 $j("#<?php echo $fieldNum; ?>_DropDown").select2({
-                    data: <?php echo addslashes("<?php echo \$optionsList; ?>"); ?>}).on('change', function (e) {
+                    data: <?php echo "<".'?php echo $optionsList; ?>'; ?>}).on('change', function (e) {
                     $j("#<?php echo $fieldNum; ?>_currValue").val(e.added.text);
 
                 });
@@ -234,7 +234,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
                     <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
                     <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
                     <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
-                    <input type="hidden" name="FilterValue[<?php echo $filterCounter; ?>]" id="<?php echo $fieldNum; ?>_currValue" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+                    <input type="hidden" name="FilterValue[<?php echo $filterCounter; ?>]" id="<?php echo $fieldNum; ?>_currValue" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="3">
 
                 <?php foreach ($options as $option) { ?>
                         <div class="radio">
@@ -247,7 +247,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         </div>
         <script>
             //for population
-            var filterValue_<?php echo $fieldNum; ?> = '<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>';
+            var filterValue_<?php echo $fieldNum; ?> = <?php echo "<".'?php echo htmlspecialchars($FilterValue[ '. $filterCounter .' ]); ?>';?>
             $j(function () {
                 if (filterValue_<?php echo $fieldNum; ?>) {
                     $j("input[class =filter_<?php echo $fieldNum; ?>][value ='" + filterValue_<?php echo $fieldNum; ?> + "']").attr("checked", "checked");
@@ -293,7 +293,7 @@ function getCheckboxFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         var filterValue = '<?php echo htmlspecialchars($FilterValue[4]); ?>';
 
         //for population
-        var filterValue_<?php echo $fieldNum; ?> = '<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>';
+        var filterValue_<?php echo $fieldNum; ?> = '<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>';
         $j(function () {
             if (filterValue_<?php echo $fieldNum; ?>) {
                 $j("input[class =filter_<?php echo $fieldNum; ?>][value =" + filterValue_<?php echo $fieldNum; ?> + "]").attr("checked", "checked").click();
@@ -334,7 +334,7 @@ function getNumberFilter( &$fileContent, $field, $fieldNum, &$filterCounter){
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="greater-than-or-equal-to">
         <div class="col-md-2 vspacer-md">
-            <input type="text" class="numeric form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+            <input type="text" class="numeric form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="3">
         </div>
 
         <?php $filterCounter++; ?>
@@ -343,7 +343,7 @@ function getNumberFilter( &$fileContent, $field, $fieldNum, &$filterCounter){
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="less-than-or-equal-to">
         <div class="col-md-2 vspacer-md">
-            <input type="text" class="numeric form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+            <input type="text" class="numeric form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="3">
         </div>
     </div>
 
@@ -389,7 +389,7 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" id="lookupoperator_<?php echo $fieldNum; ?>" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
-        <input type="hidden" id="filterfield_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+        <input type="hidden" id="filterfield_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="3">
     </div>
 
     <script>
@@ -468,7 +468,7 @@ function getTextFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="like">
         <div class="col-md-5 vspacer-md">
-            <input type="text" class="form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+            <input type="text" class="form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="3">
         </div>
     </div>
 
@@ -494,7 +494,7 @@ function getDatePreFilter (&$fileContent, $field, $fieldNum, $filterCounter){
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="greater-than-or-equal-to">
         <div class="col-md-2 vspacer-md">
-            <input type="text"  class="form-control" id="from-date_<?php echo $fieldNum; ?>"  name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
+            <input type="text"  class="form-control" id="from-date_<?php echo $fieldNum; ?>"  name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="10">
         </div>
 
         <?php $filterCounter++; ?>
@@ -503,7 +503,7 @@ function getDatePreFilter (&$fileContent, $field, $fieldNum, $filterCounter){
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="less-than-or-equal-to">
         <div class="col-md-2 vspacer-md">
-            <input type="text" class="form-control" id="to-date_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="10">
+            <input type="text" class="form-control" id="to-date_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="10">
         </div>
     </div>
 
