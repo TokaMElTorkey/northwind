@@ -59,9 +59,10 @@ function recurse_copy($src,$dst) {
     color: white;
     border-radius: 10px;
     overflow-Y: scroll;
-    font-size: 15px;
+    font-size: 14px;
     padding:30px;
     min-height: 120px;
+    line-height: 150%;
 
 }
 .success-msg{
