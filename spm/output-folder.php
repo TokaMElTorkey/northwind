@@ -36,19 +36,20 @@
 	</h1>
 
 </div>
-
-<h4>Full path to your application folder</h4>
-<div class='form-group'>
-	<input onkeyup='validatePath(this)' type='text' class='form-control col-md-11 col-xs-9' value='<?php echo dirname(dirname(__FILE__)); ?>'>
-</div>
-<button data-toggle='popover' title='' data-content='' class='transparent btn'>
-	<i class='glyphicon glyphicon-ok' id='mark' style='color:#30C313;' ></i>
-</button>
-<br>
-<h5><i>For example: /var/www/my-app</i></h5>
-<center>
-	<a id="start" href="generate.php?axp=<?php echo $_GET['axp']; ?>"  class="btn btn-success btn-lg"><span class="glyphicon glyphicon-play" ></span>   Start</a>
-</center>
+<form method='POST' action="generate.php?axp=<?php echo $_GET['axp']; ?>">
+	<h4>Full path to your application folder</h4>
+	<div class='form-group'>
+		<input name='path' onkeyup='validatePath(this)' type='text' class='form-control col-md-11 col-xs-9' value='<?php echo dirname(dirname(__FILE__)); ?>'>
+	</div>
+	<button data-toggle='popover' title='' data-content='' class='transparent btn'>
+		<i class='glyphicon glyphicon-ok' id='mark' style='color:#30C313;' ></i>
+	</button>
+	<br>
+	<h5><i>For example: /var/www/my-app</i></h5>
+	<center>
+			<button type="submit" id="start"   class="btn btn-success btn-lg"><span class="glyphicon glyphicon-play" ></span>   Start</button>
+	</center>
+</form>
 
 
 

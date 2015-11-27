@@ -46,6 +46,9 @@ if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['pr
 		if (! is_writable($path."/hooks")){
 			throw new RuntimeException('The hooks folder is not writable');
 		}
+		if (! is_writable($path."/resources")){
+			throw new RuntimeException('The resources folder is not writable');
+		}
 	} catch (RuntimeException $e){
 			echo  $e->getMessage();
 			exit;

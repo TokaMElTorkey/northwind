@@ -9,13 +9,69 @@ if (!isset($_GET['axp'])) {
 $projectFile = '';
 $xmlFile = getXMLFile($_GET['axp'], $projectFile);
 //-------------------------------------------------------------------------------------
+//path check 
+    try{
+        if (!isset( $_POST['path'])){
+            throw new RuntimeException('This page has been expired');
+        }
+        $path = $_POST['path'];
+        if (! is_dir($path)){
+            throw new RuntimeException('Invalid path');
+        }
+        
 
+        if ( ! ( file_exists("$path\lib.php") && file_exists("$path\db.php") && file_exists("$path\index.php") ) ){
+            throw new RuntimeException('The given path is not a valid AppGini project path');
+        }
+        if (! is_writable($path."/hooks")){
+            throw new RuntimeException('The hooks folder of the given path is not writable');
+        }
+        if (! is_writable($path."/resources")){
+            throw new RuntimeException('The resources folder of the given path is not writable');
+        }
+    } catch (RuntimeException $e){
+            echo "<br>".spm_error_message($e->getMessage());
+            exit;
+    }
+//-------------------------------------------------------------------------------------
+//coping bootstrap3-datetimepicker and moment resources
+function recurse_copy($src,$dst) { 
+    $dir = opendir($src); 
+    @mkdir($dst); 
+    while(false !== ( $file = readdir($dir)) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+            if ( is_dir($src . '/' . $file) ) { 
+                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+            else { 
+                copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+        } 
+    } 
+    closedir($dir); 
+}
+//-------------------------------------------------------------------------------------
 ?>
 
 <style>
 #progress{
     background-color: black;
     color: white;
+    border-radius: 10px;
+    overflow-Y: scroll;
+    font-size: 15px;
+    padding:30px;
+    min-height: 120px;
+
+}
+.success-msg{
+    color: green;
+}
+.failure-msg{
+    color: red;
+}
+.spacer{
+    margin-left: 10px;
 }
 
 </style>
@@ -23,14 +79,26 @@ $xmlFile = getXMLFile($_GET['axp'], $projectFile);
 
 <div class="page-header row">
     <h1>Search Page Maker for AppGini</h1>
-    <h1><a href="./index.php">Projects</a> > <a href="./project.php?axp=<?php echo $_GET['axp'] ?>"><?php echo substr( $projectFile , 0 , strrpos( $projectFile , ".")); ?></a> > Generating search pages
+    <h1><a href="./index.php">Projects</a> > <a href="./project.php?axp=<?php echo $_GET['axp'] ?>"><?php echo substr( $projectFile , 0 , strrpos( $projectFile , ".")); ?></a> > <a href="./output-folder.php?axp=<?php echo $_GET['axp'] ?>">  Select output folder</a> > Generating search pages
     </h1>
 
 </div>
-
+<h5>Progress log</h5>
 <div class="col-md-12" id="progress" class="container" >
+<?php
+echo "<br>Output folder: $path";
 
-<?php    
+//coping resources folders
+echo "<br>Creating required resources' folders: ";
+if ( !is_dir( "$path/resources/bootstrap-datetimepicker")){
+    recurse_copy( "./resources/bootstrap-datetimepicker", "$path/resources/bootstrap-datetimepicker");
+} 
+
+if ( !is_dir( "$path/resources/moment")){
+    recurse_copy( "./resources/moment", "$path/resources/moment");
+}
+echo "OK <br><br>"; 
+//creating files
 for ($i = 0; $i < count($xmlFile->table); $i++) {
     
     //if no spm node found, skip table
@@ -67,13 +135,13 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
 
         $filterCounter++;   //number of filter fields
 
-       
         $field = $xmlFile->table[$i]->field[$fieldNum]; 
+        echo "<br><span class='spacer'></span>".(string)$field->caption."' field : " ;
         getFieldType($fileContent, $field, $filterIdxArray[$fieldNum] , $filterCounter , $xmlFile->table[$i]->name);
         $fileContent.='
             <!-- ########################################################## -->
             ';
-        echo "<br>'".(string)$field->caption."' field : OK";
+        echo "OK";
     
     }
 
@@ -85,7 +153,11 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     <div style="margin-top:10px;" ><button class="btn btn-success btn-lg" >Apply</button></div>';
 
     $fileName = $xmlFile->table[$i]->name."_filter.php";
-    file_put_contents( $fileName , $fileContent);
+    if ( file_put_contents( "$path/hooks/$fileName" , $fileContent)){
+        echo "<br><span class='spacer'></span><span class='success-msg'>'$fileName' added to the hooks folder Successfully.</span>";
+    }else{
+        echo "<br><span class='spacer'></span><span class='failure-msg'>Error: Couldn't save 'hooks/$fileName': Check the permissions.</span>";
+    }
 
 echo "<br><br>";
 }
@@ -93,8 +165,22 @@ echo "<br><br>";
 
 ?>
 </div>
+<center>
+    <a style="margin:20px;" href="index.php" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-home" ></span>   Start page</a>
+</center>
+<script>
+    
+    $j( document ).ready( function(){
 
+        $j("#progress").height( $j(window).height() - $j("#progress").offset().top - $j(".btn-success").height() - 100 );
 
+        //add resize event
+        $j( window ).resize(function() {
+           $j("#progress").height( $j(window).height() - $j("#progress").offset().top - $j(".btn-success").height() - 100 );
+        });
+
+    });
+</script>
 
 <?php
 
@@ -247,7 +333,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         </div>
         <script>
             //for population
-            var filterValue_<?php echo $fieldNum; ?> = <?php echo "<".'?php echo htmlspecialchars($FilterValue[ '. $filterCounter .' ]); ?>';?>
+            var filterValue_<?php echo $fieldNum; ?> = '<?php echo "<".'?php echo htmlspecialchars($FilterValue[ '. $filterCounter .' ]); ?>';?>';
             $j(function () {
                 if (filterValue_<?php echo $fieldNum; ?>) {
                     $j("input[class =filter_<?php echo $fieldNum; ?>][value ='" + filterValue_<?php echo $fieldNum; ?> + "']").attr("checked", "checked");
@@ -629,7 +715,7 @@ function getYearFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups ){
     
     if ($includeOrderBy){
-    
+        echo "<br><span class='spacer'></span>'Order by' section included: ";
         $fileContent.='    
 
         <!-- sorting header  -->   
@@ -677,14 +763,14 @@ function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeO
             <?php
         }
         ?>';
-        echo "<br>'Order by' section included: OK";
+        echo "OK";
     }
 
 
     //-----------------------------------------------------------------------------------
 
     if ($includeGroups){
-    
+        echo "<br><span class='spacer'></span>'User/group/all' section included: ";
         $fileContent.='    
             <?php
                 // ownership options
@@ -775,7 +861,7 @@ function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeO
                 });
             </script>
             ';
-            echo "<br>'User/group/all' section included: OK";
+            echo "OK";
     }
     //-----------------------------------------------------------------------------------
     if ($includeDatetimePicker){
@@ -790,34 +876,37 @@ function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeO
     //add clear filters function
     ob_start() 
     ?>
-    <script>
-        function clearFilters(elm){
-            var parentDiv = $j(elm).parent(".row ");
-            //get all input nodes
-            inputValueChildren = parentDiv.find("input[type!=radio][name^=FilterValue]");
-            inputRadioClildren = parentDiv.find("input[type=radio][name^=FilterValue]");
-            
-            //default input nodes ( text, hidden )
-            inputValueChildren.each(function( index ) {
-                $j( this ).val('');
-            });
-            
-            //radio buttons
-            inputRadioClildren.each(function( index ) {
-                $j( this ).removeAttr('checked');
+       
 
-                //checkbox case
-                if ($j( this ).val()=='') $j(this).attr("checked", "checked").click();
-            });
-            
-            //lookup and select dropdown
-            parentDiv.find("div[id$=DropDown],div[id^=filter_]").select2("val", "");
+        <!-- function to handle the action of the clear field button -->
+        <script>
+            function clearFilters(elm){
+                var parentDiv = $j(elm).parent(".row ");
+                //get all input nodes
+                inputValueChildren = parentDiv.find("input[type!=radio][name^=FilterValue]");
+                inputRadioClildren = parentDiv.find("input[type=radio][name^=FilterValue]");
+                
+                //default input nodes ( text, hidden )
+                inputValueChildren.each(function( index ) {
+                    $j( this ).val('');
+                });
+                
+                //radio buttons
+                inputRadioClildren.each(function( index ) {
+                    $j( this ).removeAttr('checked');
 
-            //for lookup
-            parentDiv.find("input[id^=lookupoperator_]").val('equal-to');
+                    //checkbox case
+                    if ($j( this ).val()=='') $j(this).attr("checked", "checked").click();
+                });
+                
+                //lookup and select dropdown
+                parentDiv.find("div[id$=DropDown],div[id^=filter_]").select2("val", "");
 
-        }
-    </script>
+                //for lookup
+                parentDiv.find("input[id^=lookupoperator_]").val('equal-to');
+
+            }
+        </script>
 
     <?php
     $fileContent.= ob_get_contents();
