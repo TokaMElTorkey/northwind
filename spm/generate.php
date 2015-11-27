@@ -66,9 +66,6 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         }
 
         $filterCounter++;   //number of filter fields
-        if ($filterCounter>12){
-            break; /********/
-        }
 
        
         $field = $xmlFile->table[$i]->field[$fieldNum]; 
@@ -192,7 +189,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         ?>
         <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
             <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
-
+            <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
 
             <div id="<?php echo $fieldNum; ?>_DropDown"><span></span></div>
 
@@ -200,6 +197,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
             <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
             <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
             <input type="hidden" name="FilterValue[<?php echo $filterCounter; ?>]" id="<?php echo $fieldNum; ?>_currValue" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
+            
         </div>
 
         <script>
@@ -230,7 +228,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 
         <div class="row" style="border-bottom: dotted 2px #DDD;">
             <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
-            
+            <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
             <div class="col-md-8 col-md-offset-3">
 
                     <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
@@ -269,12 +267,10 @@ function getCheckboxFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
     ob_start();
     ?>
 
-
-          
-
     <div class="row" style="border-bottom: dotted 2px #DDD;">
          
                 <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+                <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
                 <div class="col-md-8 col-md-offset-3">
                 <div class="radio">
                     <label><input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="1" > Checked</label>
@@ -332,6 +328,7 @@ function getNumberFilter( &$fileContent, $field, $fieldNum, &$filterCounter){
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
         
         <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div class="col-md-1 vspacer-lg">Between </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
@@ -386,11 +383,12 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
 
         <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div id="filter_<?php echo $fieldNum; ?>"></span></div>
 
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
-        <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
+        <input type="hidden" id="lookupoperator_<?php echo $fieldNum; ?>" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
         <input type="hidden" id="filterfield_<?php echo $fieldNum; ?>" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo addslashes('<?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'); ?>" size="3">
     </div>
 
@@ -409,16 +407,30 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
             }
         }).on('change', function(e){
             $j("#filterfield_<?php echo $fieldNum; ?>").val(e.added.text);
+            $j("#lookupoperator_<?php echo $fieldNum; ?>").val('equal-to');
+            if (e.added.id=='{empty_value}'){
+                $j("#lookupoperator_<?php echo $fieldNum; ?>").val('is-empty');
+            }
         });
 
 
         /* preserve the applied category filter and show it when re-opening the filters page */
         if ($j("#filterfield_<?php echo $fieldNum; ?>").val().length){
+            
+            //None case 
+            if ($j("#filterfield_<?php echo $fieldNum; ?>").val() == '<None>'){
+                $j("#filter_<?php echo $fieldNum; ?>").select2( 'data' , {
+                            id: '{empty-value}',
+                            text: '<None>'
+                });
+                $j("#lookupoperator_<?php echo $fieldNum; ?>").val('is-empty');
+                return;
+            }
             $j.ajax({
                 url: 'ajax_combo.php',
                 dataType: 'json',
                 data: { s: $j("#filterfield_<?php echo $fieldNum; ?>").val(),  //search term
-                        p: 1,                        //page number
+                        p: 1,                                         //page number
                         t:"<?php echo $tableName; ?>",                //table name
                         f:"<?php echo $field->name; ?>"               //field name
                 }}).done(function(response){
@@ -450,6 +462,7 @@ function getTextFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
     
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
         <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div class="col-md-1 text-center vspacer-lg"> Contains </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
@@ -475,6 +488,7 @@ function getDatePreFilter (&$fileContent, $field, $fieldNum, $filterCounter){
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
 
         <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div class="col-md-1 vspacer-lg">Between </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
@@ -768,12 +782,47 @@ function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeO
         $fileContent = '
         <!-- load bootstrap datetime-picker-->
         <link rel="stylesheet" href="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
-        <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/moment.min.js"></script>
-        <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/transition.js"></script>
-        <script type="text/javascript" src="resources/bootstrap-datetimepicker/require/collapse.js"></script>
+        <script type="text/javascript" src="resources/moment/moment.min.js"></script>
         <script type="text/javascript" src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
         '.$fileContent ;
     }
+
+    //add clear filters function
+    ob_start() 
+    ?>
+    <script>
+        function clearFilters(elm){
+            var parentDiv = $j(elm).parent(".row ");
+            //get all input nodes
+            inputValueChildren = parentDiv.find("input[type!=radio][name^=FilterValue]");
+            inputRadioClildren = parentDiv.find("input[type=radio][name^=FilterValue]");
+            
+            //default input nodes ( text, hidden )
+            inputValueChildren.each(function( index ) {
+                $j( this ).val('');
+            });
+            
+            //radio buttons
+            inputRadioClildren.each(function( index ) {
+                $j( this ).removeAttr('checked');
+
+                //checkbox case
+                if ($j( this ).val()=='') $j(this).attr("checked", "checked").click();
+            });
+            
+            //lookup and select dropdown
+            parentDiv.find("div[id$=DropDown],div[id^=filter_]").select2("val", "");
+
+            //for lookup
+            parentDiv.find("input[id^=lookupoperator_]").val('equal-to');
+
+        }
+    </script>
+
+    <?php
+    $fileContent.= ob_get_contents();
+    ob_end_clean();
+    
 }
 
 function mapIndex ( $fields ){
