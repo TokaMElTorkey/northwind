@@ -151,7 +151,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     
     //add submit button
     $fileContent.='
-    <div style="margin-top:10px;" ><button class="btn btn-success btn-lg" >Apply</button></div>';
+    <center><div style="margin-top:10px;" ><button class="btn btn-success btn-lg" >Apply</button></div></center>';
 
     $fileName = $xmlFile->table[$i]->name."_filter.php";
     if ( file_put_contents( "$path/hooks/$fileName" , $fileContent)){
