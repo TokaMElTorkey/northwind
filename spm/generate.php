@@ -192,7 +192,7 @@ function getFieldType(&$fileContent, $field, $fieldNum, &$filterCounter , $table
 
         getLookupFilter($fileContent, $field, $fieldNum, $filterCounter , $tableName);
 
-    } else if (!empty($field->CSValueList->__toString())) {      //options list
+    } else if ($field->CSValueList->__toString() != '') {      //options list
 
         getOptionsFilter($fileContent, $field, $fieldNum, $filterCounter);
 
