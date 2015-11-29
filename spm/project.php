@@ -39,13 +39,13 @@
 
 	<?php
 	for ( $i= 0 ; $i < count ($xmlFile->table) ; $i++ ){ ?>
-	<a href="#" class="list-group-item" onclick="showFields( event , <?php echo $i; ?> , this)" > <?php if (!empty($xmlFile->table[$i]->tableIcon)){ ?><img src="./resources/table_icons/<?php echo $xmlFile->table[$i]->tableIcon ;?>" alt="<?php echo $xmlFile->table[$i]->tableIcon ; ?>" >  <?php } echo ((String)($xmlFile->table[$i]->caption));	?> </a>
+	<a href="#" class="list-group-item" onclick="showFields( event , <?php echo $i; ?> , this)" > <?php if (!empty($xmlFile->table[$i]->tableIcon)){ ?><img src="./resources/table_icons/<?php echo $xmlFile->table[$i]->tableIcon ;?>" alt="<?php echo $xmlFile->table[$i]->tableIcon ; ?>" >  <?php } echo $xmlFile->table[$i]->caption->__toString();	?> </a>
  
 	<?php
 		//convert cData fields to string
 		for ( $j= 0 ; $j < count ($xmlFile->table[$i]->field) ; $j++ ){ 
-			$xmlFile->table[$i]->field[$j]->caption = (string) $xmlFile->table[$i]->field[$j]->caption;
-			$xmlFile->table[$i]->field[$j]->CSValueList = (string) $xmlFile->table[$i]->field[$j]->CSValueList;
+			$xmlFile->table[$i]->field[$j]->caption = $xmlFile->table[$i]->field[$j]->caption->__toString();
+			$xmlFile->table[$i]->field[$j]->CSValueList = $xmlFile->table[$i]->field[$j]->CSValueList->__toString();
 		}
 	}
 	?>

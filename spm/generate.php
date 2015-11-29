@@ -107,7 +107,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         continue;
     }
 
-    echo "<br>Generating search page code for '".(string)$xmlFile->table[$i]->caption."' table<br>";
+    echo "<br>Generating search page code for '".$xmlFile->table[$i]->caption->__toString()."' table<br>";
 
     //mapping fields indexes to match filter Values
     $filterIdxArray = mapIndex( $xmlFile->table[$i]->field );
@@ -137,7 +137,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         $filterCounter++;   //number of filter fields
 
         $field = $xmlFile->table[$i]->field[$fieldNum]; 
-        echo "<br><span class='spacer'></span>".(string)$field->caption."' field : " ;
+        echo "<br><span class='spacer'></span>".$field->caption->__toString()."' field : " ;
         getFieldType($fileContent, $field, $filterIdxArray[$fieldNum] , $filterCounter , $xmlFile->table[$i]->name);
         $fileContent.='
             <!-- ########################################################## -->
@@ -192,7 +192,7 @@ function getFieldType(&$fileContent, $field, $fieldNum, &$filterCounter , $table
 
         getLookupFilter($fileContent, $field, $fieldNum, $filterCounter , $tableName);
 
-    } else if (!empty((string) $field->CSValueList)) {      //options list
+    } else if (!empty($field->CSValueList->__toString())) {      //options list
 
         getOptionsFilter($fileContent, $field, $fieldNum, $filterCounter);
 
@@ -240,7 +240,7 @@ function getFieldType(&$fileContent, $field, $fieldNum, &$filterCounter , $table
 function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 
 
-    $options = explode('||', entitiesToUTF8(convertLegacyOptions((string) $field->CSValueList)));
+    $options = explode('||', entitiesToUTF8(convertLegacyOptions($field->CSValueList->__toString())));
 
     //check data length
     if (count($options) > 6) {     //DROPDOWN
@@ -275,7 +275,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         ob_start();
         ?>
         <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
             <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
 
             <div id="<?php echo $fieldNum; ?>_DropDown"><span></span></div>
@@ -314,7 +314,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         ?>
 
         <div class="row" style="border-bottom: dotted 2px #DDD;">
-            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
             <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
             <div class="col-md-8 col-md-offset-3">
 
@@ -356,7 +356,7 @@ function getCheckboxFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 
     <div class="row" style="border-bottom: dotted 2px #DDD;">
          
-                <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+                <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
                 <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
                 <div class="col-md-8 col-md-offset-3">
                 <div class="radio">
@@ -414,7 +414,7 @@ function getNumberFilter( &$fileContent, $field, $fieldNum, &$filterCounter){
 
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
         
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
         <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div class="col-md-1 vspacer-lg">Between </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
@@ -469,7 +469,7 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
 
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
 
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
         <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div id="filter_<?php echo $fieldNum; ?>"></span></div>
 
@@ -548,7 +548,7 @@ function getTextFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
     ?>
     
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
         <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div class="col-md-1 text-center vspacer-lg"> Contains </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
@@ -574,7 +574,7 @@ function getDatePreFilter (&$fileContent, $field, $fieldNum, $filterCounter){
      
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
 
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo (string) $field->caption; ?></strong></div>
+        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
         <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div class="col-md-1 vspacer-lg">Between </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
