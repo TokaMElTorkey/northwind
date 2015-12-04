@@ -57,22 +57,26 @@ function recurse_copy($src,$dst) {
 #progress{
     background-color: black;
     color: white;
-    border-radius: 10px;
     overflow-Y: scroll;
-    font-size: 14px;
-    padding:30px;
-    min-height: 120px;
-    line-height: 150%;
+    border: solid blue 2px;
+    font-family: Gill Sans Extrabold, sans-serif;
+    font-size: 16px;
+    line-height: 2;
+    padding:25px;
+}
 
-}
-.success-msg{
-    color: green;
-}
-.failure-msg{
-    color: red;
-}
 .spacer{
-    margin-left: 10px;
+    margin-left: 40px;
+}
+code {
+    margin-top: -1.00em;
+    margin-bottom: -1.00em;
+    font-family: monospace, monospace !important;
+    font-size: 1em;
+}
+pre{
+    padding: 1px;
+    margin: 20px;
 }
 
 </style>
@@ -84,10 +88,11 @@ function recurse_copy($src,$dst) {
     </h1>
 
 </div>
-<h5>Progress log</h5>
-<div class="col-md-12" id="progress" class="container" >
+<h4>Progress log</h4>
+<div class="col-md-12 text-info" id="progress" class="container" >
+
 <?php
-echo "<br>Output folder: $path";
+echo "Output folder: $path";
 
 //coping resources folders
 echo "<br>Creating required resources' folders: ";
@@ -98,7 +103,7 @@ if ( !is_dir( "$path/resources/bootstrap-datetimepicker")){
 if ( !is_dir( "$path/resources/moment")){
     recurse_copy( "./resources/moment", "$path/resources/moment");
 }
-echo "OK <br><br>"; 
+echo "OK <br>"; 
 //creating files
 for ($i = 0; $i < count($xmlFile->table); $i++) {
     
@@ -107,7 +112,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         continue;
     }
 
-    echo "<br>Generating search page code for '".$xmlFile->table[$i]->caption->__toString()."' table<br>";
+    echo "<p><br><b>Generating search page code for '".$xmlFile->table[$i]->caption->__toString()."' table:</b><br>";
 
     //mapping fields indexes to match filter Values
     $filterIdxArray = mapIndex( $xmlFile->table[$i]->field );
@@ -147,24 +152,35 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     }
 
     //includes
-    includeDefaultParts($fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups );
+    includeNeededParts($fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups );
     
-    //add submit button
-    $fileContent.='
-    <center><div style="margin-top:10px;" ><button class="btn btn-success btn-lg" >Apply</button></div></center>';
+    //Default filter page requirments
+    includeDefaultParts($fileContent, $xmlFile->table[$i]->allowSavingFilters);
 
+    $tableName = $xmlFile->table[$i]->name;
     $fileName = $xmlFile->table[$i]->name."_filter.php";
     if ( file_put_contents( "$path/hooks/$fileName" , $fileContent)){
-        echo "<br><span class='spacer'></span><span class='success-msg'>'$fileName' added to the hooks folder Successfully.</span>";
+        echo "<br><span class='spacer'></span><span class='text-success'><b>'$fileName' added to the hooks folder Successfully.</b></span><br>
+        <p class='spacer'><span class='glyphicon glyphicon-chevron-right'></span> To install, open the <span class='text-info'>hooks/$tableName.php</span> file and add this code to the <span class='text-info'>$tableName"."_init()</span> hook if it's not already there:
+        <code class='text-info'>\$options->FilterPage =\"hooks/$fileName\";</code>
+        <br>Now, the function should look like this:
+        <pre><code class='text-primary'>
+        function $tableName"."_init(&\$options, \$memberInfo, &\$args){
+            \$options->FilterPage = \"hooks/$fileName\";
+            return TRUE;
+        }
+        </code></pre>
+        </p>";
     }else{
-        echo "<br><span class='spacer'></span><span class='failure-msg'>Error: Couldn't save 'hooks/$fileName': Check the permissions.</span>";
+        echo "<br><span class='spacer'></span><span class='text-danger'><b>Error: Couldn't save 'hooks/$fileName': Check the permissions.</b></span>";
     }
 
-echo "<br><br>";
+echo "</p><br>";
 }
 
 
 ?>
+</samp>
 </div>
 <center>
     <a style="margin:20px;" href="index.php" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-home" ></span>   Start page</a>
@@ -713,7 +729,7 @@ function getYearFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 
 
 
-function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups ){
+function includeNeededParts( &$fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups ){
     
     if ($includeOrderBy){
         echo "<br><span class='spacer'></span>'Order by' section included: ";
@@ -873,7 +889,11 @@ function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeO
         <script type="text/javascript" src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
         '.$fileContent ;
     }
+}
 
+
+
+function includeDefaultParts(&$fileContent , $saveFiltersFlag){
     //add clear filters function
     ob_start() 
     ?>
@@ -909,11 +929,55 @@ function includeDefaultParts( &$fileContent , $includeDatetimePicker , $includeO
             }
         </script>
 
+        <!-- filter actions -->
+        <div class="row">
+            <div class="col-md-2 col-md-offset-2 vspacer-lg">
+                <input type="hidden" name="apply_sorting" value="1">
+                <button type="submit" id="applyFilters" onclick="beforeApplyFilters(event);return true;" class="btn btn-success btn-block btn-lg"><i class="glyphicon glyphicon-ok"></i> Apply filters</button>
+            </div>
+            <?php if($saveFiltersFlag == "True"){ ?>
+                <div class="col-md-3 vspacer-lg">
+                    <button type="submit" onclick="beforeApplyFilters(event);return true;" class="btn btn-default btn-block btn-lg" id="SaveFilter" name="SaveFilter_x" value="1"><i class="glyphicon glyphicon-align-left"></i> Save filters</button>
+                </div>
+            <?php } ?>
+            <div class="col-md-2 vspacer-lg">
+                <button onclick="jQuery('form')[0].reset();" type="submit" id="cancelFilters" class="btn btn-warning btn-block btn-lg"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
+            </div>
+        </div>
+
+        <!--funtion to remove unsupplied fields -->
+        <script>
+            function beforeApplyFilters(event){
+            
+                //get all field submitted values
+                $j(":input[type=text][name^=FilterValue],:input[type=hidden][name^=FilterValue],:input[type=radio][name^=FilterValue]:checked").each(function( index ) {
+                      
+                    //if type=hidden  and options radio fields with the same name are checked, supply its value
+                    if ( $j( this ).attr('type')=='hidden' &&  $j(":input[type=radio][name='"+$j( this ).attr('name')+"']:checked").length >0 ){
+                        return;
+                    }
+                      
+                      //do not submit fields with empty values
+                    if ( !$j( this ).val()){
+                      var fieldNum =  $j(this).attr('name').match(/(\d+)/)[0];
+                      $j(":input[name='FilterField["+fieldNum+"]']").val('');
+                     
+                      };
+                });
+
+            };
+        </script>
+
+
     <?php
     $fileContent.= ob_get_contents();
     ob_end_clean();
     
 }
+
+
+
+
 
 function mapIndex ( $fields ){
 
