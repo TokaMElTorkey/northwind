@@ -57,22 +57,26 @@ function recurse_copy($src,$dst) {
 #progress{
     background-color: black;
     color: white;
-    border-radius: 10px;
     overflow-Y: scroll;
-    font-size: 14px;
-    padding:30px;
-    min-height: 120px;
-    line-height: 150%;
+    border: solid blue 2px;
+    font-family: Gill Sans Extrabold, sans-serif;
+    font-size: 16px;
+    line-height: 2;
+    padding:25px;
+}
 
-}
-.success-msg{
-    color: green;
-}
-.failure-msg{
-    color: red;
-}
 .spacer{
-    margin-left: 10px;
+    margin-left: 40px;
+}
+code {
+    margin-top: -1.00em;
+    margin-bottom: -1.00em;
+    font-family: monospace, monospace !important;
+    font-size: 1em;
+}
+pre{
+    padding: 1px;
+    margin: 20px;
 }
 
 </style>
@@ -84,10 +88,11 @@ function recurse_copy($src,$dst) {
     </h1>
 
 </div>
-<h5>Progress log</h5>
-<div class="col-md-12" id="progress" class="container" >
+<h4>Progress log</h4>
+<div class="col-md-12 text-info" id="progress" class="container" >
+
 <?php
-echo "<br>Output folder: $path";
+echo "Output folder: $path";
 
 //coping resources folders
 echo "<br>Creating required resources' folders: ";
@@ -98,7 +103,7 @@ if ( !is_dir( "$path/resources/bootstrap-datetimepicker")){
 if ( !is_dir( "$path/resources/moment")){
     recurse_copy( "./resources/moment", "$path/resources/moment");
 }
-echo "OK <br><br>"; 
+echo "OK <br>"; 
 //creating files
 for ($i = 0; $i < count($xmlFile->table); $i++) {
     
@@ -107,7 +112,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         continue;
     }
 
-    echo "<br>Generating search page code for '".$xmlFile->table[$i]->caption->__toString()."' table<br>";
+    echo "<p><br><b>Generating search page code for '".$xmlFile->table[$i]->caption->__toString()."' table:</b><br>";
 
     //mapping fields indexes to match filter Values
     $filterIdxArray = mapIndex( $xmlFile->table[$i]->field );
@@ -152,19 +157,30 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     //Default filter page requirments
     includeDefaultParts($fileContent, $xmlFile->table[$i]->allowSavingFilters);
 
-
+    $tableName = $xmlFile->table[$i]->name;
     $fileName = $xmlFile->table[$i]->name."_filter.php";
     if ( file_put_contents( "$path/hooks/$fileName" , $fileContent)){
-        echo "<br><span class='spacer'></span><span class='success-msg'>'$fileName' added to the hooks folder Successfully.</span>";
+        echo "<br><span class='spacer'></span><span class='text-success'><b>'$fileName' added to the hooks folder Successfully.</b></span><br>
+        <p class='spacer'><span class='glyphicon glyphicon-chevron-right'></span> To install, open the <span class='text-info'>hooks/$tableName.php</span> file and add this code to the <span class='text-info'>$tableName"."_init()</span> hook if it's not already there:
+        <code class='text-info'>\$options->FilterPage =\"hooks/$fileName\";</code>
+        <br>Now, the function should look like this:
+        <pre><code class='text-primary'>
+        function $tableName"."_init(&\$options, \$memberInfo, &\$args){
+            \$options->FilterPage = \"hooks/$fileName\";
+            return TRUE;
+        }
+        </code></pre>
+        </p>";
     }else{
-        echo "<br><span class='spacer'></span><span class='failure-msg'>Error: Couldn't save 'hooks/$fileName': Check the permissions.</span>";
+        echo "<br><span class='spacer'></span><span class='text-danger'><b>Error: Couldn't save 'hooks/$fileName': Check the permissions.</b></span>";
     }
 
-echo "<br><br>";
+echo "</p><br>";
 }
 
 
 ?>
+</samp>
 </div>
 <center>
     <a style="margin:20px;" href="index.php" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-home" ></span>   Start page</a>
