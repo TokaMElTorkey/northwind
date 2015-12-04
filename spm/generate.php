@@ -74,11 +74,6 @@ code {
     font-family: monospace, monospace !important;
     font-size: 1em;
 }
-pre{
-    padding: 1px;
-    margin: 20px;
-}
-
 </style>
 
 
@@ -103,7 +98,7 @@ if ( !is_dir( "$path/resources/bootstrap-datetimepicker")){
 if ( !is_dir( "$path/resources/moment")){
     recurse_copy( "./resources/moment", "$path/resources/moment");
 }
-echo "OK <br>"; 
+echo "OK <br><br>"; 
 //creating files
 for ($i = 0; $i < count($xmlFile->table); $i++) {
     
@@ -111,8 +106,8 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     if (! isset($xmlFile->table[$i]->spm) ){
         continue;
     }
-
-    echo "<p><br><b>Generating search page code for '".$xmlFile->table[$i]->caption->__toString()."' table:</b><br>";
+    echo ($i==0?"":"<hr>");
+    echo "<p><b>Generating search page code for '".$xmlFile->table[$i]->caption->__toString()."' table:</b>";
 
     //mapping fields indexes to match filter Values
     $filterIdxArray = mapIndex( $xmlFile->table[$i]->field );
@@ -161,21 +156,14 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     $fileName = $xmlFile->table[$i]->name."_filter.php";
     if ( file_put_contents( "$path/hooks/$fileName" , $fileContent)){
         echo "<br><span class='spacer'></span><span class='text-success'><b>'$fileName' added to the hooks folder Successfully.</b></span><br>
-        <p class='spacer'><span class='glyphicon glyphicon-chevron-right'></span> To install, open the <span class='text-info'>hooks/$tableName.php</span> file and add this code to the <span class='text-info'>$tableName"."_init()</span> hook if it's not already there:
-        <code class='text-info'>\$options->FilterPage =\"hooks/$fileName\";</code>
-        <br>Now, the function should look like this:
-        <pre><code class='text-primary'>
-        function $tableName"."_init(&\$options, \$memberInfo, &\$args){
-            \$options->FilterPage = \"hooks/$fileName\";
-            return TRUE;
-        }
-        </code></pre>
+        <p class='spacer'><span class='glyphicon glyphicon-chevron-right'></span> To install, open the <span class='text-info'>hooks/$tableName.php</span> file and add this code (if it's not already there) to the <span class='text-info'>$tableName"."_init()</span> hook before the return statement:
+        <br><code class='text-info'>\$options->FilterPage =\"hooks/$fileName\";</code>
         </p>";
     }else{
         echo "<br><span class='spacer'></span><span class='text-danger'><b>Error: Couldn't save 'hooks/$fileName': Check the permissions.</b></span>";
     }
 
-echo "</p><br>";
+echo "</p>";
 }
 
 
