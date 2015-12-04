@@ -89,7 +89,7 @@ pre{
 
 </div>
 <h4>Progress log</h4>
-<div class="col-md-12 text-info" id="progress" class="container" >
+<div class="col-md-12" id="progress" class="container" >
 
 <?php
 echo "Output folder: $path";
@@ -941,7 +941,7 @@ function includeDefaultParts(&$fileContent , $saveFiltersFlag){
                 </div>
             <?php } ?>
             <div class="col-md-2 vspacer-lg">
-                <button onclick="jQuery('form')[0].reset();" type="submit" id="cancelFilters" class="btn btn-warning btn-block btn-lg"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
+                <button onclick="resetForm();" type="submit" id="cancelFilters" class="btn btn-warning btn-block btn-lg"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
             </div>
         </div>
 
@@ -966,6 +966,11 @@ function includeDefaultParts(&$fileContent , $saveFiltersFlag){
                 });
 
             };
+            function resetForm(){
+                //reset all inputs (including hidden)
+                $j(":input").val('').attr('name','');
+                return true;
+            }
         </script>
 
 
