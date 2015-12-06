@@ -3,7 +3,7 @@
 
 	// validate project name
 	if (!isset($_GET['axp'])){
-		echo 'Project file not found.';
+		 echo "<br>".spm_error_message('Project file not found.');
 		exit;
 	}
 	$projectFile = '';
