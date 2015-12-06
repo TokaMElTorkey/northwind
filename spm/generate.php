@@ -986,7 +986,6 @@ function includeDefaultParts(&$fileContent , $saveFiltersFlag){
 
                 //remove unsuplied fields
                 beforeApplyFilters();
-                return false;
 
                 return true;
             }
