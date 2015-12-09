@@ -3,7 +3,7 @@ include(dirname(__FILE__) . "/header.php");
 
 // validate project name
 if (!isset($_GET['axp'])) {
-    echo 'Project file not found.';
+    echo "<br>".spm_error_message('Project file not found.');
     exit;
 }
 $projectFile = '';
@@ -284,6 +284,7 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 
             <div id="<?php echo $fieldNum; ?>_DropDown"><span></span></div>
 
+            <input type="hidden" class="populatedOptionsData" name="<?php echo $filterCounter; ?>" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" >
             <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
             <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
             <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
@@ -373,15 +374,13 @@ function getCheckboxFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
                     <label><input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="" checked> Any</label>
                </div>
             </div>
-
             <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
-            <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
+            <input type="hidden" class='checkboxData' name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
             <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" id="filter_<?php echo $fieldNum; ?>" value="equal-to">
 
     </div>
 
     <script>
-        var filterValue = '<?php echo htmlspecialchars($FilterValue[4]); ?>';
 
         //for population
         var filterValue_<?php echo $fieldNum; ?> = '<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>';
@@ -477,6 +476,7 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
         <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
         <div id="filter_<?php echo $fieldNum; ?>"></span></div>
 
+         <input type="hidden" class="populatedLookupData" name="<?php echo $filterCounter; ?>" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" >
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" id="lookupoperator_<?php echo $fieldNum; ?>" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
@@ -929,7 +929,7 @@ function includeDefaultParts(&$fileContent , $saveFiltersFlag){
                 </div>
             <?php } ?>
             <div class="col-md-2 vspacer-lg">
-                <button onclick="resetForm();" type="submit" id="cancelFilters" class="btn btn-warning btn-block btn-lg"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
+                <button onclick="beforeCancelFilters();" type="submit" id="cancelFilters" class="btn btn-warning btn-block btn-lg"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
             </div>
         </div>
 
@@ -954,9 +954,39 @@ function includeDefaultParts(&$fileContent , $saveFiltersFlag){
                 });
 
             };
-            function resetForm(){
-                //reset all inputs (including hidden)
-                $j(":input").val('').attr('name','');
+            function beforeCancelFilters(){
+                
+                //lookup case ( populate with initial data)
+                $j(":input[class='populatedLookupData']").each(function(){
+                    
+                    $j(":input[name='FilterValue["+$j(this).attr('name')+"]']").val($j(this).val());
+                })
+
+                //options case ( populate with initial data)
+                $j(":input[class='populatedOptionsData']").each(function(){
+                    
+                    $j(":input[name='FilterValue["+$j(this).attr('name')+"]']").val($j(this).val());
+                })
+
+                //other fields
+                $j('form')[0].reset();
+
+
+                //checkbox case
+                $j(":input[class='checkboxData']").each(function(){
+                    var filterNum = $j(this).val();
+                    var populatedValue = eval("filterValue_"+filterNum);                  
+                    var parentDiv = $j(this).parent(".row ");
+                    
+                    //check old value
+                    parentDiv.find("input[type=radio][value='"+populatedValue+"']").attr('checked', 'checked').click();
+                    
+                
+                })
+
+                //remove unsuplied fields
+                beforeApplyFilters();
+
                 return true;
             }
         </script>
