@@ -321,17 +321,17 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         <div class="row" style="border-bottom: dotted 2px #DDD;">
             <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
             <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
+            <input type="hidden" class='optionsData' name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
             <div class="col-md-8 col-md-offset-3">
 
                     <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
-                    <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
                     <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
                     <input type="hidden" name="FilterValue[<?php echo $filterCounter; ?>]" id="<?php echo $fieldNum; ?>_currValue" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="3">
 
                 <?php foreach ($options as $option) { ?>
                         <div class="radio">
                             <label>
-                                 <input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" value="<?php echo $option; ?>"><?php echo $option; ?>
+                                 <input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" value='<?php echo $option; ?>'><?php echo $option; ?>
                             </label>
                         </div>
                  <?php } ?>
@@ -956,31 +956,38 @@ function includeDefaultParts(&$fileContent , $saveFiltersFlag){
             };
             function beforeCancelFilters(){
                 
-                //lookup case ( populate with initial data)
-                $j(":input[class='populatedLookupData']").each(function(){
-                    
-                    $j(":input[name='FilterValue["+$j(this).attr('name')+"]']").val($j(this).val());
-                })
-
-                //options case ( populate with initial data)
-                $j(":input[class='populatedOptionsData']").each(function(){
-                    
-                    $j(":input[name='FilterValue["+$j(this).attr('name')+"]']").val($j(this).val());
-                })
 
                 //other fields
                 $j('form')[0].reset();
 
+                //lookup case ( populate with initial data)
+                $j(":input[class='populatedLookupData']").each(function(){
+                  
 
-                //checkbox case
-                $j(":input[class='checkboxData']").each(function(){
+                    $j(":input[name='FilterValue["+$j(this).attr('name')+"]']").val($j(this).val());
+                    if ($j(this).val()== '<None>'){
+                        $j(this).parent(".row ").find('input[id^="lookupoperator"]').val('is-empty');
+                    }else{
+                        $j(this).parent(".row ").find('input[id^="lookupoperator"]').val('equal-to');
+                    }
+                        
+                })
+
+                //options case ( populate with initial data)
+                $j(":input[class='populatedOptionsData']").each(function(){
+                   
+                    $j(":input[name='FilterValue["+$j(this).attr('name')+"]']").val($j(this).val());
+                })
+
+
+                //checkbox, radio options case
+                $j(":input[class='checkboxData'],:input[class='optionsData'] ").each(function(){
                     var filterNum = $j(this).val();
                     var populatedValue = eval("filterValue_"+filterNum);                  
                     var parentDiv = $j(this).parent(".row ");
-                    
+
                     //check old value
                     parentDiv.find("input[type=radio][value='"+populatedValue+"']").attr('checked', 'checked').click();
-                    
                 
                 })
 
