@@ -137,7 +137,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         $filterCounter++;   //number of filter fields
 
         $field = $xmlFile->table[$i]->field[$fieldNum]; 
-        echo "<br><span class='spacer'></span>".$field->caption->__toString()."' field : " ;
+        echo "<br><span class='spacer'></span>'".$field->caption->__toString()."' field : " ;
         getFieldType($fileContent, $field, $filterIdxArray[$fieldNum] , $filterCounter , $xmlFile->table[$i]->name);
         $fileContent.='
             <!-- ########################################################## -->
