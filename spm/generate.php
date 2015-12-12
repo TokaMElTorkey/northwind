@@ -103,7 +103,7 @@ echo "OK <br><br>";
 for ($i = 0; $i < count($xmlFile->table); $i++) {
     
     //if no spm node found, skip table
-    if (! isset($xmlFile->table[$i]->spm) ){
+    if ( !( isset($xmlFile->table[$i]->plugins)  && isset($xmlFile->table[$i]->plugins->spm) ) ){
         continue;
     }
     echo ($i==0?"":"<hr>");
@@ -117,7 +117,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     $filterCounter = 0;
     $includeDatetimePicker = $includeOrderBy = $includeGroups = false;
 
-    $fieldIdxArray = explode(":", $xmlFile->table[$i]->spm );
+    $fieldIdxArray = explode(":", $xmlFile->table[$i]->plugins->spm );
     array_pop($fieldIdxArray); //remove last element (empty)
 
     for ($j = 0; $j < count($fieldIdxArray); $j++) {
