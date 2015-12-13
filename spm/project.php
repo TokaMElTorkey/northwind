@@ -138,7 +138,10 @@
 
         	//one/many tables in project
 			currentTable = ( (typeof tableNumber != 'undefined')?xmlFile.table[tableNumber]:xmlFile.table);
-			currentTable['spm'] =  ids;
+			if (! currentTable['plugins'] ){
+				currentTable['plugins']=[];
+			}
+			currentTable['plugins']['spm'] =  ids;
 
 			//update project file
 			$j.ajax({
