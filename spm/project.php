@@ -175,8 +175,8 @@
 			table = xmlFile.table;
 		}
 		var chosenElements;
-		if (table.spm){
-			chosenElements = new Array(table.spm.split(":").length);
+		if ( table.plugins && table.plugins.spm ){
+			chosenElements = new Array(table.plugins.spm.split(":").length);
 		}
 
 		//get data types ( only for the first time the table is clicked )
@@ -199,8 +199,8 @@
 		//convert ids string into array
 		var spmDataArray = [];
 
-		if(table.spm){
-			var spmDataArray = table.spm.split(":");	
+		if( table.plugins && table.plugins.spm){
+			var spmDataArray = table.plugins.spm.split(":");	
 		}
 
 		$j.each(tableData[tableNum], function( key, value ) {

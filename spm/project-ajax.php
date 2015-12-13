@@ -19,10 +19,15 @@ if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['pr
 	    )) {
 			die("");
 	}
-	if (!isset($xmlFile->table[$tableNum]->spm)){
-	 	$xmlFile->table[$tableNum]->addChild("spm");	
+	if (!isset($xmlFile->table[$tableNum]->plugins)){
+	 	$xmlFile->table[$tableNum]->addChild("plugins");	
 	}
-	$xmlFile->table[$tableNum]->spm= $data;
+	if (!isset($xmlFile->table[$tableNum]->plugins->spm)){
+ 		$xmlFile->table[$tableNum]->plugins->addChild("spm");	
+	} 	
+	
+	
+	$xmlFile->table[$tableNum]->plugins->spm= $data;
 
 	$xmlFile->asXML("./projects/".$projName);
 
