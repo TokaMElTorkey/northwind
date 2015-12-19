@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------------------
 ?>
 
-<link rel="stylesheet" href="./resources/css/animate-bootstrap-icons.css">
+<link rel="stylesheet" href="./app-resources/css/animate-bootstrap-icons.css">
 
 <style>
 	.transparent{
@@ -39,7 +39,7 @@
 <form method='POST' action="generate.php?axp=<?php echo $_GET['axp']; ?>">
 	<h4>Full path to your application folder</h4>
 	<div class='form-group'>
-		<input name='path' onkeyup='validatePath(this)' type='text' class='form-control col-md-11 col-xs-9' value='<?php echo dirname(dirname(__FILE__)); ?>'>
+		<input name='path' onkeyup='validatePath(this)' type='text' class='form-control col-md-11 col-xs-9' value='<?php echo dirname(dirname(__DIR__."../")); ?>'>
 	</div>
 	<button data-toggle='popover' title='' data-content='' class='transparent btn'>
 		<i class='glyphicon glyphicon-ok' id='mark' style='color:#30C313;' ></i>

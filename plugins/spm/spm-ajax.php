@@ -4,14 +4,14 @@
 	
 	/* get max. file size from php.ini configuration */
 	function parse_size($size) {
-	$unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
-	$size = preg_replace('/[^0-9\.]/', '', $size); 		// Remove the non-numeric characters from the size.
-	if ($unit) {
-		// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-		return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
-	}else {
-		return round($size);
-		}
+		$unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
+		$size = preg_replace('/[^0-9\.]/', '', $size); 		// Remove the non-numeric characters from the size.
+		if ($unit) {
+			// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
+			return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+		}else {
+			return round($size);
+			}
 	}
   
 	$maxFileSize = (parse_size(ini_get('post_max_size'))<parse_size(ini_get('upload_max_filesize'))?ini_get('post_max_size'):ini_get('upload_max_filesize'));
@@ -54,7 +54,7 @@
 			}
 			
 			//check existing projects' names 
-			$currentProjects = scandir ( "./projects"  );
+			$currentProjects = scandir ( "../projects"  );
 			
 			natsort($currentProjects);
 			$currentProjects = array_reverse ( $currentProjects );
@@ -86,7 +86,7 @@
 				}
 			}
 				
-			if (!move_uploaded_file( $_FILES['uploadedFile']['tmp_name'], sprintf('./projects/%s',($renameFlag?$newName:$_FILES['uploadedFile']['name']))
+			if (!move_uploaded_file( $_FILES['uploadedFile']['tmp_name'], sprintf('../projects/%s',($renameFlag?$newName:$_FILES['uploadedFile']['name']))
 			)) {
 				throw new RuntimeException('Failed to move uploaded file.');
 			}else{

@@ -2,11 +2,11 @@
 	/* Ensure that the folder was installed correctly */
 	
 	$installationError = false;
-	if ( !@include("../defaultLang.php") ){ 
+	if ( !@include("../../defaultLang.php") ){ 
 	   $installationError = true;
 	}
-	@include("../language.php");
-	@include("../lib.php");
+	@include("../../language.php");
+	@include("../../lib.php");
 
 	#########################################################
 	function spm_error_message($msg, $back_url = ''){
@@ -35,7 +35,7 @@
 		// VALIDATIONS
 		try{
 
-			$projects = scandir ( "./projects"  );
+			$projects = scandir ( "../projects"  );
 			$projects = array_diff($projects, array('.', '..'));
 			$userProject = $fileHash;
 			$projectFile = null;
@@ -55,7 +55,7 @@
 
 
 			// validate that the file is not corrupted
-			@$xmlFile = simpleXML_load_file("./projects/$projectFile");
+			@$xmlFile = simpleXML_load_file("../projects/$projectFile");
 			if (!$xmlFile ){
 				throw new RuntimeException('Invalid axp file.');
 			}	
@@ -91,7 +91,7 @@
 				<body>
 					<br>
 					<div class="container">
-						<div class="panel panel-danger"><div class="panel-heading"><h3 class="panel-title">Error:</h3></div><div class="panel-body"><p class="text-danger">The SPM folder was not installed correctly, you must put the folder inside your root project folder.</p></div></div></div>
+						<div class="panel panel-danger"><div class="panel-heading"><h3 class="panel-title">Error:</h3></div><div class="panel-body"><p class="text-danger">The SPM folder was not installed correctly, you must put it inside the plugins folder under you root project folder.</p></div></div></div>
 					</div>
 				</body>
 				</html>
@@ -100,31 +100,31 @@
 			}
 		?>
 
-		<link id="browser_favicon" rel="shortcut icon" href="../resources/images/appgini-icon.png">
+		<link id="browser_favicon" rel="shortcut icon" href="../../resources/images/appgini-icon.png">
 
-		<link rel="stylesheet" href="../resources/initializr/css/bootstrap.css">
+		<link rel="stylesheet" href="../../resources/initializr/css/bootstrap.css">
 		<!--[if gt IE 8]><!-->
-			<link rel="stylesheet" href="../resources/initializr/css/bootstrap-theme.css">
+			<link rel="stylesheet" href="../../resources/initializr/css/bootstrap-theme.css">
 		<!--<![endif]-->
-		<link rel="stylesheet" href="../dynamic.css.php">
-		<link rel="stylesheet" href="./resources/dropzone/dropzone.min.css">
+		<link rel="stylesheet" href="../../dynamic.css.php">
+		<link rel="stylesheet" href="./app-resources/dropzone/dropzone.min.css">
 		
 
 
 		<!-- jquery ui -->
-		<link rel="stylesheet" href="./resources/jquery-ui-1.11.2/jquery-ui.min.css">
+		<link rel="stylesheet" href="./app-resources/jquery-ui-1.11.2/jquery-ui.min.css">
 
 		<!--[if lt IE 9]>
 			<script src="resources/initializr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 		<![endif]-->
-		<script src="../resources/jquery/js/jquery-1.11.2.min.js"></script>
+		<script src="../../resources/jquery/js/jquery-1.11.2.min.js"></script>
 
 		<!-- jquery ui -->
-		<script src="./resources/jquery-ui-1.11.2/jquery-ui.min.js"></script>
+		<script src="./app-resources/jquery-ui-1.11.2/jquery-ui.min.js"></script>
 
 		<script>var $j = jQuery.noConflict();</script>
-		<script src="../resources/initializr/js/vendor/bootstrap.min.js"></script>	
-		<script src="./resources/dropzone/dropzone.min.js"></script>
+		<script src="../../resources/initializr/js/vendor/bootstrap.min.js"></script>	
+		<script src="./app-resources/dropzone/dropzone.min.js"></script>
 
 		<script>
 		
@@ -253,20 +253,20 @@
 				/* grant access to the groups 'Admins' only */
 				$mi = getMemberInfo();
 				if( ! ($mi['admin'] && ((is_string($mi['group']) && $mi['group'] =='Admins') || ( is_array($mi['group']) && array_search("Admins" , $mi['group']))))){
-					echo "<br>".spm_error_message('Access denied.<br>Please, <a href=\'../index.php?signIn=1\' >Log in</a> as administrator to access this page.' , false);
+					echo "<br>".spm_error_message('Access denied.<br>Please, <a href=\'../../index.php?signIn=1\' >Log in</a> as administrator to access this page.' , false);
 					exit;
 				}
 				
 
 				/* Ensure that the projects folder has write permission */
-				if ( !file_exists ("./projects" )){
-					 if (!mkdir ( "./projects" , 0775)){
+				if ( !file_exists ("../projects" )){
+					 if (!mkdir ( "../projects" , 0775)){
 						echo "<br>".spm_error_message('Could not create projects directory.<br>Please,create \'projects\' directory inside the SPM root directory',false);		
 						exit;
 					}
 				}
 				
-				if ( ! is_writable( "./projects" )){
+				if ( ! is_writable( "../projects" )){
 					echo "<br>".spm_error_message('Please, change the permission of the \'projects\' folder to be writeable.',false);		
 					exit;
 				}
