@@ -54,7 +54,6 @@
 	  init: function() {
             this.on("success", function(file, response) {
 				$j(".dropzone").css( "border" ,"3px dotted blue");
-				console.log(response);
 				response = JSON.parse(response);
 				if ( response["response-type"] =="success"){
 					var successDiv = $j("<div>", {class: "alert alert-success" , style: "display: none; padding-top: 6px; padding-bottom: 6px;"});
@@ -73,22 +72,14 @@
 				$j("#response").html("<div class='alert alert-danger'>"+response+"</div>");
 				$j(".dropzone").css( "border" ,"3px dotted red");
 				
-				setTimeout( myfunc, 5000 , file , this);
+				setTimeout( deleteFile, 5000 , file , this);
 			});
       }
 	}
-  	function myfunc(file , elm){
+  	function deleteFile (file , elm){
 			elm.removeFile(file);
 	}
-  
-	function dismissibleMsg( element , location ){
-	  $j(element).show("slow", function(){
-			setTimeout(function(){
-				$j("#<?php echo $id; ?>").hide("slow"); 
-				window.location.href = location;
-			}, 5000);
-		});		
-	}
+
 </script>
 
 <?php 

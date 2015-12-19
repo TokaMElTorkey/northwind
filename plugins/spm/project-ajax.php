@@ -1,8 +1,11 @@
 <?php
+@include("../plugins-resources/plugins-common.php");
 
-/**
+
+
+ /**
   *  Save project modifications in project file
-  **/
+  */
 
 if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['projFile']) ){
 
@@ -19,12 +22,9 @@ if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['pr
 	    )) {
 			die("");
 	}
-	if (!isset($xmlFile->table[$tableNum]->plugins)){
-	 	$xmlFile->table[$tableNum]->addChild("plugins");	
-	}
-	if (!isset($xmlFile->table[$tableNum]->plugins->spm)){
- 		$xmlFile->table[$tableNum]->plugins->addChild("spm");	
-	} 	
+	
+	//create spm node if not exist
+	checkOrCreatePluginNode( $xmlFile->table[$tableNum] , 'spm' );
 	
 	
 	$xmlFile->table[$tableNum]->plugins->spm= $data;

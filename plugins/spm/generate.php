@@ -3,7 +3,7 @@ include(dirname(__FILE__) . "/header.php");
 
 // validate project name
 if (!isset($_GET['axp'])) {
-    echo "<br>".spm_error_message('Project file not found.');
+    echo "<br>".plugin_error_message('Project file not found.');
     exit;
 }
 $projectFile = '';
@@ -36,27 +36,11 @@ $xmlFile = getXMLFile($_GET['axp'], $projectFile);
             }
         }
     } catch (RuntimeException $e){
-            echo "<br>".spm_error_message($e->getMessage());
+            echo "<br>".plugin_error_message($e->getMessage());
             exit;
     }
 //-------------------------------------------------------------------------------------
-//coping bootstrap3-datetimepicker and moment resources
-function recurse_copy($src,$dst) { 
-    $dir = opendir($src); 
-    @mkdir($dst); 
-    while(false !== ( $file = readdir($dir)) ) { 
-        if (( $file != '.' ) && ( $file != '..' )) { 
-            if ( is_dir($src . '/' . $file) ) { 
-                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
-            } 
-            else { 
-                copy($src . '/' . $file,$dst . '/' . $file); 
-            } 
-        } 
-    } 
-    closedir($dir); 
-}
-//-------------------------------------------------------------------------------------
+
 ?>
 
 <style>

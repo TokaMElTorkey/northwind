@@ -3,7 +3,7 @@
 
 	// validate project name
 	if (!isset($_GET['axp'])){
-		echo "<br>".spm_error_message('Project file not found.');
+		echo "<br>".plugin_error_message('Project file not found.');
 		exit;
 	}
 	$projectFile = '';
@@ -39,9 +39,9 @@
 
 	<?php
 	for ( $i= 0 ; $i < count ($xmlFile->table) ; $i++ ){ ?>
-	<a href="#" class="list-group-item" onclick="showFields( event , <?php echo $i; ?> , this)" > <?php if (!empty($xmlFile->table[$i]->tableIcon)){ ?><img src="./app-resources/table_icons/<?php echo $xmlFile->table[$i]->tableIcon ;?>" alt="<?php echo $xmlFile->table[$i]->tableIcon ; ?>" >  <?php } echo $xmlFile->table[$i]->caption->__toString();	?> </a>
- 
-	<?php
+		<a href="#" class="list-group-item" onclick="showFields( event , <?php echo $i; ?> , this)" > <?php if (!empty($xmlFile->table[$i]->tableIcon)){ ?><img src="./app-resources/table_icons/<?php echo $xmlFile->table[$i]->tableIcon ;?>" alt="<?php echo $xmlFile->table[$i]->tableIcon ; ?>" >  <?php } echo $xmlFile->table[$i]->caption->__toString();	?> </a>
+	 
+	 	<?php
 		//convert cData fields to string
 		for ( $j= 0 ; $j < count ($xmlFile->table[$i]->field) ; $j++ ){ 
 			$xmlFile->table[$i]->field[$j]->caption = $xmlFile->table[$i]->field[$j]->caption->__toString();
@@ -153,7 +153,6 @@
 			  	data: (ids.length==0?":":ids)
 			  },
 			  success: function(response){
-			  	console.log(response);
 			  },
 			});
 	}
