@@ -54,6 +54,7 @@
 	  init: function() {
             this.on("success", function(file, response) {
 				$j(".dropzone").css( "border" ,"3px dotted blue");
+				console.log(response);
 				response = JSON.parse(response);
 				if ( response["response-type"] =="success"){
 					var successDiv = $j("<div>", {class: "alert alert-success" , style: "display: none; padding-top: 6px; padding-bottom: 6px;"});
@@ -91,7 +92,7 @@
 </script>
 
 <?php 
-	$currentProjects = scandir ( "./projects"  );
+	$currentProjects = scandir ( "../projects"  );
 	$currentProjects = array_diff($currentProjects, array('.', '..'));
 	$projectsNum = count($currentProjects);
 
