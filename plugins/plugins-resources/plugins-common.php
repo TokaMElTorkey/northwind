@@ -128,4 +128,34 @@ function checkOrCreatePluginNode( $table , $nodeName ){
     } 
 
 }
+#################################################################################
+/**
+ * Update node in axp file table 
+ * @param $projName: table axp project name
+ *        $tableNumber: table index inside axp file
+ *        $pluginName:  plugin node to be updated
+ *        $data: data to update the node with
+ * @return  boolean
+ */
+function updateProjectPluginNode($projName , $tableNumber , $pluginName , $data ){
+    
+    @$xmlFile = simpleXML_load_file("../projects/".$projName);
+
+    //validate input
+    if (  (preg_match('/^[a-z0-9-_]+\.axp$/i', $projName ))&& 
+            (isset($xmlFile)) && 
+            (isset($xmlFile->table[$tableNumber]))           
+        ) {
+        //create spm node if not exist
+        checkOrCreatePluginNode( $xmlFile->table[$tableNumber] , $pluginName );
+    
+        $xmlFile->table[$tableNumber]->plugins->$pluginName = $data;
+        $xmlFile->asXML("../projects/".$projName);        
+
+        return true;
+    }
+
+    return false;
+}
+    
 ?>

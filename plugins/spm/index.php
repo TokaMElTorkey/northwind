@@ -44,7 +44,7 @@
 <script>
 	Dropzone.options.myAwesomeDropzone = {
 	  paramName: "uploadedFile", // The name that will be used to transfer the file
-	  url: "spm-ajax.php",
+	  url: "../plugins-resources/upload-ajax.php",
 	  acceptedFiles: ".axp,.AXP",
 	  uploadMultiple: false,
 	  maxFiles: 1,
@@ -57,9 +57,10 @@
 				response = JSON.parse(response);
 				if ( response["response-type"] =="success"){
 					var successDiv = $j("<div>", {class: "alert alert-success" , style: "display: none; padding-top: 6px; padding-bottom: 6px;"});
-					successDiv.html(response.data);
+					var successMsg = "File uploaded successfully."+(response.isRenamed?"<br>The project name already exists, the file was renamed to "+response.fileName+".":"");
+					successDiv.html( successMsg );
 					$j("#response").html(successDiv);
-					dismissibleMsg( successDiv , response.location );
+					dismissibleMsg( successDiv , "project.php?axp="+response.md5FileName );
 				}
             });
 			this.on("error", function(file, response){
