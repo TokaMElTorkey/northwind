@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------------------
 ?>
 
-<link rel="stylesheet" href="./app-resources/css/animate-bootstrap-icons.css">
+<link rel="stylesheet" href="../plugins-resources/css/animate-bootstrap-icons.css">
 
 <style>
 	.transparent{

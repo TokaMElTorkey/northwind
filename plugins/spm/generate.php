@@ -26,14 +26,8 @@ $xmlFile = getXMLFile($_GET['axp'], $projectFile);
         if (! is_writable($path."/hooks")){
             throw new RuntimeException('The hooks folder of the given path is not writable');
         }
-        if ( is_dir($path."/plugins") ){
-            if (!is_writable($path."/plugins")){
-                throw new RuntimeException('The plugins folder is not writable');
-            }
-
-            if (  is_dir($path."/plugins/plugins-resources") && !is_writable($path."/plugins/plugins-resources")){
-                throw new RuntimeException('The plugins/plugins-resources folder is not writable');
-            }
+        if (! is_writable($path."/resources")){
+            throw new RuntimeException('The resources folder of the given path is not writable');
         }
     } catch (RuntimeException $e){
             echo "<br>".plugin_error_message($e->getMessage());
@@ -80,19 +74,14 @@ code {
 echo "Output folder: $path";
 
 
-//create path to resources folder if not exist
-if (!is_dir("$path/plugins/plugins-resources")){
-    mkdir( "$path/plugins/plugins-resources", 0775, true);
-}
-
 //coping resources folders
 echo "<br>Creating required resources' folders: ";
-if ( !is_dir( "$path/plugins/plugins-resources/bootstrap-datetimepicker")){
-    recurse_copy( "./app-resources/bootstrap-datetimepicker", "$path/plugins/plugins-resources/bootstrap-datetimepicker");
+if ( !is_dir( "$path/resources/bootstrap-datetimepicker")){ 
+     recurse_copy( "./app-resources/bootstrap-datetimepicker", "$path/resources/bootstrap-datetimepicker");
 } 
 
-if ( !is_dir( "$path/plugins/plugins-resources/moment")){
-    recurse_copy( "./app-resources/moment", "$path/plugins/plugins-resources/moment");
+if ( !is_dir( "$path/resources/moment")){
+     recurse_copy( "./app-resources/moment", "$path/resources/moment");
 }
 echo "OK <br><br>"; 
 //creating files
@@ -868,9 +857,9 @@ function includeNeededParts( &$fileContent , $includeDatetimePicker , $includeOr
     if ($includeDatetimePicker){
         $fileContent = '
         <!-- load bootstrap datetime-picker-->
-        <link rel="stylesheet" href="plugins/plugins-resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
-        <script type="text/javascript" src="plugins/plugins-resources/moment/moment.min.js"></script>
-        <script type="text/javascript" src="plugins/plugins-resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+        <link rel="stylesheet" href="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+        <script type="text/javascript" src="resources/moment/moment.min.js"></script>
+        <script type="text/javascript" src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
         '.$fileContent ;
     }
 }
