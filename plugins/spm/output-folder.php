@@ -3,7 +3,7 @@
 
 	// validate project name
 	if (!isset($_GET['axp'])){
-		 echo "<br>".spm_error_message('Project file not found.');
+		 echo "<br>".plugin_error_message('Project file not found.');
 		exit;
 	}
 	$projectFile = '';
@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------------------
 ?>
 
-<link rel="stylesheet" href="./app-resources/css/animate-bootstrap-icons.css">
+<link rel="stylesheet" href="../plugins-resources/css/animate-bootstrap-icons.css">
 
 <style>
 	.transparent{

@@ -1,8 +1,11 @@
 <?php
+@include("../plugins-resources/plugins-common.php");
 
-/**
+
+
+ /**
   *  Save project modifications in project file
-  **/
+  */
 
 if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['projFile']) ){
 
@@ -10,26 +13,16 @@ if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['pr
 	$projName = $_POST['projFile'];
 	$data = $_POST['data'];
 
-	@$xmlFile = simpleXML_load_file("../projects/".$projName);
-
-	//validate input
-	if ( !( (preg_match('/^[a-z0-9-_]+\.axp$/i', $projName ))&& 
-		    (preg_match('/^[0-9:]*$/i', $data ))  &&
-		    (isset($xmlFile->table[$tableNum]))		      
-	    )) {
+	//validate data 
+	if (! preg_match('/^[0-9:]*$/i', $data )){
 			die("");
 	}
-	if (!isset($xmlFile->table[$tableNum]->plugins)){
-	 	$xmlFile->table[$tableNum]->addChild("plugins");	
-	}
-	if (!isset($xmlFile->table[$tableNum]->plugins->spm)){
- 		$xmlFile->table[$tableNum]->plugins->addChild("spm");	
-	} 	
-	
-	
-	$xmlFile->table[$tableNum]->plugins->spm= $data;
 
-	$xmlFile->asXML("../projects/".$projName);
+	//update node with new data after validating it
+	if (updateProjectPluginNode($projName , $tableNum , 'spm' , $data )){
+		echo  "ok";
+	}
+
 
 /**
   *  validate the given project folder
@@ -51,14 +44,8 @@ if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['pr
 		if (! is_writable($path."/hooks")){
 			throw new RuntimeException('The hooks folder is not writable');
 		}
-		if ( is_dir($path."/plugins") ){
-			if (!is_writable($path."/plugins")){
-				throw new RuntimeException('The plugins folder is not writable');
-			}
-
-			if (  is_dir($path."/plugins/plugins-resources") && !is_writable($path."/plugins/plugins-resources")){
-				throw new RuntimeException('The plugins/plugins-resources folder is not writable');
-			}
+		if (! is_writable($path."/resources") ){
+			throw new RuntimeException('The resources folder is not writable');
 		}
 
 	} catch (RuntimeException $e){
