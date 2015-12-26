@@ -100,7 +100,13 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     
     $fileContent = '';
     $filterCounter = 0;
-    $includeDatetimePicker = $includeOrderBy = $includeGroups = false;
+    $includesArray  = [
+        'datetimePicker' => false,
+        'dropDown'       => false,
+        'orderBy' => false,
+        'groups'  => false
+    ];
+        
 
     $fieldIdxArray = explode(":", $xmlFile->table[$i]->plugins->spm );
     array_pop($fieldIdxArray); //remove last element (empty)
@@ -112,9 +118,9 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
         //sections 
         if ($fieldNum > 9000){
             if ( $fieldNum == 9001 ){
-                $includeOrderBy = true;
+                $includesArray['orderBy'] = true;
             }else{
-                 $includeGroups = true;
+                $includesArray['groups'] = true;
             }
             continue;
         }
@@ -132,7 +138,7 @@ for ($i = 0; $i < count($xmlFile->table); $i++) {
     }
 
     //includes
-    includeNeededParts($fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups );
+    includeNeededParts($fileContent , $includesArray );
     
     //Default filter page requirments
     includeDefaultParts($fileContent, $xmlFile->table[$i]->allowSavingFilters);
@@ -179,10 +185,12 @@ function getFieldType(&$fileContent, $field, $fieldNum, &$filterCounter , $table
 
     if (!empty($field->parentTable)) {                      //lookup
 
+        $GLOBALS['includesArray']['dropDown'] = true;
         getLookupFilter($fileContent, $field, $fieldNum, $filterCounter , $tableName);
 
     } else if ($field->CSValueList->__toString() != '') {      //options list
 
+        $GLOBALS['includesArray']['dropDown'] = true;
         getOptionsFilter($fileContent, $field, $fieldNum, $filterCounter);
 
     } else if ($field->checkBox == "True") {                //checkbox
@@ -196,26 +204,26 @@ function getFieldType(&$fileContent, $field, $fieldNum, &$filterCounter , $table
 
     } else if ($currentType == 9){                          //date
        
-        $GLOBALS['includeDatetimePicker'] = true;
+        $GLOBALS['includesArray']['datetimePicker'] = true;
         getDatePreFilter($fileContent, $field, $fieldNum, $filterCounter);
         getDateFilter($fileContent, $field, $fieldNum, $filterCounter);
         $filterCounter++;
 
     } else if ($currentType < 12) {                         //dateTime
 
-        $GLOBALS['includeDatetimePicker'] = true;
+        $GLOBALS['includesArray']['datetimePicker'] = true;
         getDatePreFilter($fileContent, $field, $fieldNum, $filterCounter);
         getDateTimeFilter($fileContent, $field, $fieldNum, $filterCounter);
         $filterCounter++;  
 
     } else if ($currentType == 12) {                        //time
-        $GLOBALS['includeDatetimePicker'] = true;
+        $GLOBALS['includesArray']['datetimePicker'] = true;
         getDatePreFilter($fileContent, $field, $fieldNum, $filterCounter);
         getTimeFilter($fileContent, $field, $fieldNum, $filterCounter);
         $filterCounter++;  
 
     } else if ($currentType == 13) {                        //year
-        $GLOBALS['includeDatetimePicker'] = true;
+        $GLOBALS['includesArray']['datetimePicker'] = true;
         getDatePreFilter($fileContent, $field, $fieldNum, $filterCounter);
         getYearFilter($fileContent, $field, $fieldNum, $filterCounter);
         $filterCounter++;  
@@ -264,11 +272,10 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         ob_start();
         ?>
         <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
-            <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
+            <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
+              <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
 
-            <div id="<?php echo $fieldNum; ?>_DropDown"><span></span></div>
-
+            <div id="<?php echo $fieldNum; ?>_DropDown" class="drop-down col-md-3 col-sm-6 col-xs-10 vspacer-lg"><span></span></div>
             <input type="hidden" class="populatedOptionsData" name="<?php echo $filterCounter; ?>" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" >
             <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
             <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
@@ -304,8 +311,8 @@ function getOptionsFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
         ?>
 
         <div class="row" style="border-bottom: dotted 2px #DDD;">
-            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
-            <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
+            <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
+              <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
             <input type="hidden" class='optionsData' name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">
             <div class="col-md-8 col-md-offset-3">
 
@@ -346,8 +353,8 @@ function getCheckboxFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 
     <div class="row" style="border-bottom: dotted 2px #DDD;">
          
-                <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
-                <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
+                <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
+                  <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
                 <div class="col-md-8 col-md-offset-3">
                 <div class="radio">
                     <label><input type="radio" name="FilterValue[<?php echo $filterCounter; ?>]" class="filter_<?php echo $fieldNum; ?>" onclick="checkboxFilter(this)" value="1" > Checked</label>
@@ -402,8 +409,8 @@ function getNumberFilter( &$fileContent, $field, $fieldNum, &$filterCounter){
 
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
         
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
+        <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
+          <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
         <div class="col-md-1 vspacer-lg">Between </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
@@ -457,11 +464,11 @@ function getLookupFilter(&$fileContent, $field, $fieldNum, $filterCounter , $tab
 
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
 
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div id="filter_<?php echo $fieldNum; ?>"></span></div>
+        <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
+          <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
+        <div id="filter_<?php echo $fieldNum; ?>" class="drop-down col-md-3 col-sm-6 col-xs-10 vspacer-lg"><span></span></div>
 
-         <input type="hidden" class="populatedLookupData" name="<?php echo $filterCounter; ?>" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" >
+        <input type="hidden" class="populatedLookupData" name="<?php echo $filterCounter; ?>" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" >
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" id="lookupoperator_<?php echo $fieldNum; ?>" name="FilterOperator[<?php echo $filterCounter; ?>]" value="equal-to">
@@ -536,14 +543,13 @@ function getTextFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
     ob_start();
     ?>
     
-     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div class="col-md-1 text-center vspacer-lg"> Contains </div>
+        <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
+        <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
+          <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">  
         <input type="hidden" name="FilterOperator[<?php echo $filterCounter; ?>]" value="like">
-        <div class="col-md-5 vspacer-md">
+        <div class="col-md-3 col-sm-6 col-xs-10 vspacer-lg">
             <input type="text" class="form-control" name="FilterValue[<?php echo $filterCounter; ?>]" value="<?php echo '<'.'?php echo htmlspecialchars($FilterValue[' . $filterCounter . ']); ?>'; ?>" size="3">
         </div>
     </div>
@@ -563,8 +569,8 @@ function getDatePreFilter (&$fileContent, $field, $fieldNum, $filterCounter){
      
      <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
 
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
+        <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong><?php echo $field->caption->__toString(); ?></strong></div>
+          <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
         <div class="col-md-1 vspacer-lg">Between </div>
         <input type="hidden" name="FilterAnd[<?php echo $filterCounter; ?>]" value="and">
         <input type="hidden" name="FilterField[<?php echo $filterCounter; ?>]" value="<?php echo $fieldNum; ?>">   
@@ -702,9 +708,10 @@ function getYearFilter(&$fileContent, $field, $fieldNum, $filterCounter) {
 
 
 
-function includeNeededParts( &$fileContent , $includeDatetimePicker , $includeOrderBy , $includeGroups ){
+function includeNeededParts( &$fileContent , $includesArray ){
     
-    if ($includeOrderBy){
+
+    if ( $includesArray['orderBy']){
         echo "<br><span class='spacer'></span>'Order by' section included: ";
         $fileContent.='    
 
@@ -755,11 +762,9 @@ function includeNeededParts( &$fileContent , $includeDatetimePicker , $includeOr
         ?>';
         echo "OK";
     }
-
-
     //-----------------------------------------------------------------------------------
 
-    if ($includeGroups){
+    if ($includesArray['groups']){
         echo "<br><span class='spacer'></span>'User/group/all' section included: ";
         $fileContent.='    
             <?php
@@ -854,7 +859,8 @@ function includeNeededParts( &$fileContent , $includeDatetimePicker , $includeOr
             echo "OK";
     }
     //-----------------------------------------------------------------------------------
-    if ($includeDatetimePicker){
+    
+    if ($includesArray['datetimePicker']){
         $fileContent = '
         <!-- load bootstrap datetime-picker-->
         <link rel="stylesheet" href="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
@@ -862,6 +868,38 @@ function includeNeededParts( &$fileContent , $includeDatetimePicker , $includeOr
         <script type="text/javascript" src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
         '.$fileContent ;
     }
+    //-----------------------------------------------------------------------------------
+    
+    if ($includesArray['dropDown']){
+
+        $fileContent = '
+        <style>
+        .drop-down{
+            width: 21.2% !important;
+            padding: 0px;
+            padding-left:1.2%;
+            margin-right:4%;
+            max-width:2000px !important;
+        }
+        @media (max-width: 991px) {
+          .drop-down{
+            width: 43% !important;
+            margin-right:7%;
+        }
+        }
+        @media (max-width: 767px) {
+          .drop-down{
+            width: 73% !important;
+            padding-left:2%;
+            margin-right:10%;
+
+        }
+        }
+        </style>
+        '.$fileContent ;
+    }
+
+
 }
 
 

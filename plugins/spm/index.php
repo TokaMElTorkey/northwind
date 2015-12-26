@@ -96,7 +96,7 @@
 			function jsDisplayProjects(){
 				modal_window({ message: '<?php
 					foreach ( $currentProjects as $projName ){
-						echo "<a href=\"project.php?axp=".md5($projName)."\">$projName <span class=\'glyphicon glyphicon-chevron-right\'></span></a><br>";
+						echo "<div class=\"col-lg-3 col-md-3 col-sm-6 col-xs-6\"><div class=\"thumbnail\"><div class=\"caption\"><a href=\"project.php?axp=".md5($projName)."\"> <img src=\"../../resources/images/bigprof-logo-only.png\" class=\"img-responsive\" alt=\AppGiniLogo\"> $projName </a></div></div></div>";
 					}
 				?>', title: "Current projects" });
 			}
