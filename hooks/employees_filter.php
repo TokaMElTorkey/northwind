@@ -1,168 +1,36 @@
 
-        <!-- load bootstrap datetime-picker-->
-        <link rel="stylesheet" href="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
-        <script type="text/javascript" src="resources/moment/moment.min.js"></script>
-        <script type="text/javascript" src="resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+        <style>
+        .drop-down{
+            width: 21.2% !important;
+            padding: 0px;
+            padding-left:1.2%;
+            margin-right:4%;
+            max-width:2000px !important;
+        }
+        @media (max-width: 991px) {
+          .drop-down{
+            width: 43% !important;
+            margin-right:7%;
+        }
+        }
+        @media (max-width: 767px) {
+          .drop-down{
+            width: 73% !important;
+            padding-left:2%;
+            margin-right:10%;
+
+        }
+        }
+        </style>
             
-     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong>Last Name</strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div class="col-md-1 text-center vspacer-lg"> Contains </div>
+        <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
+        <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong>Last Name</strong></div>
+          <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
         <input type="hidden" name="FilterAnd[1]" value="and">
         <input type="hidden" name="FilterField[1]" value="3">  
         <input type="hidden" name="FilterOperator[1]" value="like">
-        <div class="col-md-5 vspacer-md">
+        <div class="col-md-3 col-sm-6 col-xs-10 vspacer-lg">
             <input type="text" class="form-control" name="FilterValue[1]" value="<?php echo htmlspecialchars($FilterValue[1]); ?>" size="3">
-        </div>
-    </div>
-
-
-    
-            <!-- ########################################################## -->
-                
-     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong>First Name</strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div class="col-md-1 text-center vspacer-lg"> Contains </div>
-        <input type="hidden" name="FilterAnd[2]" value="and">
-        <input type="hidden" name="FilterField[2]" value="4">  
-        <input type="hidden" name="FilterOperator[2]" value="like">
-        <div class="col-md-5 vspacer-md">
-            <input type="text" class="form-control" name="FilterValue[2]" value="<?php echo htmlspecialchars($FilterValue[2]); ?>" size="3">
-        </div>
-    </div>
-
-
-    
-            <!-- ########################################################## -->
-                
-     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong>Home Phone</strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div class="col-md-1 text-center vspacer-lg"> Contains </div>
-        <input type="hidden" name="FilterAnd[3]" value="and">
-        <input type="hidden" name="FilterField[3]" value="13">  
-        <input type="hidden" name="FilterOperator[3]" value="like">
-        <div class="col-md-5 vspacer-md">
-            <input type="text" class="form-control" name="FilterValue[3]" value="<?php echo htmlspecialchars($FilterValue[3]); ?>" size="3">
-        </div>
-    </div>
-
-
-    
-            <!-- ########################################################## -->
-                
-     
-     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong>Birth Date</strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div class="col-md-1 vspacer-lg">Between </div>
-        <input type="hidden" name="FilterAnd[4]" value="and">
-        <input type="hidden" name="FilterField[4]" value="6">   
-        <input type="hidden" name="FilterOperator[4]" value="greater-than-or-equal-to">
-        <div class="col-md-2 vspacer-md">
-            <input type="text"  class="form-control" id="from-date_6"  name="FilterValue[4]" value="<?php echo htmlspecialchars($FilterValue[4]); ?>" size="10">
-        </div>
-
-                <div class="col-md-1 text-center vspacer-lg"> and </div>
-        <input type="hidden" name="FilterAnd[5]" value="and">
-        <input type="hidden" name="FilterField[5]" value="6">  
-        <input type="hidden" name="FilterOperator[5]" value="less-than-or-equal-to">
-        <div class="col-md-2 vspacer-md">
-            <input type="text" class="form-control" id="to-date_6" name="FilterValue[5]" value="<?php echo htmlspecialchars($FilterValue[5]); ?>" size="10">
-        </div>
-    </div>
-
-        
-    <script>
-        //date
-        $j("#from-date_6 , #to-date_6 ").datetimepicker({
-            
-            format: 'MM/DD/YYYY'   //config
-            
-        });
-
-        $j("#from-date_6" ).on('dp.change' , function(e){
-        
-            date = moment(e.date).add(1, 'month');  
-            $j("#to-date_6 ").val(date.format('MM/DD/YYYY')).data("DateTimePicker").minDate(e.date);
-
-        });
-        
-    </script>
-
-    
-            <!-- ########################################################## -->
-                
-     
-     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong>Hire Date</strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div class="col-md-1 vspacer-lg">Between </div>
-        <input type="hidden" name="FilterAnd[6]" value="and">
-        <input type="hidden" name="FilterField[6]" value="7">   
-        <input type="hidden" name="FilterOperator[6]" value="greater-than-or-equal-to">
-        <div class="col-md-2 vspacer-md">
-            <input type="text"  class="form-control" id="from-date_7"  name="FilterValue[6]" value="<?php echo htmlspecialchars($FilterValue[6]); ?>" size="10">
-        </div>
-
-                <div class="col-md-1 text-center vspacer-lg"> and </div>
-        <input type="hidden" name="FilterAnd[7]" value="and">
-        <input type="hidden" name="FilterField[7]" value="7">  
-        <input type="hidden" name="FilterOperator[7]" value="less-than-or-equal-to">
-        <div class="col-md-2 vspacer-md">
-            <input type="text" class="form-control" id="to-date_7" name="FilterValue[7]" value="<?php echo htmlspecialchars($FilterValue[7]); ?>" size="10">
-        </div>
-    </div>
-
-        
-    <script>
-        //date
-        $j("#from-date_7 , #to-date_7 ").datetimepicker({
-            
-            format: 'MM/DD/YYYY'   //config
-            
-        });
-
-        $j("#from-date_7" ).on('dp.change' , function(e){
-        
-            date = moment(e.date).add(1, 'month');  
-            $j("#to-date_7 ").val(date.format('MM/DD/YYYY')).data("DateTimePicker").minDate(e.date);
-
-        });
-        
-    </script>
-
-    
-            <!-- ########################################################## -->
-                
-     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong>City</strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div class="col-md-1 text-center vspacer-lg"> Contains </div>
-        <input type="hidden" name="FilterAnd[8]" value="and">
-        <input type="hidden" name="FilterField[8]" value="9">  
-        <input type="hidden" name="FilterOperator[8]" value="like">
-        <div class="col-md-5 vspacer-md">
-            <input type="text" class="form-control" name="FilterValue[8]" value="<?php echo htmlspecialchars($FilterValue[8]); ?>" size="3">
-        </div>
-    </div>
-
-
-    
-            <!-- ########################################################## -->
-                
-     <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-        <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong>Postal Code</strong></div>
-        <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
-        <div class="col-md-1 text-center vspacer-lg"> Contains </div>
-        <input type="hidden" name="FilterAnd[9]" value="and">
-        <input type="hidden" name="FilterField[9]" value="11">  
-        <input type="hidden" name="FilterOperator[9]" value="like">
-        <div class="col-md-5 vspacer-md">
-            <input type="text" class="form-control" name="FilterValue[9]" value="<?php echo htmlspecialchars($FilterValue[9]); ?>" size="3">
         </div>
     </div>
 
@@ -185,9 +53,9 @@
 
         
         //convert value to select2 format
-        if ($FilterValue[10]) {
+        if ($FilterValue[2]) {
             $filtervalueObj = new stdClass();
-            $text = htmlspecialchars($FilterValue[10]);
+            $text = htmlspecialchars($FilterValue[2]);
             $filtervalueObj->text = $text;
             $filtervalueObj->id = array_search($text, $options);
 
@@ -195,15 +63,15 @@
         }
 
         ?>        <div class="row vspacer-lg" style="border-bottom: dotted 2px #DDD;" >
-            <div class="col-md-offset-2 col-md-2 vspacer-lg"><strong>Country</strong></div>
-            <button type="button" class="btn btn-default pull-right" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-off"></button>
+            <div class="col-md-offset-3 col-md-2 col-sm-3 col-xs-12 vspacer-lg"><strong>Country</strong></div>
+              <button type="button" class="btn btn-default pull-col-lg-3 vspacer-lg" title='Clear fields'  onclick="clearFilters(this);" ><span class="glyphicon glyphicon-trash text-danger"></button>
 
-            <div id="12_DropDown"><span></span></div>
-
-            <input type="hidden" name="FilterAnd[10]" value="and">
-            <input type="hidden" name="FilterField[10]" value="12">
-            <input type="hidden" name="FilterOperator[10]" value="equal-to">
-            <input type="hidden" name="FilterValue[10]" id="12_currValue" value="<?php echo htmlspecialchars($FilterValue[10]); ?>" size="3">
+            <div id="12_DropDown" class="drop-down col-md-3 col-sm-6 col-xs-10 vspacer-lg"><span></span></div>
+            <input type="hidden" class="populatedOptionsData" name="2" value="<?php echo htmlspecialchars($FilterValue[2]); ?>" >
+            <input type="hidden" name="FilterAnd[2]" value="and">
+            <input type="hidden" name="FilterField[2]" value="12">
+            <input type="hidden" name="FilterOperator[2]" value="equal-to">
+            <input type="hidden" name="FilterValue[2]" id="12_currValue" value="<?php echo htmlspecialchars($FilterValue[2]); ?>" size="3">
             
         </div>
 
@@ -258,5 +126,84 @@
             }
         </script>
 
+        <!-- filter actions -->
+        <div class="row">
+            <div class="col-md-2 col-md-offset-2 vspacer-lg">
+                <input type="hidden" name="apply_sorting" value="1">
+                <button type="submit" id="applyFilters" onclick="beforeApplyFilters(event);return true;" class="btn btn-success btn-block btn-lg"><i class="glyphicon glyphicon-ok"></i> Apply filters</button>
+            </div>
+                            <div class="col-md-3 vspacer-lg">
+                    <button type="submit" onclick="beforeApplyFilters(event);return true;" class="btn btn-default btn-block btn-lg" id="SaveFilter" name="SaveFilter_x" value="1"><i class="glyphicon glyphicon-align-left"></i> Save filters</button>
+                </div>
+                        <div class="col-md-2 vspacer-lg">
+                <button onclick="beforeCancelFilters();" type="submit" id="cancelFilters" class="btn btn-warning btn-block btn-lg"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
+            </div>
+        </div>
+
+        <!--funtion to remove unsupplied fields -->
+        <script>
+            function beforeApplyFilters(event){
+            
+                //get all field submitted values
+                $j(":input[type=text][name^=FilterValue],:input[type=hidden][name^=FilterValue],:input[type=radio][name^=FilterValue]:checked").each(function( index ) {
+                      
+                    //if type=hidden  and options radio fields with the same name are checked, supply its value
+                    if ( $j( this ).attr('type')=='hidden' &&  $j(":input[type=radio][name='"+$j( this ).attr('name')+"']:checked").length >0 ){
+                        return;
+                    }
+                      
+                      //do not submit fields with empty values
+                    if ( !$j( this ).val()){
+                      var fieldNum =  $j(this).attr('name').match(/(\d+)/)[0];
+                      $j(":input[name='FilterField["+fieldNum+"]']").val('');
+                     
+                      };
+                });
+
+            };
+            function beforeCancelFilters(){
+                
+
+                //other fields
+                $j('form')[0].reset();
+
+                //lookup case ( populate with initial data)
+                $j(":input[class='populatedLookupData']").each(function(){
+                  
+
+                    $j(":input[name='FilterValue["+$j(this).attr('name')+"]']").val($j(this).val());
+                    if ($j(this).val()== '<None>'){
+                        $j(this).parent(".row ").find('input[id^="lookupoperator"]').val('is-empty');
+                    }else{
+                        $j(this).parent(".row ").find('input[id^="lookupoperator"]').val('equal-to');
+                    }
+                        
+                })
+
+                //options case ( populate with initial data)
+                $j(":input[class='populatedOptionsData']").each(function(){
+                   
+                    $j(":input[name='FilterValue["+$j(this).attr('name')+"]']").val($j(this).val());
+                })
+
+
+                //checkbox, radio options case
+                $j(":input[class='checkboxData'],:input[class='optionsData'] ").each(function(){
+                    var filterNum = $j(this).val();
+                    var populatedValue = eval("filterValue_"+filterNum);                  
+                    var parentDiv = $j(this).parent(".row ");
+
+                    //check old value
+                    parentDiv.find("input[type=radio][value='"+populatedValue+"']").attr('checked', 'checked').click();
+                
+                })
+
+                //remove unsuplied fields
+                beforeApplyFilters();
+
+                return true;
+            }
+        </script>
+
+
     
-    <center><div style="margin-top:10px;" ><button class="btn btn-success btn-lg" >Apply</button></div></center>
