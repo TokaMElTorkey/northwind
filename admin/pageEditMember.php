@@ -1,9 +1,9 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
 
 	// get memberID of anonymous member
-	$anonMemberID=strtolower($adminConfig['anonymousMember']);
+	$anonMemberID = strtolower($adminConfig['anonymousMember']);
 
 	$memberID = '';
 	// request to save changes?
@@ -28,7 +28,7 @@
 			$memberID = is_allowed_username($_POST['memberID']);
 			if(!$memberID){
 				echo "<div class=\"alert alert-danger\">{$Translation['username error']}</div>";
-				include("$currDir/incFooter.php");
+				include("{$currDir}/incFooter.php");
 			}
 
 			// add member
@@ -37,7 +37,7 @@
 			if($isApproved){
 				notifyMemberApproval($memberID);
 			}
-			
+
 			// redirect to member editing page
 			redirect("admin/pageEditMember.php?memberID=$memberID&new_member=1");
 
@@ -49,26 +49,26 @@
 
 			if(!$memberID){
 				echo "<div class=\"alert alert-danger\">{$Translation['username error']}</div>";
-				include("$currDir/incFooter.php");
+				include("{$currDir}/incFooter.php");
 			}
 
 			// anonymousMember?
-			if($anonMemberID==$memberID){
-				$password='';
-				$email='';
-				$groupID=sqlValue("select groupID from membership_groups where name='".$adminConfig['anonymousGroup']."'");
-				$isApproved=1;
+			if($anonMemberID == $memberID){
+				$password = '';
+				$email = '';
+				$groupID = sqlValue("select groupID from membership_groups where name='".$adminConfig['anonymousGroup']."'");
+				$isApproved = 1;
 			}
 
 			// get current approval state
-			$oldIsApproved=sqlValue("select isApproved from membership_users where lcase(memberID)='$memberID'");
+			$oldIsApproved = sqlValue("select isApproved from membership_users where lcase(memberID)='$memberID'");
 
 			// update member
-			$upQry="UPDATE `membership_users` set memberID='$memberID', passMD5=".($password!='' ? "'".md5($password)."'" : "passMD5").", email='$email', groupID='$groupID', isBanned='$isBanned', isApproved='$isApproved', custom1='$custom1', custom2='$custom2', custom3='$custom3', custom4='$custom4', comments='$comments' WHERE lcase(memberID)='$oldMemberID'";
+			$upQry = "UPDATE `membership_users` set memberID='$memberID', passMD5=".($password!='' ? "'".md5($password)."'" : "passMD5").", email='$email', groupID='$groupID', isBanned='$isBanned', isApproved='$isApproved', custom1='$custom1', custom2='$custom2', custom3='$custom3', custom4='$custom4', comments='$comments' WHERE lcase(memberID)='$oldMemberID'";
 			sql($upQry, $eo);
 
 			// if memberID was changed, update membership_userrecords
-			if($oldMemberID!=$memberID){
+			if($oldMemberID != $memberID){
 				sql("update membership_userrecords set memberID='$memberID' where lcase(memberID)='$oldMemberID'", $eo);
 			}
 
@@ -76,7 +76,7 @@
 			if($isApproved && !$oldIsApproved){
 				notifyMemberApproval($memberID);
 			}
-			
+
 			// redirect to member editing page
 			redirect("admin/pageEditMember.php?memberID=$memberID");
 		}
@@ -85,7 +85,7 @@
 	}elseif($_GET['memberID']!=''){
 		// we have an edit request for a member
 		$memberID=makeSafe(strtolower($_GET['memberID']));
-		
+
 		// display dismissible alert
 		if (isset ($_GET['new_member']) && $_GET['new_member'] == 1 ){
 			$displayCreatedAlert = true;
@@ -97,7 +97,7 @@
 		if($group_name) $addend = " to '{$group_name}'";
 	}
 
-	include("$currDir/incHeader.php");
+	include("{$currDir}/incHeader.php");
 
 	if($memberID!=''){
 		// fetch group data to fill in the form below
@@ -113,12 +113,12 @@
 			$custom3=htmlspecialchars($row['custom3']);
 			$custom4=htmlspecialchars($row['custom4']);
 			$comments=htmlspecialchars($row['comments']);
-			
-			
+
+
 			//display dismissible alert if it is a new member
 			if ( $displayCreatedAlert ){ 
 				$id = 'notification-' . rand(); ?>
-			
+
 				<div id="<?php echo $id ; ?>" class="alert alert-success" style="display: none; padding-top: 6px; padding-bottom: 6px;">
 					<?php echo str_replace ( '<USERNAME>' , $memberID , $Translation['member added']); ?>
 				</div>
@@ -130,7 +130,7 @@
 					});
 				</script>
 	<?php   } 
-			
+
 		}else{
 			// no such member exists
 			echo "<div class=\"alert alert-danger\">{$Translation['member not found']}</div>";
@@ -301,5 +301,5 @@
 
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

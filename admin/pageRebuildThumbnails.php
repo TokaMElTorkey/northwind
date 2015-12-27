@@ -1,7 +1,7 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	// image paths
 	$p=array(   
@@ -30,7 +30,7 @@
 
 
 		<?php
-		include("$currDir/incFooter.php");
+		include("{$currDir}/incFooter.php");
 		exit;
 	}
 
@@ -68,13 +68,13 @@
 	</div>
 
 	<script>
-		window.onload=function(){
-			document.getElementById('status').innerHTML="<?php echo $Translation['finished status'] ; ?>";
-			document.getElementById('status').style.color='green';
-			document.getElementById('status').style.fontSize='25px';
-			document.getElementById('status').style.backgroundColor='#fff4cf';
+		window.onload = function(){
+			document.getElementById('status').innerHTML = "<?php echo $Translation['finished status'] ; ?>";
+			document.getElementById('status').style.color = 'green';
+			document.getElementById('status').style.fontSize = '25px';
+			document.getElementById('status').style.backgroundColor = '#fff4cf';
 		}
 	</script>
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");

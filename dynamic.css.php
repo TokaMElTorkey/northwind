@@ -154,7 +154,7 @@ h4, .h4 {
 }
 
 .navbar-right {
-	margin-right: 0;
+	margin-right: 0 !important;
 }
 
 .navbar-btn {

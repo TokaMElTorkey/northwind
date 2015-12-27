@@ -1,7 +1,7 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	/* application schema as created in AppGini */
 	$schema = array(   
@@ -274,5 +274,5 @@
 </script>
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

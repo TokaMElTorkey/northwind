@@ -1,6 +1,6 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
 
 	// tables list
 		$tables=getTableList();
@@ -31,7 +31,7 @@
 	if($_POST['saveChanges']!=''){
 		// validate data
 		foreach($tables as $t=>$tc){
-			eval("
+			eval(" 
 				\${$t}_insert=checkPermissionVal('{$t}_insert');
 				\${$t}_view=checkPermissionVal('{$t}_view');
 				\${$t}_edit=checkPermissionVal('{$t}_edit');
@@ -64,7 +64,7 @@
 		// we have an edit request for a group
 	}
 
-	include("$currDir/incHeader.php");
+	include("{$currDir}/incHeader.php");
 
 	// fetch group permissions to fill in the form below in case user has no special permissions
 		$res1=sql("select * from membership_grouppermissions where groupID='$groupID'", $eo);
@@ -191,5 +191,5 @@
 	</script>
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

@@ -1,19 +1,19 @@
 <?php
 	@set_time_limit(0);
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	// get a list of tables
-	$arrTables=getTableList();
+	$arrTables = getTableList();
 
 	// get a list of tables with records that have no owners
-	foreach($arrTables as $tn=>$tc){
-		$countOwned=sqlValue("select count(1) from membership_userrecords where tableName='$tn'");
-		$countAll=sqlValue("select count(1) from `$tn`");
+	foreach($arrTables as $tn => $tc){
+		$countOwned = sqlValue("select count(1) from membership_userrecords where tableName='{$tn}'");
+		$countAll = sqlValue("select count(1) from `{$tn}`");
 
-		if($countAll>$countOwned){
-			$arrTablesNoOwners[$tn]=($countAll-$countOwned);
+		if($countAll > $countOwned){
+			$arrTablesNoOwners[$tn] = ($countAll - $countOwned);
 		}
 	}
 
@@ -29,7 +29,7 @@
 				$insertBegin = "insert ignore into membership_userrecords (tableName, pkValue, groupID, memberID, dateAdded, dateUpdated) values ";
 				$ts = time();
 				$assigned = 0;
-				$tempStatus = '';		
+				$tempStatus = '';
 
 				$res = sql("select `$tn`.`$pkf` from `$tn`", $eo);
 				while($row = db_fetch_row($res)){
@@ -51,9 +51,9 @@
 					$tempStatus = $Translation["assigned table records to group and member"];
 					$tempStatus = str_replace ( "<MEMBERID>" , $memberID , $tempStatus );
 				}else{
-					$tempStatus = $Translation["assigned table records to group"];	
+					$tempStatus = $Translation["assigned table records to group"];   
 				}
-				
+
 				$originalValues =  array ('<NUMBER>','<TABLE>' , '<GROUP>' );
 				$number = number_format($assigned);
 				$group = sqlValue("select name from membership_groups where groupID='$groupID'");

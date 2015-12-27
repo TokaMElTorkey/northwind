@@ -1,7 +1,7 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	// check configured sender
 	if(!isEmail($adminConfig['senderEmail'])){
@@ -10,7 +10,7 @@
 				<?php echo $Translation["can not send mail"]; ?>
 		</div>
 		<?php
-		include("$currDir/incFooter.php");
+		include("{$currDir}/incFooter.php");
 	}
 
 	// determine and validate recipients
@@ -27,7 +27,7 @@
 				<?php echo $Translation["no recipient"];  ?>
 			</div>
 			<?php
-			include("$currDir/incFooter.php");
+			include("{$currDir}/incFooter.php");
 		}
 	}else{
 	// begin sending emails
@@ -54,7 +54,7 @@
 				<?php echo $Translation["no recipient"];  ?>
 			</div>
 			<?php
-			include("$currDir/incFooter.php");
+			include("{$currDir}/incFooter.php");
 		}
 
 		// create a recipients array
@@ -76,19 +76,19 @@
 				<?php echo $Translation["no recipient found"] ;  ?>
 			</div>
 			<?php
-			include("$currDir/incFooter.php");
+			include("{$currDir}/incFooter.php");
 		}
 
 		// save mail queue
 		$queueFile=md5(microtime());
-		$currDir=dirname(__FILE__);
-		if(!$fp=fopen("$currDir/$queueFile.php", "w")){
+		$currDir = dirname(__FILE__);
+		if(!$fp=fopen("{$currDir}/$queueFile.php", "w")){
 			?>
 			<div class="alert alert-danger">
 				<?php echo str_replace ( "<CURRDIR>" , $currDir , $Translation["mail queue not saved"] ); ?>
 			</div>
 			<?php
-			include("$currDir/incFooter.php");
+			include("{$currDir}/incFooter.php");
 		}else{
 			fwrite($fp, "<?php\n");
 			foreach($to as $recip){
@@ -102,7 +102,7 @@
 
 		// redirect to mail queue processor
 		redirect("admin/pageSender.php?queue=$queueFile");
-		include("$currDir/incFooter.php");
+		include("{$currDir}/incFooter.php");
 	}
 
 
@@ -120,49 +120,49 @@
 	<input type="hidden" name="sendToAll" value="<?php echo $sendToAll; ?>">
 	<table class="table table-striped">
 		<tr>
-			<td align="right" class="tdFormCaption" valign="top">
+			<td class="tdFormCaption text-right flip" valign="top">
 				<div class="formFieldCaption"><?php echo $Translation["from"] ; ?></div>
 				</td>
-			<td align="left" class="tdFormInput">
+			<td class="tdFormInput text-left flip">
 				<?php echo $adminConfig['senderName']." &lt;".$adminConfig['senderEmail']."&gt;"; ?>
 				<br><a href="pageSettings.php"><?php echo $Translation["change setting"] ; ?></a>
 				</td>
 			</tr>
 
 		<tr>
-			<td align="right" class="tdFormCaption" valign="top">
+			<td class="tdFormCaption text-right flip" valign="top">
 				<div class="formFieldCaption"><?php echo $Translation["to"] ; ?></div>
 				</td>
-			<td align="left" class="tdFormInput">
+			<td class="tdFormInput text-left flip">
 				<a href="<?php echo ($sendToAll ? "pageViewMembers.php" : ($isGroup ? "pageViewMembers.php?groupID=$groupID" : "pageEditMember.php?memberID=$memberID")); ?>"><img src="images/<?php echo (($isGroup||$sendToAll) ? "members_icon.gif" : "member_icon.gif"); ?>" border="0"></a> <?php echo $recipient; ?>
 				</td>
 			</tr>
 
 		<tr>
-			<td align="right" class="tdFormCaption" valign="top">
+			<td class="tdFormCaption text-right flip" valign="top">
 				<div class="formFieldCaption"><?php echo $Translation["subject"] ; ?></div>
 				</td>
-			<td align="left" class="tdFormInput">
+			<td class="tdFormInput text-left flip">
 				<input type="text" name="mailSubject" value="" size="60" class="formTextBox">
 				</td>
 			</tr>
 
 		<tr>
-			<td align="right" class="tdFormCaption" valign="top">
+			<td class="tdFormCaption text-right flip" valign="top">
 				<div class="formFieldCaption"><?php echo $Translation["message"] ; ?></div>
 				</td>
-			<td align="left" class="tdFormInput">
+			<td class="tdFormInput text-left flip">
 				<textarea name="mailMessage" cols="60" rows="10" class="formTextBox"></textarea>
 				</td>
 			</tr>
 
 		<tr>
-			<td colspan="2" align="right" class="tdFormFooter">
+			<td colspan="2" class="tdFormFooter text-right flip">
 				<input type="submit" name="saveChanges" value="<?php echo $Translation["send message"] ; ?>" onClick="return jsShowWait();">
 				</td>
 			</tr>
 		</table>
 </form>
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

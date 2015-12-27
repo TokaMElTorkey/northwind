@@ -34,6 +34,7 @@
 		is_ajax() -- return true if this is an ajax request, false otherwise
 		array_trim($arr) -- recursively trim provided value/array
 		csrf_token($validate) -- csrf-proof a form
+		get_plugins() -- scans for installed plugins and returns them in an array ('name', 'title', 'icon' or 'glyphicon', 'admin_path')
 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	*/
 	########################################################################
@@ -703,4 +704,25 @@
 		}
 
 		return true;
+	}
+	########################################################################
+	function get_plugins(){
+		$plugins = array();
+		$plugins_path = dirname(__FILE__) . '/../plugins/';
+
+		if(!is_dir($plugins_path)) return $plugins;
+
+		$pd = dir($plugins_path);
+		while(false !== ($plugin = $pd->read())){
+			if(!is_dir($plugins_path . $plugin) || in_array($plugin, array('projects', 'plugins-resources', '.', '..'))) continue;
+
+			$info_file = "{$plugins_path}{$plugin}/plugin-info.json";
+			if(!is_file($info_file)) continue;
+
+			$plugins[] = json_decode(file_get_contents($info_file), true);
+			$plugins[count($plugins) - 1]['admin_path'] = "../plugins/{$plugin}";
+		}
+		$pd->close();
+
+		return $plugins;
 	}

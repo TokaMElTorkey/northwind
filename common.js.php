@@ -294,7 +294,7 @@ function modal_window(options){
 					) +
 					'<div class="modal-body" style="-webkit-overflow-scrolling:touch !important; overflow-y: auto;">' +
 						( url != undefined ?
-							'<iframe width="100%" height="100%" sandbox="allow-forms allow-scripts allow-same-origin allow-popups" src="' + url + '"></iframe>'
+							'<iframe width="100%" height="100%" sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups" src="' + url + '"></iframe>'
 							: message
 						) +
 					'</div>' +
@@ -594,4 +594,46 @@ function mass_change_owner(t, ids){
 
 function add_more_actions_link(){
 	window.open('http://bigprof.com/appgini/help/advanced-topics/hooks/multiple-record-batch-actions?r=appgini-action-menu');
+}
+
+/* detect current screen size (xs, sm, md or lg) */
+function screen_size(sz){
+	if(!$j('.device-xs').length){
+		$j('body').append(
+			'<div class="device-xs visible-xs"></div>' +
+			'<div class="device-sm visible-sm"></div>' +
+			'<div class="device-md visible-md"></div>' +
+			'<div class="device-lg visible-lg"></div>'
+		);
+	}
+	return $j('.device-' + sz).is(':visible');
+}
+
+/* enable floating of action buttons in DV so they are visible on vertical scrolling */
+function enable_dvab_floating(){
+	/* already run? */
+	if(window.enable_dvab_floating_run != undefined) return;
+
+	/* scroll action buttons of DV on scrolling DV */
+	$j(window).scroll(function(){
+		if(!screen_size('md') && !screen_size('lg')) return;
+		if(!$j('.detail_view').length) return;
+
+		/* get vscroll amount, DV form height, button toolbar height and position */
+		var vscroll = $j(window).scrollTop();
+		var dv_height = $j('[id$="_dv_form"]').eq(0).height();
+		var bt_height = $j('.detail_view .btn-toolbar').height();
+		var form_top = $j('.detail_view .form-group').eq(0).offset().top;
+		var bt_top_max = dv_height - bt_height - 10;
+
+		if(vscroll > form_top){
+			var tm = parseInt(vscroll - form_top) + 60;
+			if(tm > bt_top_max) tm = bt_top_max;
+
+			$j('.detail_view .btn-toolbar').css({ 'margin-top': tm + 'px' });
+		}else{
+			$j('.detail_view .btn-toolbar').css({ 'margin-top': 0 });
+		}
+	});
+	window.enable_dvab_floating_run = true;
 }

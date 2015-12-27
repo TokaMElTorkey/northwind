@@ -560,7 +560,7 @@ class CI_Input {
 		* the conversion of entities to ASCII later.
 		*
 		*/
-		$str = preg_replace('#(&\#?[0-9a-z]{2,})([\x00-\x20])*;?#i', "\\1;\\2", $str);
+		$str = preg_replace('#(&\#[0-9a-z]{2,})([\x00-\x20])*;?#i', "\\1;\\2", $str);
 
 		/*
 		* Validate UTF16 two byte encoding (x00) 

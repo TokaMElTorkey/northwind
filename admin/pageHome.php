@@ -1,7 +1,7 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 ?>
 
 <?php
@@ -98,7 +98,7 @@
 <!-- ################# Add-ons available ######################## -->
 	<?php
 		// do we have a cache file that was recently updated?
-		$addOnsCache = "$currDir/add-ons.cache";
+		$addOnsCache = "{$currDir}/add-ons.cache";
 		$addOnXML = '';
 		if(is_file($addOnsCache) && filemtime($addOnsCache) >= (time() - 86400 * 2)){
 			// read feed from cache
@@ -260,5 +260,5 @@
 
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

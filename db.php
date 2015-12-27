@@ -20,7 +20,7 @@
 
 
 
-	define('mysql_charset', 'ascii');
+	define('mysql_charset', 'latin1');
 
 	function db_link($link = NULL){
 		static $db_link;
