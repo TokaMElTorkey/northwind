@@ -1,7 +1,7 @@
 <?php
 	$currDir = dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	if(isset($_POST['saveChanges'])){
 		// csrf check
@@ -11,7 +11,7 @@
 				<?php echo $Translation['invalid security token'] ; ?>
 			</div>
 			<?php
-			include("$currDir/incFooter.php");
+			include("{$currDir}/incFooter.php");
 		}
 
 		// validate inputs
@@ -56,7 +56,7 @@
 				<?php echo $Translation['go back'] ;  ?>
 			</div>
 			<?php
-			include("$currDir/incFooter.php");
+			include("{$currDir}/incFooter.php");
 		}
 
 		$new_config = array(
@@ -115,7 +115,7 @@
 		}
 
 		// exit
-		include("$currDir/incFooter.php");
+		include("{$currDir}/incFooter.php");
 	}    
 
 ?>
@@ -356,5 +356,5 @@
 <div style="height: 600px;"></div>
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

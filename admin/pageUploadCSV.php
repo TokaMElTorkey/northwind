@@ -6,14 +6,14 @@
 	ignore_user_abort(true);
 	set_time_limit(0);
 	@ini_set('auto_detect_line_endings', '1');
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	$arrTables=getTableList();
 
 	if($_POST['csvPreview']!=''){
-		$fn=(strpos($_POST['csvPreview'], 'Apply')===false ? getUploadedFile('csvFile') : $_SESSION['csvUploadFile']);
+		$fn=(strpos($_POST['csvPreview'], 'Apply') === false ? getUploadedFile('csvFile') : $_SESSION['csvUploadFile']);
 
 		$headCellStyle='border: solid 1px white; border-bottom: solid 1px #C0C0C0; border-right: solid 1px #C0C0C0; background-color: #ECECFB; font-weight: bold; font-size: 12px; padding: 0 2px;';
 		$dataCellStyle='border: solid 1px white; border-bottom: solid 1px #C0C0C0; border-right: solid 1px #C0C0C0; font-size: 10px; padding: 0 2px;';
@@ -24,18 +24,11 @@
 				<?php echo str_replace ( '<FILENAME>' , $fn , $Translation['file not found error'] ) ; ?>
 			</div>
 			<?php
-			include("$currDir/incFooter.php");
+			include("{$currDir}/incFooter.php");
 			exit;
 		}
 
-		?>
-		<!--<div align=left>
-		<pre><?php print_r($_POST); ?></pre>
-		<pre><?php print_r($_SESSION); ?></pre>
-		</div>-->
-		<?php
-
-		$_SESSION['csvUploadFile']=$fn;
+		$_SESSION['csvUploadFile'] = $fn;
 
 		$arrPreviewData=getCSVArray(0, 10, false);
 		if(!is_array($arrPreviewData)){
@@ -64,7 +57,7 @@
 		?>
 
 		<tr><td align="left" colspan="<?php echo (count($arrPreviewData[0])+1); ?>" style="<?php echo $headCellStyle; ?>">
-			<input type="button" value="<?php echo $Translation['change CSV settings'] ; ?>" style="font-weight: bold;" onclick="
+			<input type="button" value="<?php echo $Translation['change CSV settings'] ; ?>" style="font-weight: bold;" onclick=" 
 				document.getElementById('advancedOptions').style.display='inline'; 
 				document.getElementById('applyCSVSettings').style.display='inline';
 				this.style.display='none';
@@ -105,7 +98,7 @@
 				<?php echo str_replace ( '<FILENAME>' , $fn , $Translation['file not found error'] ) ; ?>
 			</div>
 			<?php
-			include("$currDir/incFooter.php");
+			include("{$currDir}/incFooter.php");
 			exit;
 		}
 
@@ -135,7 +128,7 @@
 		$replaceValues = array ( number_format($csvStart) , number_format($_SESSION['csvEstimatedRecords']) );
 		echo str_replace ( $originalValues , $replaceValues , $Translation['start at estimated record'] )."<br>";
 
-		
+
 		if(@count($arrCSVData)>1){
 			// backup table
 			if($_POST['csvBackupBeforeImport']){
@@ -297,10 +290,12 @@
 		<?php
 	}
 
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 
 	##########################################################################
 	function getCSVArray($start = 0, $numRows = 0, $makeSafe = true){
+		global $Translation;
+
 		if($numRows<1) $numRows=MAXROWS;
 
 		getCSVSettings($csvIgnoreNRows, $csvCharsPerLine, $csvFieldSeparator, $csvFieldDelimiter, $csvFieldNamesOnTop, $csvUpdateIfPKExists, $csvBackupBeforeImport);
@@ -424,6 +419,8 @@
 	}
 	##########################################################################
 	function lineHasFieldNames($arr, $table){
+		global $Translation;
+
 		if(!is_array($arr)){
 			#echo '<!-- lineHasFieldNames: line '.__LINE__.' -->';
 			return false;
@@ -491,6 +488,7 @@
 	##########################################################################
 	function advancedCSVSettingsForm(){
 		global $Translation;
+
 		getCSVSettings($csvIgnoreNRows, $csvCharsPerLine, $csvFieldSeparator, $csvFieldDelimiter, $csvFieldNamesOnTop, $csvUpdateIfPKExists, $csvBackupBeforeImport);
 		ob_start();
 		?>

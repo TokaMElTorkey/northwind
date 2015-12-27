@@ -1,57 +1,66 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	// process search
-	if($_GET['searchMembers']!=""){
-		$searchSQL=makeSafe($_GET['searchMembers']);
-		$searchHTML=htmlspecialchars($_GET['searchMembers']);
-		$searchField=intval($_GET['searchField']);
-		$searchFieldName=array_search($searchField, array('m.memberID'=>1, 'g.name'=>2, 'm.email'=>3, 'm.custom1'=>4, 'm.custom2'=>5, 'm.custom3'=>6, 'm.custom4'=>7, 'm.comments'=>8));
+	if($_GET['searchMembers'] != ""){
+		$searchSQL = makeSafe($_GET['searchMembers']);
+		$searchHTML = htmlspecialchars($_GET['searchMembers']);
+		$searchField = intval($_GET['searchField']);
+		$searchFieldName = array_search($searchField, array(
+			'm.memberID' => 1,
+			'g.name' => 2,
+			'm.email' => 3,
+			'm.custom1' => 4,
+			'm.custom2' => 5,
+			'm.custom3' => 6,
+			'm.custom4' => 7,
+			'm.comments' => 8
+		));
 		if(!$searchFieldName){ // = search all fields
-			$where="where (m.memberID like '%$searchSQL%' or g.name like '%$searchSQL%' or m.email like '%$searchSQL%' or m.custom1 like '%$searchSQL%' or m.custom2 like '%$searchSQL%' or m.custom3 like '%$searchSQL%' or m.custom4 like '%$searchSQL%' or m.comments like '%$searchSQL%')";
+			$where = "where (m.memberID like '%{$searchSQL}%' or g.name like '%{$searchSQL}%' or m.email like '%{$searchSQL}%' or m.custom1 like '%{$searchSQL}%' or m.custom2 like '%{$searchSQL}%' or m.custom3 like '%{$searchSQL}%' or m.custom4 like '%{$searchSQL}%' or m.comments like '%{$searchSQL}%')";
 		}else{ // = search a specific field
-			$where="where ($searchFieldName like '%$searchSQL%')";
+			$where = "where ({$searchFieldName} like '%{$searchSQL}%')";
 		}
 	}else{
-		$searchSQL='';
-		$searchHTML='';
-		$searchField=0;
-		$searchFieldName='';
-		$where="";
+		$searchSQL = '';
+		$searchHTML = '';
+		$searchField = 0;
+		$searchFieldName = '';
+		$where = '';
 	}
 
 	// process groupID filter
-	$groupID=intval($_GET['groupID']);
+	$groupID = intval($_GET['groupID']);
 	if($groupID){
-		if($where!=''){
-			$where.=" and (g.groupID='$groupID')";
+		if($where != ''){
+			$where .= " and (g.groupID='{$groupID}')";
 		}else{
-			$where="where (g.groupID='$groupID')";
+			$where = "where (g.groupID='{$groupID}')";
 		}
 	}
 
 	// process status filter
-	$status=intval($_GET['status']); // 1=waiting approval, 2=active, 3=banned, 0=any
+	$status = intval($_GET['status']); // 1=waiting approval, 2=active, 3=banned, 0=any
 	if($status){
 		switch($status){
 			case 1:
-				$statusCond="(m.isApproved=0)";
+				$statusCond = "(m.isApproved=0)";
 				break;
 			case 2:
-				$statusCond="(m.isApproved=1 and m.isBanned=0)";
+				$statusCond = "(m.isApproved=1 and m.isBanned=0)";
 				break;
 			case 3:
-				$statusCond="(m.isApproved=1 and m.isBanned=1)";
+				$statusCond = "(m.isApproved=1 and m.isBanned=1)";
 				break;
 			default:
-				$statusCond="";
+				$statusCond = "";
 		}
-		if($where!='' && $statusCond!=''){
-			$where.=" and $statusCond";
+		if($where != '' && $statusCond != ''){
+			$where .= " and {$statusCond}";
 		}else{
-			$where="where $statusCond";
+			$where = "where {$statusCond}";
 		}
 	}
 
@@ -220,5 +229,5 @@
 	</table>
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

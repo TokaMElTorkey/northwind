@@ -25,7 +25,7 @@
 				</div>
 
 				<div class="form-group">
-					<label for="OrderID" class="control-label col-lg-3">Order ID <button class="btn btn-info btn-xs vspacer-sm" type="button" data-toggle="collapse" tabindex="-1" data-target="#OrderID-description"><i class="glyphicon glyphicon-info-sign"></i></button></label>
+					<label for="OrderID" class="control-label col-lg-3" data-parent_link="view_parent_modal">Order ID <button class="btn btn-info btn-xs vspacer-sm" type="button" data-toggle="collapse" tabindex="-1" data-target="#OrderID-description"><i class="glyphicon glyphicon-info-sign"></i></button></label>
 					<div class="col-lg-9">
 						<span class="help-block collapse" id="OrderID-description"><div class="alert alert-info">This field is a lookup field that gets its data from the Orders table. Since the Orders table has a large number of orders, AppGini automatically displays this lookup field as an<br />auto-complete. Type part of the order number to see a list of matching orders to choose from.</div></span>
 
@@ -34,7 +34,7 @@
 				</div>
 
 				<div class="form-group">
-					<label for="ProductID" class="control-label col-lg-3">Product</label>
+					<label for="ProductID" class="control-label col-lg-3" data-parent_link="view_parent_modal">Product</label>
 					<div class="col-lg-9">
 						<div class="row form-control-static"><div class="col-xs-11"><%%COMBO(ProductID)%%><%%PLINK(ProductID)%%><%%ADDNEW(products)%%></div><div class="col-xs-1"><span id="ProductIDLoading"></span></div></div>
 					</div>
@@ -130,8 +130,12 @@
 				});
 			}
 
-			$j('form').on('click', '.view_parent', function(){
+			/* find and hide parent links if field label has data 'parent_link' set to 'view_parent_hidden' */
+			$j('label[data-parent_link=view_parent_hidden]').each(function(){
+				$j(this).parents('.form-group').find('.view_parent').hide();
+			});
 
+			$j('form').on('click', '.view_parent', function(){
 				var pt = $j(this).attr('id').replace(/_view_parent$/, '');
 				if($j(this).prevAll('input:hidden').length){
 					var parent_id = $j(this).prevAll('input:hidden').eq(0).val();
@@ -145,16 +149,31 @@
 				}
 
 				if(parent_id != '{empty_value}'){
-					modal_window({
-						url: pt + '_view.php?Embedded=1&SelectedID=' + encodeURIComponent(parent_id),
-						close: function(){
-							var field_id = $j('#' + pt + '_view_parent').prevAll('input:hidden').eq(0).attr('id');
-							$j('#' + field_id + '-container').select2('focus').select2('focus');
-						},
-						size: 'full',
-						title: $j(this).attr('title')
-					});
+					var parent_link = $j(this).parents('.form-group').children('label').data('parent_link');
+					switch(parent_link){
+						case 'view_parent_hidden':
+							break;
+						case 'view_parent_modal':
+							modal_window({
+								url: pt + '_view.php?Embedded=1&SelectedID=' + encodeURIComponent(parent_id),
+								close: function(){
+									var field_id = $j('#' + pt + '_view_parent').prevAll('input:hidden').eq(0).attr('id');
+									$j('#' + field_id + '-container').select2('focus').select2('focus');
+								},
+								size: 'full',
+								title: $j(this).attr('title')
+							});
+							break;
+						case 'view_parent_same_window':
+							window.location = pt + '_view.php?Embedded=' + (embedded_mode ? '1' : '') + '&SelectedID=' + encodeURIComponent(parent_id);
+							break;
+						case 'view_parent_new_window':
+							window.open(pt + '_view.php?SelectedID=' + encodeURIComponent(parent_id));
+							break;
+					}
+
 				}
 			});
+
 		});
 	</script>

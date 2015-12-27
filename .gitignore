@@ -5,3 +5,5 @@
 /hooks/customers-dv.js
 /hooks/customers-tv.js
 /plugins/projects/*.axp
+/resources/bootstrap-datetimepicker
+/resources/moment

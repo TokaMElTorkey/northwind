@@ -1,6 +1,6 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
 ?>
 <!doctype html public "-//W3C//DTD html 4.0 //en">
 <html>
@@ -53,9 +53,9 @@
 				<td class="tdHeader"><div class="ColCaption"><?php echo $Translation["value"]; ?></div></td>
 				</tr>
 		<?php
-		include("$currDir/../language.php");
+		include("{$currDir}/../language.php");
 		foreach($field as $fn){
-			if(@is_file("$currDir/../".$Translation['ImageFolder'].$row[$fn])){
+			if(@is_file("{$currDir}/../".$Translation['ImageFolder'].$row[$fn])){
 				$op="<a href=\""."../".$Translation['ImageFolder'].$row[$fn]."\" target=\"_blank\">".htmlspecialchars($row[$fn])."</a>";
 			}else{
 				$op=htmlspecialchars($row[$fn]);
@@ -75,6 +75,5 @@
 	}
 
 
-
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

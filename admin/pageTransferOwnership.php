@@ -1,7 +1,7 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	/* we need the following variables:
 		$sourceGroupID
@@ -29,13 +29,13 @@
 		if(!sqlValue("select count(1) from membership_users where lcase(memberID)='$sourceMemberID' and groupID='$sourceGroupID'")){
 			if($sourceMemberID!=-1){
 				errorMsg( $Translation['invalid source member'] );
-				include("$currDir/incFooter.php");
+				include("{$currDir}/incFooter.php");
 			}
 		}
 		if(!$moveMembers){
 			if(!sqlValue("select count(1) from membership_users where lcase(memberID)='$destinationMemberID' and groupID='$destinationGroupID'")){
 				errorMsg($Translation['invalid destination member']);
-				include("$currDir/incFooter.php");
+				include("{$currDir}/incFooter.php");
 			}
 		}
 
@@ -83,7 +83,7 @@
 			$originalValues =  array ('<SOURCEGROUP>', '<DESTINATIONGROUP>' );
 			$replaceValues = array (  $sourceGroup ,$destinationGroup );
 			echo str_replace ( $originalValues , $replaceValues , $Translation['moving all group members'] );
-	
+
 			// change source members group
 			sql("update membership_users set groupID='$destinationGroupID' where groupID='$sourceGroupID'", $eo);
 			$srcGroupMembers=sqlValue("select count(1) from membership_users where groupID='$sourceGroupID'");
@@ -102,7 +102,7 @@
 				$status = str_replace ( $originalValues , $replaceValues , $Translation['failed transferring group members'] );
 			}else{
 				$status = str_replace ( $originalValues , $replaceValues , $Translation['group members transferred'] );
-	
+
 				if($dataRecsAft){
 					$status.= $Translation['failed transfer data records'];
 				}else{
@@ -114,7 +114,7 @@
 			$originalValues =  array ('<SOURCEGROUP>', '<DESTINATIONMEMBER>' , '<DESTINATIONGROUP>' );
 			$replaceValues = array (  $sourceGroup , $destinationMemberID , $destinationGroup );
 			echo str_replace ( $originalValues , $replaceValues , $Translation['moving group data to member'] );
-	
+
 			// change group of source member's data
 			$recsBef=sqlValue("select count(1) from membership_userrecords where lcase(memberID)='$destinationMemberID'");
 			sql("update membership_userrecords set groupID='$destinationGroupID', memberID='$destinationMemberID' where groupID='$sourceGroupID'", $eo);
@@ -141,7 +141,7 @@
 		<?php
 
 		// quit
-		include("$currDir/incFooter.php");
+		include("{$currDir}/incFooter.php");
 	}
 
 
@@ -333,5 +333,5 @@
 ?>
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

@@ -26,7 +26,7 @@
 		<script src="toolTips.js"></script>
 		<script src="../resources/initializr/js/vendor/bootstrap.min.js"></script>
 		<script src="../resources/lightbox/js/prototype.js"></script>
-		<script src="../resources/lightbox/js/scriptaculous.js?load=effects,builder,dragdrop,controls"></script>
+		<script src="../resources/lightbox/js/scriptaculous.js?load=effects"></script>
 		<script>
 
 			// VALIDATION FUNCTIONS FOR VARIOUS PAGES
@@ -90,29 +90,29 @@
 				}
 
 				if(mm && sm!='-1'){
-				
+
 					confirmMessage = "<?php echo $Translation['sure move member']; ?>";
 					confirmMessage = confirmMessage.replace(/<MEMBER>/, sm).replace(/<OLDGROUP>/, sg).replace(/<NEWGROUP>/, dg);
 					return window.confirm(confirmMessage);
-					
+
 				}
 				if((dmm || dm) && sm!='-1'){
-				
+
 					confirmMessage = "<?php echo $Translation['sure move data of member']; ?>";
-					confirmMessage = confirmMessage.replace(/<OLDMEMBER>/, sm).replace(/<OLDGROUP>/, sg).replace(/<NEWMEMBER>/, dm).replace(/<NEWGROUP>/, dg);					
+					confirmMessage = confirmMessage.replace(/<OLDMEMBER>/, sm).replace(/<OLDGROUP>/, sg).replace(/<NEWMEMBER>/, dm).replace(/<NEWGROUP>/, dg);                 
 					return window.confirm(confirmMessage);
 				}
 
 				if(mm){
-				
+
 					confirmMessage = "<?php echo $Translation['sure move all members']; ?>";
 					confirmMessage = confirmMessage.replace(/<OLDGROUP>/, sg).replace(/<NEWGROUP>/, dg);
 					return window.confirm(confirmMessage);
 				}
 
 				if(dmm){
-				
-				
+
+
 					confirmMessage = "<?php echo $Translation['sure move data of all members']; ?>";
 					confirmMessage = confirmMessage.replace(/<OLDGROUP>/, sg).replace(/<MEMBER>/, dm).replace(/<NEWGROUP>/, dg);
 					return window.confirm(confirmMessage);
@@ -184,7 +184,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-globe"></i> <?php echo $Translation['groups']; ?> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="pageViewGroups.php"><?php echo $Translation['view groups']; ?></a></li>
-							<li><a href="pageEditGroup.php"><?php echo 	$Translation['add group']  ; ?></a></li>
+							<li><a href="pageEditGroup.php"><?php echo   $Translation['add group']  ; ?></a></li>
 							<li class="divider"></li>
 							<li><a href="pageEditGroup.php?groupID=<?php echo sqlValue("select groupID from membership_groups where name='" . makeSafe($adminConfig['anonymousGroup']) . "'"); ?>"><?php echo  $Translation['edit anonymous permissions'] ; ?></a></li>
 						</ul>
@@ -214,6 +214,24 @@
 							<li><a href="http://forums.appgini.com" target="_blank"><i class="glyphicon glyphicon-new-window"></i> <?php echo $Translation['AppGini forum']; ?></a></li>
 						</ul>
 					</li>
+
+					<?php $plugins = get_plugins(); ?>
+
+					<?php if(count($plugins)){ ?>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i> <?php echo $Translation["plugins"] ; ?> <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<?php foreach($plugins as $plugin){ ?>
+									<?php
+										$plugin_icon = '';
+										if($plugin['glyphicon']) $plugin_icon = "<i class=\"glyphicon glyphicon-{$plugin['glyphicon']}\"></i> ";
+										if($plugin['icon']) $plugin_icon = "<img src=\"{$plugin['admin_path']}/{$plugin['icon']}\"> ";
+									?>
+									<li><a target="_blank" href="<?php echo $plugin['admin_path']; ?>"><?php echo $plugin_icon . $plugin['title']; ?></a></li>
+								<?php } ?>
+							</ul>
+						</li>
+					<?php } ?>
 				</ul>
 
 				<div class="navbar-right">
@@ -242,8 +260,5 @@
 					echo $Translation['security risk'];
 			} ?></p>
 		</div>
-		
-		
-		
 	<?php  } ?>
 

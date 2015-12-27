@@ -1,35 +1,35 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
-	if($_GET['searchGroups']!=""){
-		$searchSQL=makeSafe($_GET['searchGroups']);
-		$searchHTML=htmlspecialchars($_GET['searchGroups']);
-		$where="where name like '%$searchSQL%' or description like '%$searchSQL%'";
+	if($_GET['searchGroups'] != ""){
+		$searchSQL = makeSafe($_GET['searchGroups']);
+		$searchHTML = htmlspecialchars($_GET['searchGroups']);
+		$where = "where name like '%$searchSQL%' or description like '%$searchSQL%'";
 	}else{
-		$searchSQL='';
-		$searchHTML='';
-		$where="";
+		$searchSQL = '';
+		$searchHTML = '';
+		$where = "";
 	}
 
-	$numGroups=sqlValue("select count(1) from membership_groups $where");
-	if(!$numGroups && $searchSQL!=''){
+	$numGroups = sqlValue("select count(1) from membership_groups $where");
+	if(!$numGroups && $searchSQL != ''){
 		echo "<div class=\"status\">{$Translation['no matching results found']}</div>";
-		$noResults=TRUE;
-		$page=1;
+		$noResults = true;
+		$page = 1;
 	}else{
-		$noResults=FALSE;
+		$noResults = false;
 	}
 
-	$page=intval($_GET['page']);
-	if($page<1){
-		$page=1;
-	}elseif($page>ceil($numGroups/$adminConfig['groupsPerPage']) && !$noResults){
-		redirect("admin/pageViewGroups.php?page=".ceil($numGroups/$adminConfig['groupsPerPage']));
+	$page = intval($_GET['page']);
+	if($page < 1){
+		$page = 1;
+	}elseif($page > ceil($numGroups / $adminConfig['groupsPerPage']) && !$noResults){
+		redirect("admin/pageViewGroups.php?page=" . ceil($numGroups / $adminConfig['groupsPerPage']));
 	}
 
-	$start=($page-1)*$adminConfig['groupsPerPage'];
+	$start = ($page - 1) * $adminConfig['groupsPerPage'];
 
 ?>
 <div class="page-header"><h1><?php echo $Translation['groups'] ; ?></h1></div>
@@ -55,9 +55,9 @@
 		</tr>
 <?php
 
-	$res=sql("select groupID, name, description from membership_groups $where limit $start, ".$adminConfig['groupsPerPage'], $eo);
-	while($row=db_fetch_row($res)){
-		$groupMembersCount=sqlValue("select count(1) from membership_users where groupID='$row[0]'");
+	$res = sql("select groupID, name, description from membership_groups $where limit $start, ".$adminConfig['groupsPerPage'], $eo);
+	while( $row = db_fetch_row($res)){
+		$groupMembersCount = sqlValue("select count(1) from membership_users where groupID='$row[0]'");
 		?>
 		<tr>
 			<td class="tdCaptionCell" align="left">
@@ -132,5 +132,5 @@
 	</table>
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

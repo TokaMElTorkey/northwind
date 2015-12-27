@@ -1,39 +1,39 @@
 <?php
-	$currDir=dirname(__FILE__);
-	require("$currDir/incCommon.php");
-	include("$currDir/incHeader.php");
+	$currDir = dirname(__FILE__);
+	require("{$currDir}/incCommon.php");
+	include("{$currDir}/incHeader.php");
 
 	// process search
-	$memberID=makeSafe(strtolower($_GET['memberID']));
-	$groupID=intval($_GET['groupID']);
-	$tableName=makeSafe($_GET['tableName']);
+	$memberID = makeSafe(strtolower($_GET['memberID']));
+	$groupID = intval($_GET['groupID']);
+	$tableName = makeSafe($_GET['tableName']);
 
 	// process sort
-	$sortDir=($_GET['sortDir'] ? 'desc' : '');
-	$sort=makeSafe($_GET['sort']);
-	if($sort!='dateAdded' && $sort!='dateUpdated'){ // default sort is newly created first
-		$sort='dateAdded';
-		$sortDir='desc';
+	$sortDir = ($_GET['sortDir'] ? 'desc' : '');
+	$sort = makeSafe($_GET['sort']);
+	if($sort != 'dateAdded' && $sort != 'dateUpdated'){ // default sort is newly created first
+		$sort = 'dateAdded';
+		$sortDir = 'desc';
 	}
 
 	if($sort){
-		$sortClause="order by $sort $sortDir";
+		$sortClause = "order by {$sort} {$sortDir}";
 	}
 
-	if($memberID!=''){
-		$where.=($where ? " and " : "")."r.memberID like '$memberID%'";
+	if($memberID != ''){
+		$where .= ($where ? " and " : "") . "r.memberID like '{$memberID}%'";
 	}
 
-	if($groupID!=''){
-		$where.=($where ? " and " : "")."g.groupID='$groupID'";
+	if($groupID != ''){
+		$where .= ($where ? " and " : "") . "g.groupID='{$groupID}'";
 	}
 
-	if($tableName!=''){
-		$where.=($where ? " and " : "")."r.tableName='$tableName'";
+	if($tableName != ''){
+		$where .= ($where ? " and " : "") . "r.tableName='{$tableName}'";
 	}
 
 	if($where){
-		$where="where $where";
+		$where = "where {$where}";
 	}
 
 	$numRecords=sqlValue("select count(1) from membership_userrecords r left join membership_groups g on r.groupID=g.groupID $where");
@@ -82,8 +82,8 @@
 						<td align="center">
 							<?php echo $Translation['show records'] ; ?>
 							<?php
-								$arrFields=array('', 'customers', 'employees', 'orders', 'order_details', 'products', 'categories', 'suppliers', 'shippers');
-								$arrFieldCaptions=array( $Translation['all tables'] , $Translation["customers"] , $Translation["employees"] , $Translation["orders"] , $Translation["order items"] , $Translation["products"] , $Translation["product categories"] , $Translation["suppliers"] , $Translation["shippers"] );
+								$arrFields = array('', 'customers', 'employees', 'orders', 'order_details', 'products', 'categories', 'suppliers', 'shippers');
+								$arrFieldCaptions = array('All tables', 'Customers', 'Employees', 'Orders', 'Order Items', 'Products', 'Product Categories', 'Suppliers', 'Shippers');
 								echo htmlSelect('tableName', $arrFields, $arrFieldCaptions, $tableName);
 							?>
 							</td>
@@ -117,45 +117,45 @@
 		</tr>
 <?php
 
-	$res=sql("select r.recID, r.memberID, g.name, r.tableName, r.dateAdded, r.dateUpdated, r.pkValue from membership_userrecords r left join membership_groups g on r.groupID=g.groupID $where $sortClause limit $start, ".$adminConfig['recordsPerPage'], $eo);
-	while($row=db_fetch_row($res)){
+	$res = sql("select r.recID, r.memberID, g.name, r.tableName, r.dateAdded, r.dateUpdated, r.pkValue from membership_userrecords r left join membership_groups g on r.groupID=g.groupID $where $sortClause limit $start, ".$adminConfig['recordsPerPage'], $eo);
+	while($row = db_fetch_row($res)){
 		?>
 		<tr>
-			<td class="tdCaptionCell" align="left">
+			<td class="tdCaptionCell">
 				<a href="pageEditOwnership.php?recID=<?php echo $row[0]; ?>"><img border="0" src="images/edit_icon.gif" alt="<?php echo $Translation['change record ownership'] ; ?>" title="<?php echo $Translation['change record ownership'] ; ?>"></a>
 				<a href="pageDeleteRecord.php?recID=<?php echo $row[0]; ?>" onClick="return confirm('<?php echo $Translation['sure delete record'] ; ?>');"><img border="0" src="images/delete_icon.gif" alt="<?php echo $Translation['delete record'] ; ?>" title="<?php echo $Translation['delete record'] ; ?>"></a>
-				</td>
-			<td class="tdCell" align="left"><?php echo $row[1]; ?></td>
-			<td class="tdCell" align="left"><?php echo $row[2]; ?></td>
-			<td class="tdCell" align="left"><?php echo $row[3]; ?></td>
-			<td class="tdCell <?php echo ($sort == 'dateAdded' ? 'warning' : '');?>" align="left"><?php echo @date($adminConfig['PHPDateTimeFormat'], $row[4]); ?></td>
-			<td class="tdCell <?php echo ($sort == 'dateUpdated' ? 'warning' : '');?>" align="left"><?php echo @date($adminConfig['PHPDateTimeFormat'], $row[5]); ?></td>
-			<td class="tdCell" align="left"><?php echo substr(getCSVData($row[3], $row[6]), 0, 40)." ... "; ?></td>
-			</tr>
+			</td>
+			<td class="tdCell"><?php echo $row[1]; ?></td>
+			<td class="tdCell"><?php echo $row[2]; ?></td>
+			<td class="tdCell"><?php echo $row[3]; ?></td>
+			<td class="tdCell <?php echo ($sort == 'dateAdded' ? 'warning' : '');?>"><?php echo @date($adminConfig['PHPDateTimeFormat'], $row[4]); ?></td>
+			<td class="tdCell <?php echo ($sort == 'dateUpdated' ? 'warning' : '');?>"><?php echo @date($adminConfig['PHPDateTimeFormat'], $row[5]); ?></td>
+			<td class="tdCell"><?php echo substr(getCSVData($row[3], $row[6]), 0, 80)." ... "; ?></td>
+		</tr>
 		<?php
 	}
 	?>
 	<tr>
-		<td colspan="7">
+		<td colspan="7" style="padding: 0;">
 			<table width="100%" cellspacing="0">
 				<tr>
-				<td align="left" class="tdFooter">
+				<td class="tdFooter text-left flip">
 					<input type="button" onClick="window.location='pageViewRecords.php?groupID=<?php echo $groupID; ?>&memberID=<?php echo $memberID; ?>&tableName=<?php echo $tableName; ?>&page=<?php echo ($page>1 ? $page-1 : 1); ?>&sort=<?php echo $sort; ?>&sortDir=<?php echo $sortDir; ?>';" value="<?php echo $Translation['previous'] ; ?>">
-					</td>
-				<td align="center" class="tdFooter">
+				</td>
+				<td class="text-center tdFooter">
 					<?php 
 						$originalValues =  array ('<RECORDNUM1>','<RECORDNUM2>','<RECORDS>' );
 						$replaceValues = array ( $start+1 , $start+db_num_rows($res) , $numRecords );
 						echo str_replace ( $originalValues , $replaceValues , $Translation['displaying records'] );
 					?>
 				</td>
-				<td align="right" class="tdFooter">
+				<td class="tdFooter text-right flip">
 					<input type="button" onClick="window.location='pageViewRecords.php?groupID=<?php echo $groupID; ?>&memberID=<?php echo $memberID; ?>&tableName=<?php echo $tableName; ?>&page=<?php echo ($page<ceil($numRecords/$adminConfig['recordsPerPage']) ? $page+1 : ceil($numRecords/$adminConfig['recordsPerPage'])); ?>&sort=<?php echo $sort; ?>&sortDir=<?php echo $sortDir; ?>';" value="<?php echo $Translation['next'] ; ?>">
-					</td>
+				</td>
 			</tr><table></td>
 		</tr>
 	</table>
 
 <?php
-	include("$currDir/incFooter.php");
+	include("{$currDir}/incFooter.php");
 ?>

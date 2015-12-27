@@ -5,7 +5,7 @@
 <!-- open the generated 'employees_view.php' file in your text editor and -->
 <!-- change the value of $x->ShowTableHeader to 0 -->
 
-		<td id="employees-Photo-<%%VALUE(EmployeeID)%%>" class="employees-Photo "><a href="<%%TRANSLATION(ImageFolder)%%><%%VALUE(Photo)%%>" rel="lightbox"><img src="thumbnail.php?i=<%%VALUE(Photo)%%>&t=employees&f=Photo&v=tv" class="img-thumbnail"></a></td>
+		<td id="employees-Photo-<%%VALUE(EmployeeID)%%>" class="employees-Photo "><a href="<%%TRANSLATION(ImageFolder)%%><%%VALUE(Photo)%%>" data-lightbox="employees-Photo"><img src="thumbnail.php?i=<%%VALUE(Photo)%%>&t=employees&f=Photo&v=tv" class="img-thumbnail"></a></td>
 		<td id="employees-LastName-<%%VALUE(EmployeeID)%%>" class="employees-LastName "><%%SELECT%%><%%VALUE(LastName)%%><%%ENDSELECT%%></td>
 		<td id="employees-FirstName-<%%VALUE(EmployeeID)%%>" class="employees-FirstName "><%%SELECT%%><%%VALUE(FirstName)%%><%%ENDSELECT%%></td>
 		<td id="employees-Title-<%%VALUE(EmployeeID)%%>" class="employees-Title "><%%SELECT%%><%%VALUE(Title)%%><%%ENDSELECT%%></td>

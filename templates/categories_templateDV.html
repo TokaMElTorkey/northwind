@@ -34,7 +34,7 @@
 
 						<div class="row form-control-static"><div class="col-md-8">
 
-						<a href="<%%TRANSLATION(ImageFolder)%%><%%VALUE(Picture)%%>" rel="lightbox[categories_dv]"><img src="thumbnail.php?i=<%%VALUE(Picture)%%>&t=categories&f=Picture&v=dv" class="img-thumbnail" id="Picture-image"></a>
+						<a href="<%%TRANSLATION(ImageFolder)%%><%%VALUE(Picture)%%>" data-lightbox="categories_dv"><img src="thumbnail.php?i=<%%VALUE(Picture)%%>&t=categories&f=Picture&v=dv" class="img-thumbnail" id="Picture-image"></a>
 </div>
 
 												<div class="col-md-4" style="overflow-x: hidden;">
@@ -123,7 +123,7 @@
 
 				/* append embedded mode to all links */
 				var append_embedded = function(){
-					$j('a[href]:not([href^=#]):not([href^=javascript]):not([href$="Embedded=1"]):not([href*="link.php?t="]):not(href^="mailto:")').each(
+					$j('a[href]:not([href^=#]):not([href^=javascript]):not([href$="Embedded=1"]):not([href*="link.php?t="]):not([href^="mailto:"])').each(
 						function(){
 							$j(this).attr('href', $j(this).attr('href') + '&Embedded=1');
 						}
@@ -168,8 +168,12 @@
 				});
 			}
 
-			$j('form').on('click', '.view_parent', function(){
+			/* find and hide parent links if field label has data 'parent_link' set to 'view_parent_hidden' */
+			$j('label[data-parent_link=view_parent_hidden]').each(function(){
+				$j(this).parents('.form-group').find('.view_parent').hide();
+			});
 
+			$j('form').on('click', '.view_parent', function(){
 				var pt = $j(this).attr('id').replace(/_view_parent$/, '');
 				if($j(this).prevAll('input:hidden').length){
 					var parent_id = $j(this).prevAll('input:hidden').eq(0).val();
@@ -183,16 +187,31 @@
 				}
 
 				if(parent_id != '{empty_value}'){
-					modal_window({
-						url: pt + '_view.php?Embedded=1&SelectedID=' + encodeURIComponent(parent_id),
-						close: function(){
-							var field_id = $j('#' + pt + '_view_parent').prevAll('input:hidden').eq(0).attr('id');
-							$j('#' + field_id + '-container').select2('focus').select2('focus');
-						},
-						size: 'full',
-						title: $j(this).attr('title')
-					});
+					var parent_link = $j(this).parents('.form-group').children('label').data('parent_link');
+					switch(parent_link){
+						case 'view_parent_hidden':
+							break;
+						case 'view_parent_modal':
+							modal_window({
+								url: pt + '_view.php?Embedded=1&SelectedID=' + encodeURIComponent(parent_id),
+								close: function(){
+									var field_id = $j('#' + pt + '_view_parent').prevAll('input:hidden').eq(0).attr('id');
+									$j('#' + field_id + '-container').select2('focus').select2('focus');
+								},
+								size: 'full',
+								title: $j(this).attr('title')
+							});
+							break;
+						case 'view_parent_same_window':
+							window.location = pt + '_view.php?Embedded=' + (embedded_mode ? '1' : '') + '&SelectedID=' + encodeURIComponent(parent_id);
+							break;
+						case 'view_parent_new_window':
+							window.open(pt + '_view.php?SelectedID=' + encodeURIComponent(parent_id));
+							break;
+					}
+
 				}
 			});
+
 		});
 	</script>
