@@ -7,7 +7,7 @@
 		exit;
 	}
 	$projectFile = '';
-	$xmlFile = getXMLFile( $_GET['axp'] , $projectFile);
+	$xmlFile = get_XML_file( $_GET['axp'] , $projectFile);
 //-----------------------------------------------------------------------------------------
 ?>
 

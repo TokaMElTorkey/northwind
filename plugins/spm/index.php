@@ -60,7 +60,7 @@
 					var successMsg = "File uploaded successfully."+(response.isRenamed?"<br>The project name already exists, the file was renamed to "+response.fileName+".":"");
 					successDiv.html( successMsg );
 					$j("#response").html(successDiv);
-					dismissibleMsg( successDiv , "project.php?axp="+response.md5FileName );
+					dismissible_msg( successDiv , "project.php?axp="+response.md5FileName );
 				}
             });
 			this.on("error", function(file, response){

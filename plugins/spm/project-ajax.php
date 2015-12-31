@@ -19,7 +19,7 @@ if ( isset( $_POST['data'] ) && isset($_POST['tableNumber']) && isset($_POST['pr
 	}
 
 	//update node with new data after validating it
-	if (updateProjectPluginNode($projName , $tableNum , 'spm' , $data )){
+	if (update_project_plugin_node($projName , $tableNum , 'spm' , $data )){
 		echo  "ok";
 	}
 

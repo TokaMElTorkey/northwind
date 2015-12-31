@@ -59,7 +59,7 @@ function plugin_error_message($msg, $back_url = '') {
  * @return  XML project file object 
  */
 
-function getXMLFile($fileHash, &$projectFile) {
+function get_XML_file($fileHash, &$projectFile) {
     
     try {
 
@@ -102,7 +102,7 @@ function getXMLFile($fileHash, &$projectFile) {
  * Check if the current logged-in user is an adminstrator
  * @return  boolean
  */
-function isAdmin(){
+function is_admin(){
     $mi = getMemberInfo();
     if( ! ($mi['admin'] && ((is_string($mi['group']) && $mi['group'] =='Admins') || ( is_array($mi['group']) && array_search("Admins" , $mi['group']))))){
         return false;
@@ -117,7 +117,7 @@ function isAdmin(){
  * @param $table: table xml object
  *        $nodeName: plugin name to be checked/ created
  */
-function checkOrCreatePluginNode( $table , $nodeName ){
+function check_or_create_plugin_node( $table , $nodeName ){
 
 
     if (!isset($table->plugins)){
@@ -137,7 +137,7 @@ function checkOrCreatePluginNode( $table , $nodeName ){
  *        $data: data to update the node with
  * @return  boolean
  */
-function updateProjectPluginNode($projName , $tableNumber , $pluginName , $data ){
+function update_project_plugin_node($projName , $tableNumber , $pluginName , $data ){
     
     @$xmlFile = simpleXML_load_file("../projects/".$projName);
 
@@ -147,7 +147,7 @@ function updateProjectPluginNode($projName , $tableNumber , $pluginName , $data 
             (isset($xmlFile->table[$tableNumber]))           
         ) {
         //create spm node if not exist
-        checkOrCreatePluginNode( $xmlFile->table[$tableNumber] , $pluginName );
+        check_or_create_plugin_node( $xmlFile->table[$tableNumber] , $pluginName );
     
         $xmlFile->table[$tableNumber]->plugins->$pluginName = $data;
         $xmlFile->asXML("../projects/".$projName);        

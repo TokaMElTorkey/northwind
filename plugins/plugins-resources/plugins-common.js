@@ -119,7 +119,7 @@ function modal_window(options){
  			location: redirect location after displaying div, 
  					  pass false if no redirect needed
  */
-function dismissibleMsg( divElement , location ){
+function dismissible_msg( divElement , location ){
 	  $j(divElement).show("slow", function(){
 			setTimeout(function(){
 				$j(divElement).hide("slow"); 
