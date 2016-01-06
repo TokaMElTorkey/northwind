@@ -88,12 +88,11 @@
 <div class="page-header"><h1><?php echo $Translation['members'] ; ?></h1></div>
 
 <table class="table table-striped">
+<thead>
 	<tr>
-		<td colspan="10" align="center">
-			<form method="get" action="pageViewMembers.php">
-				<table class="table table-striped">
-					<tr>
-						<td valign="top" align="center">
+	<form method="get" action="pageViewMembers.php">
+			<td colspan="2"  class="firstTR"></td>
+				<td colspan="3" >
 							<input type="hidden" name="page" value="1">
 							<?php 
 								$originalValues =  array ('<SEARCH>','<HTMLSELECT>');
@@ -105,13 +104,7 @@
 								echo str_replace ( $originalValues , $replaceValues , $Translation['search members'] );
 							?>
 							</td>
-						<td valign="bottom" rowspan="2">
-							<input type="submit" value="<?php echo $Translation['find'] ; ?>">
-							<input type="button" value="<?php echo $Translation['reset'] ; ?>" onClick="window.location='pageViewMembers.php';">
-						</td>
-						</tr>
-					<tr>
-						<td align="center">
+							<td colspan="3">
 							<?php 
 								echo $Translation["group"] ; 
 								echo htmlSQLSelect("groupID", "select groupID, name from membership_groups order by name", $groupID);
@@ -124,11 +117,15 @@
 								echo htmlSelect("status", $arrFields, $arrFieldCaptions, $status);
 							?>
 							</td>
-						</tr>
-					</table>
-				</form>
-			</td>
-		</tr>
+							<td>
+							<input type="submit" value="<?php echo $Translation['find'] ; ?>">
+							<input type="button" value="<?php echo $Translation['reset'] ; ?>" onClick="window.location='pageViewMembers.php';">
+						</td>
+	</form>
+	</tr>
+	
+	
+	
 	<tr>
 		<td class="tdHeader">&nbsp;</td>
 		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation['username'] ; ?></div></td>
@@ -141,6 +138,7 @@
 		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation['Status'] ; ?></div></td>
 		<td class="tdHeader">&nbsp;</td>
 		</tr>
+		</thead>
 <?php
 
 	$res=sql("select lcase(m.memberID), g.name, DATE_FORMAT(m.signupDate, '".$adminConfig['MySQLDateFormat']."'), m.custom1, m.custom2, m.custom3, m.custom4, m.isBanned, m.isApproved from membership_users m left join membership_groups g on m.groupID=g.groupID $where order by m.signupDate limit $start, ".$adminConfig['membersPerPage'], $eo);
@@ -148,8 +146,8 @@
 		?>
 		<tr>
 			<td class="tdCaptionCell" align="left">
-				<a href="pageEditMember.php?memberID=<?php echo $row[0]; ?>"><img border="0" src="images/edit_icon.gif" alt="<?php echo $Translation['Edit member'] ; ?>" title="<?php echo $Translation['Edit member'] ; ?>"></a>
-				<a href="pageDeleteMember.php?memberID=<?php echo $row[0]; ?>" onClick="return confirm('<?php echo str_replace ( '<USERNAME>' , $row[0] , $Translation['sure delete user'] ); ?>');"><img border="0" src="images/delete_icon.gif" alt="<?php echo $Translation['delete member'] ; ?>" title="<?php echo $Translation['delete member'] ; ?>"></a>
+				<a href="pageEditMember.php?memberID=<?php echo $row[0]; ?>"><i class="glyphicon glyphicon-edit" title="<?php echo $Translation['Edit member'] ; ?>"></i></a>
+				<a href="pageDeleteMember.php?memberID=<?php echo $row[0]; ?>" onClick="return confirm('<?php echo str_replace ( '<USERNAME>' , $row[0] , $Translation['sure delete user'] ); ?>');"><i class="glyphicon glyphicon-trash" title="<?php echo $Translation['delete member'] ; ?>"> </i></a>
 				</td>
 			<td class="tdCell" align="left"><?php echo thisOr($row[0]); ?></td>
 			<td class="tdCell" align="left"><?php echo thisOr($row[1]); ?></td>
@@ -164,27 +162,28 @@
 			<td class="tdCaptionCell" align="left">
 				<?php
 					if(!$row[8]){ // if member is not approved, display approve link
-						?><a href="pageChangeMemberStatus.php?memberID=<?php echo $row[0]; ?>&approve=1"><img border="0" src="images/approve_icon.gif" alt="<?php echo $Translation["approve this member"] ; ?>" title="<?php echo $Translation["approve this member"] ; ?>"></a><?php
+						?><a href="pageChangeMemberStatus.php?memberID=<?php echo $row[0]; ?>&approve=1"><i class="glyphicon glyphicon-ok" title="<?php echo $Translation["approve this member"] ; ?>"></i></a><?php
 					}else{
 						if($row[7]){ // if member is banned, display unban link
-							?><a href="pageChangeMemberStatus.php?memberID=<?php echo $row[0]; ?>&unban=1"><img border="0" src="images/approve_icon.gif" alt="<?php echo $Translation["unban this member"] ; ?>" title="<?php echo $Translation["unban this member"] ; ?>"></a><?php
+							?><a href="pageChangeMemberStatus.php?memberID=<?php echo $row[0]; ?>&unban=1"><i class="glyphicon glyphicon-ok" title="<?php echo $Translation["unban this member"] ; ?>"></i></a><?php
 						}else{ // if member is not banned, display ban link
-							?><a href="pageChangeMemberStatus.php?memberID=<?php echo $row[0]; ?>&ban=1"><img border="0" src="images/stop_icon.gif" alt="<?php echo $Translation["ban this member"] ; ?>" title="<?php echo $Translation["ban this member"] ; ?>"></a><?php
+							?><a href="pageChangeMemberStatus.php?memberID=<?php echo $row[0]; ?>&ban=1"><i class="glyphicon glyphicon-ban-circle"  title="<?php echo $Translation["ban this member"] ; ?>"></i></a><?php
 						}
 					}
 				?>
-				<a href="pageViewRecords.php?memberID=<?php echo $row[0]; ?>"><img border="0" src="images/data_icon.gif" alt="<?php echo $Translation["View member records"] ; ?>" title="<?php echo $Translation["View member records"] ; ?>"></a>
+				<a href="pageViewRecords.php?memberID=<?php echo $row[0]; ?>"><i class="glyphicon glyphicon-th"  title="<?php echo $Translation["View member records"] ; ?>"></i></a>
 				<?php if($adminConfig['anonymousMember']!=$row[0]){ ?>
-				<a href="pageMail.php?memberID=<?php echo $row[0]; ?>"><img border="0" src="images/mail_icon.gif" alt="<?php echo $Translation["send message to member"] ; ?>" title="<?php echo $Translation["send message to member"] ; ?>"></a>
+				<a href="pageMail.php?memberID=<?php echo $row[0]; ?>"><i class="glyphicon glyphicon-envelope"  title="<?php echo $Translation["send message to member"] ; ?>"></i></a>
 				<?php } ?>
 				</td>
 			</tr>
 		<?php
 	}
 	?>
+	<tfoot>
 	<tr>
-		<td colspan="10">
-			<table width="100%" cellspacing="0">
+		<td colspan="10" class="noTop">
+			<table width="100.4%" cellspacing="0">
 				<tr>
 				<td align="left" class="tdFooter">
 					<input type="button" onClick="window.location='pageViewMembers.php?searchMembers=<?php echo $searchHTML; ?>&groupID=<?php echo $groupID; ?>&status=<?php echo $status; ?>&searchField=<?php echo $searchField; ?>&page=<?php echo ($page>1 ? $page-1 : 1); ?>';" value="<?php echo $Translation['previous'] ; ?>">
@@ -201,32 +200,40 @@
 					</td>
 			</tr></table></td>
 		</tr>
-	<tr>
-		<td colspan="10">
-			</td>
-		</tr>
-	<tr>
-		<td colspan="10">
-			<table class="table">
-				<tr>
-					<td colspan="2"><br><b><?php echo $Translation['key'] ; ?></b></td>
-					</tr>
-				<tr>
-					<td><img src="images/edit_icon.gif"> <?php echo $Translation['edit member details'] ; ?>.</td>
-					<td><img src="images/delete_icon.gif"> <?php echo $Translation['delete member'] ; ?>.</td>
-					</tr>
-				<tr>
-					<td><img src="images/approve_icon.gif"> <?php echo $Translation['activate member'] ; ?></td>
-					<td><img src="images/stop_icon.gif"> <?php echo $Translation['ban member'] ; ?></td>
-					</tr>
-				<tr>
-					<td><img src="images/data_icon.gif"> <?php echo $Translation['view entered member records'] ; ?></td>
-					<td><img src="images/mail_icon.gif"> <?php echo $Translation['send email to member'] ; ?></td>
-					</tr>
-				</table>
-			</td>
-		</tr>
+	</tfoot>
 	</table>
+	
+	<div class="row">
+	<div class="heading">
+		<b><?php echo $Translation['key'] ; ?></b>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <?php echo $Translation['edit member details'] ; ?></div>
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  <?php echo $Translation['delete member'] ; ?></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <?php echo $Translation['activate member'] ; ?></div>
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> <?php echo $Translation['ban member'] ; ?></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>  <?php echo $Translation['view entered member records'] ; ?></div>
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  <?php echo $Translation['send email to member'] ; ?></div>
+		</div>
+	</div>
+	
+	<style>
+		.row {
+			line-height:3;
+			margin-left:0px !important;
+			margin-right:0px !important;
+		}
+		.table > thead > tr > td.firstTR{
+			padding-bottom:3% !important;
+		}
+		.noTop{
+			padding-top:0px !important;
+		}
+	</style>
 
 <?php
 	include("{$currDir}/incFooter.php");

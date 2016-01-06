@@ -35,14 +35,17 @@
 <div class="page-header"><h1><?php echo $Translation['groups'] ; ?></h1></div>
 
 <table class="table table-striped">
+<thead>
 	<tr>
 		<td colspan="5" align="center">
-			<form method="get" action="pageViewGroups.php">
+			<form method="get" action="pageViewGroups.php" class="form-inline">
+				<div class="form-group">
+					<label><?php echo $Translation['search groups'] ; ?></label>
+					<input class="form-control" type="text" style="width: auto !important;" name="searchGroups" value="<?php echo $searchHTML; ?>">
+				</div>
+				<button type="submit" class="btn btn-primary"><?php echo $Translation['find'] ; ?></button>
+				<button type="button" class="btn btn-warning" onClick="window.location='pageViewGroups.php';"><?php echo $Translation['reset'] ; ?></button>
 				<input type="hidden" name="page" value="1">
-				<?php echo $Translation['search groups'] ; ?>
-				<input class="formTextBox" type="text" name="searchGroups" value="<?php echo $searchHTML; ?>" size="20">
-				<input type="submit" value="<?php echo $Translation['find'] ; ?>">
-				<input type="button" value="<?php echo $Translation['reset'] ; ?>" onClick="window.location='pageViewGroups.php';">
 				</form>
 			</td>
 		</tr>
@@ -53,6 +56,7 @@
 		<td class="tdHeader"><div class="ColCaption"><?php echo $Translation['members count'] ; ?></div></td>
 		<td class="tdHeader">&nbsp;</td>
 		</tr>
+		</thead>
 <?php
 
 	$res = sql("select groupID, name, description from membership_groups $where limit $start, ".$adminConfig['groupsPerPage'], $eo);
@@ -61,11 +65,11 @@
 		?>
 		<tr>
 			<td class="tdCaptionCell" align="left">
-				<a href="pageEditGroup.php?groupID=<?php echo $row[0]; ?>"><img border="0" src="images/edit_icon.gif" alt="<?php echo $Translation['Edit group'] ; ?>" title="<?php echo $Translation['Edit group'] ; ?>"></a>
+				<a href="pageEditGroup.php?groupID=<?php echo $row[0]; ?>"><i class="glyphicon glyphicon-edit" title="<?php echo $Translation['Edit group'] ; ?>"></i></a>
 				<?php
 					if(!$groupMembersCount){
 						?>
-						<a href="pageDeleteGroup.php?groupID=<?php echo $row[0]; ?>" onClick="return confirm('<?php echo $Translation['confirm delete group'] ; ?>');"><img border="0" src="images/delete_icon.gif" alt="<?php echo $Translation['delete group'] ; ?>" title="<?php echo $Translation['delete group'] ; ?>"></a>
+						<a href="pageDeleteGroup.php?groupID=<?php echo $row[0]; ?>" onClick="return confirm('<?php echo $Translation['confirm delete group'] ; ?>');"><i class="glyphicon glyphicon-trash" title="<?php echo $Translation['delete group'] ; ?>"></i></a>
 						<?php
 					}else{
 						echo "&nbsp; &nbsp;";
@@ -78,20 +82,21 @@
 				<?php echo $groupMembersCount; ?>
 				</td>
 			<td class="tdCaptionCell" align="left">
-				<a href="pageEditMember.php?groupID=<?php echo $row[0]; ?>"><img border="0" src="images/add_icon.gif" alt="<?php echo $Translation["add new member"] ; ?>" title="<?php echo $Translation["add new member"] ; ?>"></a>
-				<a href="pageViewRecords.php?groupID=<?php echo $row[0]; ?>"><img border="0" src="images/data_icon.gif" alt="<?php echo $Translation['view group records'] ; ?>" title="<?php echo $Translation['view group records'] ; ?>"></a>
+				<a href="pageEditMember.php?groupID=<?php echo $row[0]; ?>"><i class="glyphicon glyphicon-plus-sign" title="<?php echo $Translation["add new member"] ; ?>"></i></a>
+				<a href="pageViewRecords.php?groupID=<?php echo $row[0]; ?>"><i class="glyphicon glyphicon-th" title="<?php echo $Translation['view group records'] ; ?>"></i></a>
 				<?php if($groupMembersCount){ ?>
-				<a href="pageViewMembers.php?groupID=<?php echo $row[0]; ?>"><img border="0" src="images/members_icon.gif" alt="<?php echo $Translation['view group members'] ; ?>" title="<?php echo $Translation['view group members'] ; ?>"></a>
-				<a href="pageMail.php?groupID=<?php echo $row[0]; ?>"><img border="0" src="images/mail_icon.gif" alt="<?php echo $Translation['send message to group'] ; ?>" title="<?php echo $Translation['send message to group'] ; ?>"></a>
+				<a href="pageViewMembers.php?groupID=<?php echo $row[0]; ?>"><i class="glyphicon glyphicon-user" title="<?php echo $Translation['view group members'] ; ?>"></i></a>
+				<a href="pageMail.php?groupID=<?php echo $row[0]; ?>"><i class="glyphicon glyphicon-envelope" title="<?php echo $Translation['send message to group'] ; ?>"></i></a>
 				<?php } ?>
 				</td>
 			</tr>
 		<?php
 	}
 	?>
+	<tfoot>
 	<tr>
-		<td colspan="5">
-			<table width="100%" cellspacing="0">
+		<td colspan="5" class="noTop">
+			<table width="100.4%" cellspacing="0">
 				<tr>
 				<td align="left" class="tdFooter">
 					<input type="button" onClick="window.location='pageViewGroups.php?searchGroups=<?php echo $searchHTML; ?>&page=<?php echo ($page>1 ? $page-1 : 1); ?>';" value="<?php echo $Translation['previous'] ; ?>">
@@ -108,29 +113,37 @@
 				</td>
 			</tr></table></td>
 		</tr>
-	<tr>
-		<td colspan="5">
-			<table class="table">
-				<tr>
-					<td colspan="2"><br><b><?php echo $Translation['key'] ; ?></b></td>
-					</tr>
-				<tr>
-					<td><img src="images/edit_icon.gif"> <?php echo $Translation['edit group details'] ; ?></td>
-					<td><img src="images/delete_icon.gif"> <?php echo $Translation['delete group'] ; ?>.</td>
-					</tr>
-				<tr>
-					<td><img src="images/add_icon.gif"> <?php echo $Translation['add member to group'] ; ?></td>
-					<td><img src="images/data_icon.gif"> <?php echo $Translation['view data records'] ; ?></td>
-					</tr>
-				<tr>
-					<td><img src="images/members_icon.gif"> <?php echo $Translation['list group members'] ; ?></td>
-					<td><img src="images/mail_icon.gif"> <?php echo $Translation['send email to all members'] ; ?></td>
-					</tr>
-				</table>
-			</td>
-		</tr>
+		</tfoot>
 	</table>
-
+	
+	<div class="row">
+	<div class="heading">
+		<b><?php echo $Translation['key'] ; ?></b>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <?php echo $Translation['edit group details'] ; ?></div>
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  <?php echo $Translation['delete group'] ; ?></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  <?php echo $Translation['add member to group'] ; ?></div>
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>  <?php echo $Translation['view data records'] ; ?></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  <?php echo $Translation['list group members'] ; ?></div>
+			<div class="col-sm-6 col-xs-12"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  <?php echo $Translation['send email to all members'] ; ?></div>
+		</div>
+	</div>
+	
+	<style>
+		.row {
+			line-height:3;
+			margin-left:0px !important;
+			margin-right:0px !important;
+		}
+		.noTop{
+			padding-top:0px !important;
+		}
+	</style>
 <?php
 	include("{$currDir}/incFooter.php");
 ?>
