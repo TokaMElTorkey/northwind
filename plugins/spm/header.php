@@ -55,7 +55,7 @@
 
 
 		<!-- jquery ui -->
-		<link rel="stylesheet" href="../plugins-resources/jquery-ui/jquery-ui-1.11.2.min.css">
+		<link rel="stylesheet" href="../plugins-resources/jquery-ui/jquery-ui.min.css">
 
 		<!--[if lt IE 9]>
 			<script src="resources/initializr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -63,7 +63,7 @@
 		<script src="../../resources/jquery/js/jquery-1.11.2.min.js"></script>
 
 		<!-- jquery ui -->
-		<script src="../plugins-resources/jquery-ui/jquery-ui-1.11.2.min.js"></script>
+		<script src="../plugins-resources/jquery-ui/jquery-ui.min.js"></script>
 
 		<script>var $j = jQuery.noConflict();</script>
 		<script src="../../resources/initializr/js/vendor/bootstrap.min.js"></script>	
