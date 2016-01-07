@@ -6,18 +6,59 @@
 	<h1>Search Page Maker for AppGini</h1>
 </div>
 
+<a id="get-started-btn" class="btn btn-danger pull-right btn-lg vspacer-lg" href="" title="Watch a screencast on using Search Page Maker"><i class="glyphicon glyphicon-facetime-video"></i> Show me how to get started!</a>
+<div class="clearfix"></div>
+
 <div> 
 	<div id="response"></div>
 	<form method="post" id="my-awesome-dropzone" class="dropzone" autocomplete="off" enctype="multipart/form-data">
 		<div class="dz-default dz-message">
 			<h1>
-				Drag your AppGini project file (*.axp) here to open it.
-				<br><small>Or click to open the upload dialog.</small>
+				<i class="glyphicon glyphicon-upload text-primary" style="font-size: 300%;"></i><br>
+				Drag your AppGini project file (*.axp) here to open it.<br>
+				<small>Or click to open the upload dialog.</small>			
 			</h1>
 		</div>
 	</form>
 </div>
 
+<?php 
+	$currentProjects = scandir ( "../projects"  );
+	$currentProjects = array_diff($currentProjects, array('.', '..'));
+	$projectsNum = count($currentProjects);
+
+	if ($projectsNum){
+		ob_start();
+		foreach ( $currentProjects as $projName ){
+			?>
+			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+				<div class="thumbnail">
+					<div class="caption">
+						<a href="project.php?axp=<?php echo md5($projName); ?>">
+							<img src="../plugins-resources/images/bigprof-logo-only.png" class="img-responsive" alt="AppGiniLogo">
+							<?php echo $projName; ?>
+						</a>
+					</div>
+				</div>
+			</div>
+			<?php
+		}
+		$list_projects = str_replace("\n", "", ob_get_contents());
+		ob_end_clean();
+		?>
+		
+		<h4 class="pull-right" ><a href="" onclick="event.preventDefault(); jsDisplayProjects();"><i class="glyphicon glyphicon-folder-open text-warning"></i>&nbsp; Or open a project you uploaded before (<?php echo ($projectsNum == 1 ? 'one project' : "{$projectsNum} projects"); ?> found)</a></h4>
+
+
+		<script>
+			function jsDisplayProjects(){
+				modal_window({ message: "<?php echo addslashes($list_projects); ?>", title: "Current projects" });
+			}
+		</script>
+
+		<?php 
+	}
+?>
 
 <style>
 	.dz-image , .dz-preview{
@@ -25,11 +66,11 @@
 		margin: auto !important;
 	}	
 	.dropzone {
-	    border: 3px dotted blue;
+	    border: 3px dashed darkblue;
 		min-height: 100px;
-		-webkit-border-radius: 3px;
-		border-radius: 3px;
-		background: rgba(0,0,0,0.03);
+		-webkit-border-radius: 30px;
+		border-radius: 30px;
+		background: rgba(50, 50, 50, 0.06);
 		padding: 23px;
 	}
 	
@@ -80,31 +121,14 @@
   	function deleteFile (file , elm){
 			elm.removeFile(file);
 	}
-
+	
+	$j(function(){
+		$j('#get-started-btn').click(function(){
+			modal_window({ message: '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Fhuu8zPzZPg?rel=0" allowfullscreen></iframe></div>', title: "How to use Search Page Maker" });
+			return false;
+		});
+	})
 </script>
-
-<?php 
-	$currentProjects = scandir ( "../projects"  );
-	$currentProjects = array_diff($currentProjects, array('.', '..'));
-	$projectsNum = count($currentProjects);
-
-	if ($projectsNum){ ?>
-		<h4 class="pull-right" ><a href="" onclick="event.preventDefault(); jsDisplayProjects();"> Or open a project you uploaded before (<?php echo ($projectsNum == 1 ? 'one project' : "{$projectsNum} projects"); ?> found)</a></h4>
-
-
-		<script>
-			function jsDisplayProjects(){
-				modal_window({ message: '<?php
-					foreach ( $currentProjects as $projName ){
-						echo "<div class=\"col-lg-3 col-md-3 col-sm-6 col-xs-6\"><div class=\"thumbnail\"><div class=\"caption\"><a href=\"project.php?axp=".md5($projName)."\"> <img src=\"../plugins-resources/images/bigprof-logo-only.png\" class=\"img-responsive\" alt=\AppGiniLogo\"> $projName </a></div></div></div>";
-					}
-				?>', title: "Current projects" });
-			}
-		</script>
-
-		<?php 
-	}
-?>
 
 </body>
 </html>
